@@ -27,6 +27,8 @@ Tests in prf/ are intended to be run in this order:
 * durchgangeinheit (tests channels and some essential devices) (in progress);
 * recheneinheit (tests CPUs) (upcoming).
 
+The test is successful if it returns normally, i.e. doesn't call terminate after throwing an exception or doesn't segfault.
+
 ## Documentation
 The principal documentation are the PDFs in doc/:
 * 32.pdf: The EZER-32 specification, in English;
