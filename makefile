@@ -20,7 +20,9 @@ PRFN := ${PRF-SRCS:%.cc=%}
 SRCS := ${wildcard src/*.cc}
 OBJS := ${filter-out ${TGT-OBJ},${SRCS:src/%.cc=obj/%.o}}
 
-
+${info ${shell [ -d bin ] || mkdir bin}}
+${info ${shell [ -d obj ] || mkdir obj}}
+${info ${shell [ -d lib ] || mkdir lib}}
 
 .PHONY: all clean
 
