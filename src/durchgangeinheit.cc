@@ -89,8 +89,8 @@ void durchgangeinheit::af(h64 a) {
 		} else {
 			// Speichergestalt
 			h32 ba((a & (p - 1)) >> 32);
-			this->l(z,  ba);
-			this->l(ab, ba + 4);
+			this->l(ab,  ba);
+			this->l(z, ba + 4);
 		}
 
 		if (a & (1ULL << (64 - 4))) {
