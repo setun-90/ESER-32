@@ -9,16 +9,6 @@ using namespace kunstspeicher;
 durchgangeinheit::durchgangeinheit(wahrspeicher &e, unique_ptr<gerat> &&g):
 	einheit(e), zs(false), gr(std::move(g)) {}
 
-template <class art> void durchgangeinheit::s(h32 k, art a) {
-	this->se.s(k, this->gfb, a);
-}
-template <class art> void durchgangeinheit::l(art &a, h32 k) {
-	this->se.l(a, k, this->gfb);
-}
-template <class art> void durchgangeinheit::a(art &a, h32 k) {
-	this->se.a(a, k, this->gfb);
-}
-
 void durchgangeinheit::ubv(void) {
 	h32 gf(this->ube & feld<h64>(64 - 1, 64 - 20)), ka(this->ube & feld<h64>(64 - 33, 0));
 	this->se.l(this->uez, ka, gf);
