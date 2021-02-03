@@ -10,7 +10,7 @@ durchgangeinheit::durchgangeinheit(wahrspeicher &e, unique_ptr<gerat> &&g):
 	einheit(e), zs(false), gr(std::move(g)) {}
 
 void durchgangeinheit::ubv(void) {
-	h32 gf(this->ube & feld<h64>(64 - 1, 64 - 20)), ka(this->ube & feld<h64>(64 - 33, 0));
+	h32 gf((this->ube & feld<h64>(64 - 1, 64 - 20)) >> 32), ka(this->ube & feld<h64>(64 - 33, 0));
 	this->se.l(this->uez, ka, gf);
 	this->se.l(this->utz, ka + 4, gf);
 	this->se.l(this->gfb, ka + 8, gf);
