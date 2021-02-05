@@ -29,6 +29,8 @@ Tests in prf/ are intended to be run in this order:
 
 The test is successful if it returns normally, i.e. doesn't call terminate after throwing an exception or doesn't segfault.
 
+To assist debugging, a gdb mode is available: simply pass `MODE=gdb` on the make command line, before the target to build.
+
 ## Documentation
 The principal documentation are the PDFs in doc/:
 * 32.pdf: The EZER-32 specification, in English;
