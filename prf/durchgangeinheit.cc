@@ -13,6 +13,7 @@ using namespace kunstspeicher;
 int main(void) {
 	std::ios_base::sync_with_stdio(false);
 
+	/* Main memory */
 	wahrspeicher hs(2048 + 5);
 	h32  gf(0x00804000),
 		s2b(0x00200000),
@@ -31,14 +32,14 @@ int main(void) {
 	hs.s(ss::z & s2s,        s2t);
 	hs.s(ss::z & s1s,        s1t);
 
+	/* Channel interrupt data structure */
 	h32 aaf(0x00000200);
 	hs.s(0,  (h32)0x00800000);
 	hs.s(4,  (h32)0x00000010);
 	hs.s(8,  (h32)gf);
 	hs.s(12, (h32)aaf);
 
-	einheit &&e((durchgangeinheit(hs, nullptr)));
-
+	/* Channel program */
 	hs.s(aaf,      (h32)0x00000000);
 	hs.s(aaf + 4,  (h32)0x00000008);
 	hs.s(aaf + 8,  (h32)0x10000000);
@@ -46,6 +47,7 @@ int main(void) {
 	hs.s(aaf + 16, (h32)0x003FFFF8);
 
 
+	einheit &&e((durchgangeinheit(hs, nullptr)));
 	std::thread lf(std::ref(e));
 	e.ub((h64)0x0080400000800000);
 	lf.join();
