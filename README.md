@@ -25,7 +25,7 @@ The emulator is written in C++11, but a C++20-compatible compiler is recommended
 Tests in prf/ are intended to be run in this order:
 * speicher (tests memory);
 * durchgangeinheit (tests channels and some essential devices) (in progress);
-* recheneinheit (tests CPUs) (upcoming).
+* recheneinheit (tests CPUs) (in progress).
 
 The test is successful if it returns normally, i.e. doesn't call terminate after throwing an exception or doesn't segfault.
 
