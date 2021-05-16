@@ -21,11 +21,11 @@ void recheneinheit::operator()(void) {
 #if __cplusplus >= 202002L
 		if (this->ube == einheit::nube)
 			this->ube.wait(einheit::nube);
-		this->gfb = this->ube & feld<h64>(64 - 1, 64 - 32) >> 32;
-		this->az  = this->ube & feld<h64>(64 - 33, 0);
-		this->ube = einheit::nube;
+		this->gfb = (this->ube & feld<h64>(64 - 1, 64 - 20)) >> 32;
+		this->az  =  this->ube & feld<h64>(64 - 33, 1);
+		this->zs  =  this->ube & feld<h64>(1, 0);
+		this->ube =  einheit::nube;
 
-		this->zs = true;
 		h32 a;
 		do {
 			this->a(a, this->az);
@@ -36,11 +36,11 @@ void recheneinheit::operator()(void) {
 			std::unique_lock<std::mutex> l(this->m);
 			if (this->ube == einheit::nube)
 				this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
-			this->gfb = this->ube & feld<h64>(64 - 1, 64 - 32) >> 32;
-			this->az  = this->ube & feld<h64>(64 - 33, 0);
-			this->ube = einheit::nube;
+			this->gfb = (this->ube & feld<h64>(64 - 1, 64 - 20)) >> 32;
+			this->az  =  this->ube & feld<h64>(64 - 33, 1);
+			this->zs  =  this->ube & feld<h64>(1, 0);
+			this->ube =  einheit::nube;
 		}
-		this->zs = true;
 		h32 a;
 		do {
 			this->a(a, this->az);
