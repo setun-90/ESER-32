@@ -102,7 +102,7 @@ void recheneinheit::af(h32 a) {
 		// Gestalten
 		h32 q;
 		switch ((a >> 24) & 0xF) {
-		case 0x0:
+		case 0x0: {
 			switch ((a >> a_g) & 0x3) {
 			case 0x0: { // Beständergestalt
 				az += 4;
@@ -146,7 +146,8 @@ void recheneinheit::af(h32 a) {
 			}
 			}
 			break;
-		case 0x1:
+		}
+		case 0x1: {
 			switch ((a >> a_g) & 0x3) {
 			case 0x1: { // Hauptspeicherquellegestalt
 				az += 4;
@@ -159,6 +160,34 @@ void recheneinheit::af(h32 a) {
 			}
 			}
 			break;
+		}
+		case 0x2: {
+			h64 ze;
+			h32 q;
+			switch ((a >> a_g) & 0x3) {
+			case 0x1: { // Hauptspeicherquellegestalt
+				h32 t;
+				this->nsl(t, (a >> a_q) & 0xF);
+				q = t + (a & a_ra);
+				break;
+			}
+			case 0x3: { // Nahspeichergestalt
+				this->nsl(q, (a >> a_q) & 0xF);
+				break;
+			}
+			}
+			this->se.g(ze, q, this->gfb);
+			h64 aze(((h64)this->gfb << 32) | this->az | this->zs);
+			this->gfb = (ze & feld<h64>(64 - 1, 64 - 20)) >> 32;
+			this->az  =  ze & feld<h64>(64 - 33, 1);
+			this->zs  =  ze & feld<h64>(1, 0);
+			h32 z;
+			this->nsl(z, (a >> a_z) & 0xF);
+			this->s(z, aze);
+			break;
+		}
+		default:
+			throw AUA(this->az, this->gfb, a);
 		}
 		return;
 	}
