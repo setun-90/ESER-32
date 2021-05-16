@@ -84,7 +84,7 @@ void verwandlungseinheit::vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z) {
 
 h32 verwandlungseinheit::s2zg(h32 e, zugriff z, h32 k, h32 g) {
 	int l((e & (ss::s | ss::l | ss::a)) >> 1), za(static_cast<int>(z));
-	if ((!za && l) || !(za & l))
+	if (!((za & l) || (!za & !l)))
 		throw ZZE(k, g, z, l);
 	h32 w;
 	if (ss::r(e)) {
@@ -102,7 +102,7 @@ h32 verwandlungseinheit::s2zg(h32 e, zugriff z, h32 k, h32 g) {
 
 h32 verwandlungseinheit::s1zg(h32 e, zugriff z, h32 k, h32 f) {
 	int l((e & (ss::s | ss::l | ss::a)) >> 1), za(static_cast<int>(z));
-	if ((!za && l) || !(za & l))
+	if (!((za & l) || (!za & !l)))
 		throw ZZE(k, f, z, l);
 	h32 w;
 	if (ss::r(e)) {
