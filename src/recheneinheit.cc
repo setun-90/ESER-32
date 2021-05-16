@@ -67,7 +67,7 @@ void recheneinheit::af(h32 a) {
 		switch ((a >> a_g) & 0x3) {
 		case 0x0: { // Beständergestalt
 			this->az += 4;
-			q = (a & a_w);
+			q = vzw(a & a_w, 32 - 13);
 			break;
 		}
 		case 0x3: { // Nahspeichergestalt
