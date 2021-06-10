@@ -21,32 +21,45 @@ void recheneinheit::operator()(void) {
 #if __cplusplus >= 202002L
 		if (this->ube == einheit::nube)
 			this->ube.wait(einheit::nube);
-		this->gfb = (this->ube & feld<h64>(64 - 1, 64 - 20)) >> 32;
-		this->az  =  this->ube & feld<h64>(64 - 33, 1);
-		this->zs  =  this->ube & feld<h64>(1, 0);
+		h64 aze;
+		if (this->zses) {
+			aze = ((h64)this->gfb << 32) | this->az | this->zs;
+		}
+		this->gfb = (this->ube >> 32) & 0xFFFFF000;
+		this->b   = (this->ube >> 32) & 0x00000006;
+		this->az  =  this->ube & 0xFFFFFFFE;
+		this->zs  =  this->ube & 1;
+		if (this->zses) {
+			this->s(0, aze);
+		}
 		this->ube =  einheit::nube;
-
-		h32 a;
-		do {
-			this->a(a, this->az);
-			this->af(a);
-		} while (this->zs && this->ube == einheit::nube);
 #else
 		{
 			std::unique_lock<std::mutex> l(this->m);
 			if (this->ube == einheit::nube)
 				this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
-			this->gfb = (this->ube & feld<h64>(64 - 1, 64 - 20)) >> 32;
-			this->az  =  this->ube & feld<h64>(64 - 33, 1);
-			this->zs  =  this->ube & feld<h64>(1, 0);
+			h64 aze;
+			if (this->zses) {
+				aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
+			}
+			this->gfb = (this->ube >> 32) & 0xFFFFF000;
+			this->b   = (this->ube >> 32) & 0x00000006;
+			this->az  =  this->ube & 0xFFFFFFFE;
+			this->zs  =  this->ube & 1;
+			if (this->zses) {
+				this->s(0, aze);
+			}
 			this->ube =  einheit::nube;
 		}
+#endif
+		this->zses = true;
 		h32 a;
-		do {
+		bool ub(false);
+		while (this->zs && !ub) {
 			this->a(a, this->az);
 			this->af(a);
-		} while (this->zs && this->ube == einheit::nube);
-#endif
+			ub = this->ube == einheit::nube;
+		}
 	}
 }
 
@@ -162,28 +175,16 @@ void recheneinheit::af(h32 a) {
 			break;
 		}
 		case 0x2: {
-			h64 ze;
 			h32 q;
-			switch ((a >> a_g) & 0x3) {
-			case 0x1: { // Hauptspeicherquellegestalt
+			{
 				h32 t;
 				this->nsl(t, (a >> a_q) & 0xF);
 				q = t + (a & a_ra);
-				break;
 			}
-			case 0x3: { // Nahspeichergestalt
-				this->nsl(q, (a >> a_q) & 0xF);
-				break;
-			}
-			}
+			h64 ze;
 			this->se.g(ze, q, this->gfb);
-			h64 aze(((h64)this->gfb << 32) | this->az | this->zs);
-			this->gfb = (ze & feld<h64>(64 - 1, 64 - 20)) >> 32;
-			this->az  =  ze & feld<h64>(64 - 33, 1);
-			this->zs  =  ze & feld<h64>(1, 0);
-			h32 z;
-			this->nsl(z, (a >> a_z) & 0xF);
-			this->s(z, aze);
+			this->ube = ze;
+			this->zses = (bool)(a & (1 << 31));
 			break;
 		}
 		default:

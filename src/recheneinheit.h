@@ -15,7 +15,7 @@
 #include <mutex>
 
 struct recheneinheit: public einheit {
-	recheneinheit(wahrspeicher &hs): einheit(hs) {}
+	recheneinheit(wahrspeicher &hs): einheit(hs), zses(false) {}
 
 	void operator()(void) override;
 
@@ -36,7 +36,7 @@ private:
 	h32 az;
 	h32 gfb;
 	h8  b;
-	bool zs;
+	bool zs, zses;
 };
 
 
