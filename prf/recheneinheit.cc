@@ -50,10 +50,10 @@ int main(void) {
 	hs.s(aaf + 24, 0x72004008);
 
 
-	einheit &&e((recheneinheit(hs)));
-	std::thread lfe(std::ref(e));
-	e.ub(ze);
-	lfe.join();
+	einheit &&e1((recheneinheit(hs))), &&e2((recheneinheit(hs)));
+	std::thread lfe1(std::ref(e1)), lfe2(std::ref(e2));
+	e1.ub(ze);
+	lfe1.join();
 
 	return 0;
 }
