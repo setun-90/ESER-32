@@ -52,14 +52,14 @@ void recheneinheit::operator()(void) {
 			this->ube =  einheit::nube;
 		}
 #endif
-		if (!this->zs)
-			break;
 		this->zses = true;
-		h32 a;
-		do {
-			this->a(a, this->az);
-			this->af(a);
-		} while (this->ube == einheit::nube);
+		if (this->zs) {
+			h32 a;
+			do {
+				this->a(a, this->az);
+				this->af(a);
+			} while (this->ube == einheit::nube);
+		}
 	}
 }
 
