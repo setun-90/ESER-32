@@ -2,14 +2,14 @@
 RM := rm -rf
 
 # Flags
-CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -std=c++11
+CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11
 LDFLAGS      := -ldl -pthread
 ifeq (${MODE},gdb)
 CXXFLAGS     := ${CXXFLAGS} -Og -ggdb
 LDFLAGS      := -Wl,-O1 ${LDFLAGS}
 else
 CXXFLAGS     := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
-LDFLAGS      := -Wl,-s,-O1,--sort-common,-z,now,-z,relro ${LDFLAGS}
+LDFLAGS      := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 endif
 LD           := ${CXX}
 
