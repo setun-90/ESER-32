@@ -18,8 +18,9 @@ ZEE::ZEE(h32 k, h32 f):
 }
 ZZE::ZZE(h32 k, h32 f, zugriff e, int l):
 	sonderfalle(), _k(k), _f(f), _e(e), _l(l) {
-	this->m = (
-	ostringstream() << hex << setfill('0')
+	ostringstream s;
+	this->m = static_cast<ostringstream &>(
+	s << hex << setfill('0')
 	<< "(k = " << setw(8) << this->_k
 	<< ",f = " << setw(8) << this->_f
 	<< ")(z = " << this->_e
