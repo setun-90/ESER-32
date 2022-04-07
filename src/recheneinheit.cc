@@ -16,14 +16,14 @@ template <class art> void recheneinheit::a(art &a, h32 k) {
 	this->se.a(a, k, this->gfb);
 }
 
-void recheneinheit::operator()(void) {
+void recheneinheit::lf(void) {
 	for (;;) {
 #if __cplusplus >= 202002L
 		if (this->ube == einheit::nube)
 			this->ube.wait(einheit::nube);
-		h64 aze;
+		h64 aze(0);
 		if (this->zses) {
-			aze = ((h64)this->gfb << 32) | this->az | this->zs;
+			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
 		}
 		this->gfb = (this->ube >> 32) & 0xFFFFF000;
 		this->b   = (this->ube >> 32) & 0x00000006;
@@ -38,7 +38,7 @@ void recheneinheit::operator()(void) {
 			std::unique_lock<std::mutex> l(this->m);
 			if (this->ube == einheit::nube)
 				this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
-			h64 aze;
+			h64 aze(0);
 			if (this->zses) {
 				aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
 			}
@@ -61,6 +61,10 @@ void recheneinheit::operator()(void) {
 			} while (this->ube == einheit::nube);
 		}
 	}
+}
+
+bool recheneinheit::ls(void) {
+	return this->zs;
 }
 
 void recheneinheit::nss(h8 z, h32 a) {

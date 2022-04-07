@@ -23,8 +23,6 @@ struct durchgangeinheit: public einheit {
 
 	durchgangeinheit(wahrspeicher &e, std::unique_ptr<gerat> &&g);
 
-	void operator()(void) override;
-
 	template <class art> void s(h32 k, art a) {
 		this->se.s(k, this->gfb, a);
 	}
@@ -38,6 +36,7 @@ struct durchgangeinheit: public einheit {
 private:
 	void af(h64 a);
 	void ubv(void);
+	void lf(void) override;
 
 	h32 az;
 	h32 gfb;

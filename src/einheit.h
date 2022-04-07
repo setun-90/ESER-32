@@ -7,23 +7,28 @@
 #include <unterbrechung.h>
 #include "verwandlungseinheit.h"
 
+#include <thread>
 #include <condition_variable>
 #include <atomic>
 #include <mutex>
 
 struct einheit {
 	virtual ~einheit() = default;
-	virtual void operator()(void) = 0;
+	virtual bool ls(void) = 0;
 	void ub(h64 e);
+	void hl(void);
 	static h64 const nube = static_cast<h64>(1) << 32;
 
 protected:
 	verwandlungseinheit se;
+	virtual void lf(void) = 0;
+	std::thread t;
 	std::atomic<h64> ube;
 #if __cplusplus < 202002L
 	std::condition_variable cv;
 	std::mutex m;
 #endif
+
 	einheit(wahrspeicher &e): se(e), ube(einheit::nube) {}
 	einheit(einheit const &) = delete;
 	einheit &operator=(einheit const &) = delete;

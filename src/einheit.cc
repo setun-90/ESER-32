@@ -11,6 +11,8 @@ h64 vzw(h64 n, h8 p) {
 }
 
 void einheit::ub(h64 e) {
+	if (!this->t.joinable())
+		this->t = std::thread(&einheit::lf, this);
 #if __cplusplus >= 202002L
 	this->ube = e;
 	this->ube.notify_one();
@@ -21,4 +23,8 @@ void einheit::ub(h64 e) {
 	}
 	this->cv.notify_one();
 #endif
+}
+
+void einheit::hl(void) {
+	this->t.std::thread::~thread();
 }

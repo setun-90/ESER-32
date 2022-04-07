@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <thread>
 #include <set>
+#include <pthread.h>
+#include <signal.h>
 
 using namespace kunstspeicher;
 
@@ -51,9 +53,11 @@ int main(void) {
 
 
 	einheit &&e1((recheneinheit(hs))), &&e2((recheneinheit(hs)));
-	std::thread lfe1(std::ref(e1)), lfe2(std::ref(e2));
 	e1.ub(ze);
-	lfe1.join();
+	while (!e2.ls());
+	e1.hl();
+	while (e2.ls());
+	e2.hl();
 
 	return 0;
 }
