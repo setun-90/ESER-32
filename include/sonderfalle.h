@@ -8,12 +8,12 @@
 #include "kunstspeicher.h"
 
 #include <exception>
-#include <sstream>
-#include <iomanip>
 
 class sonderfalle: public std::exception {
 protected:
 	std::string m;
+public:
+	char const *what() const noexcept;
 };
 
 class ZEE: public sonderfalle {
@@ -23,8 +23,6 @@ public:
 
 	h32 k(void) { return this->_k; }
 	h32 f(void) { return this->_f; }
-
-	char const *what() const noexcept { return this->m.c_str(); }
 };
 class ZZE: public sonderfalle {
 	h32 _k, _f;
@@ -37,8 +35,6 @@ public:
 	h32 f(void) { return this->_f; }
 	kunstspeicher::zugriff e(void) { return this->_e; }
 	h32 l(void) { return this->_l; }
-
-	char const *what() const noexcept { return this->m.c_str(); }
 };
 class ZSW: public sonderfalle {
 	h32 _k, _f, _w;
@@ -48,8 +44,6 @@ public:
 	h32 k(void) { return this->_k; }
 	h32 f(void) { return this->_f; }
 	h32 w(void) { return this->_w; }
-
-	char const *what() const noexcept { return this->m.c_str(); }
 };
 class AUA: public sonderfalle {
 	h32 _k, _f;
@@ -60,8 +54,6 @@ public:
 	h32 k(void) { return this->_k; }
 	h32 f(void) { return this->_f; }
 	h64 a(void) { return this->_a; }
-
-	char const *what() const noexcept { return this->m.c_str(); }
 };
 
 
