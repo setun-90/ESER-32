@@ -3,6 +3,8 @@
 #include <sonderfalle.h>
 #include <trace.h>
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <stdexcept>
 #include <tuple>
 #include <bitset>
@@ -156,7 +158,7 @@ int main(void) {
 		ka3,
 		ka4
 	}) {
-		TRACE(static_cast<std::ostringstream &>(std::ostringstream() << std::hex << std::setfill('0') << std::setw(8) << gf).str());
+		TRACE((std::ostringstream() << std::hex << std::setfill('0') << std::setw(8) << gf).str());
 		e.s(ka, gf, q64);
 		TRACE("");
 		for (size_t i(0); i < sizeof q64; i++) {
