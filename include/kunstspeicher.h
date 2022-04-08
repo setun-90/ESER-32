@@ -59,6 +59,14 @@ namespace s2 {
 }
 }
 
-std::ostream &operator<<(std::ostream &s, kunstspeicher::zugriff z);
+template <class CharT, class traits> std::basic_ostringstream<CharT, traits> &&operator<<(std::basic_ostringstream<CharT, traits> &&s, kunstspeicher::zugriff z) {
+	switch (z) {
+	case kunstspeicher::zugriff::s: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 's'; break;
+	case kunstspeicher::zugriff::l: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'l'; break;
+	case kunstspeicher::zugriff::a: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'a'; break;
+	case kunstspeicher::zugriff::g: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'g'; break;
+	}
+	return std::move(s);
+}
 
 #endif /* _KS_H */
