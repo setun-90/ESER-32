@@ -16,7 +16,7 @@ struct einheit {
 	virtual ~einheit() = default;
 	virtual bool ls(void) = 0;
 	void ub(h64 e);
-	void hl(void);
+	void as(void);
 	static h64 const nube = static_cast<h64>(1) << 32;
 
 protected:

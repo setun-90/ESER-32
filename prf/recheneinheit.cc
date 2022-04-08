@@ -55,9 +55,9 @@ int main(void) {
 	einheit &&e1((recheneinheit(hs))), &&e2((recheneinheit(hs)));
 	e1.ub(ze);
 	while (!e2.ls());
-	e1.hl();
+	e1.as();
 	while (e2.ls());
-	e2.hl();
+	e2.as();
 
 	return 0;
 }

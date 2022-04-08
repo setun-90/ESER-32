@@ -25,6 +25,6 @@ void einheit::ub(h64 e) {
 #endif
 }
 
-void einheit::hl(void) {
+void einheit::as(void) {
 	this->t.std::thread::~thread();
 }
