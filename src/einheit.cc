@@ -10,6 +10,8 @@ h64 vzw(h64 n, h8 p) {
 	return n | ~((n & (1 << p)) - 1);
 }
 
+einheit::einheit(wahrspeicher &e):
+	se(e), ube(einheit::nube) {}
 void einheit::ub(h64 e) {
 	if (!this->t.joinable())
 		this->t = std::thread(&einheit::lf, this);

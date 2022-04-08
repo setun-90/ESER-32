@@ -29,7 +29,7 @@ protected:
 	std::mutex m;
 #endif
 
-	einheit(wahrspeicher &e): se(e), ube(einheit::nube) {}
+	einheit(wahrspeicher &e);
 	einheit(einheit const &) = delete;
 	einheit &operator=(einheit const &) = delete;
 	einheit(einheit &&) = default;

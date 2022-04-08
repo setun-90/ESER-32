@@ -6,6 +6,9 @@ using namespace kunstspeicher;
 
 
 
+recheneinheit::recheneinheit(wahrspeicher &hs):
+	einheit(hs), zses(false) {}
+
 template <class art> void recheneinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
 }
