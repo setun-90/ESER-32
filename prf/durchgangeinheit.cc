@@ -1,13 +1,8 @@
 #include "../src/durchgangeinheit.h"
 #include <trace.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <cstring>
-#include <stdexcept>
-#include <thread>
-#include <set>
+#include <memory>
 
+using namespace std;
 using namespace kunstspeicher;
 
 int main(void) {
@@ -47,10 +42,10 @@ int main(void) {
 	hs.s(aaf + 16, (h32)0x003FFFF8);
 
 
-	einheit &&e((durchgangeinheit(hs, nullptr)));
-	e.ub((h64)0x0080400000800000);
-	while (e.ls());
-	e.as();
+	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, nullptr));
+	e->ub((h64)0x0080400000800000);
+	while (e->ls());
+	e->as();
 
 	return 0;
 }
