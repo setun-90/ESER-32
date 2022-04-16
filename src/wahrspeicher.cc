@@ -13,7 +13,7 @@ void wahrspeicher::ute(h32 w) {
 
 // Schreiben
 template <> void wahrspeicher::s(h32 w, h8 a) {
-	std::lock_guard<std::mutex> n(this->m);
+	lock_guard<mutex> n(this->m);
 	this->hs[w] = a;
 }
 template <> void wahrspeicher::s(h32 w, h64 a) {
@@ -29,13 +29,13 @@ template <> void wahrspeicher::s(h32 w, h64 a) {
 		static_cast<h8>(a >> 8),
 		static_cast<h8>(a)
 	};
-	std::lock_guard<std::mutex> n(this->m);
+	lock_guard<mutex> n(this->m);
 	memcpy(this->hs.data() + w, b, sizeof a);
 }
 
 // Lesen
 template <> void wahrspeicher::l(h8 &a, h32 w) {
-	std::lock_guard<std::mutex> n(this->m);
+	lock_guard<mutex> n(this->m);
 	a = this->hs[w];
 }
 
