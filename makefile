@@ -12,12 +12,8 @@ TGT-SRC := src/zuse.cc
 TGT-OBJ := obj/zuse.o
 PRF-SRCS := ${wildcard prf/*.cc}
 PRFN := ${PRF-SRCS:%.cc=%}
-SRCS := ${wildcard src/*.cc}
+SRCS := ${shell find src -name '*.cc'}
 OBJS := ${filter-out ${TGT-OBJ},${SRCS:src/%.cc=obj/%.o}}
-
-${info ${shell [ -d bin ] || mkdir bin}}
-${info ${shell [ -d obj ] || mkdir obj}}
-${info ${shell [ -d lib ] || mkdir lib}}
 
 .PHONY: all clean
 
@@ -30,10 +26,11 @@ zuse: CXXFLAGS := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fipa-pta
 zuse: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 zuse: bin/zuse
 
-bin/%: ${OBJS} obj/%.o
+bin/%:  obj/%.o ${OBJS}
 	${LD} ${LDFLAGS} $^ -o $@
 
 obj/%.o: src/%.cc
+	${shell [[ ! -d ${@D} ]] && mkdir -p ${@D}}
 	${CXX} ${CXXFLAGS} -c $^ -o $@
 
 
