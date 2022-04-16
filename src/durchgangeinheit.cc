@@ -17,10 +17,10 @@ void durchgangeinheit::ubv(void) {
 	this->se.l(this->az, ka + 12, gf);
 }
 
-void durchgangeinheit::lf(void) {
-	for (;;) {
+void durchgangeinheit::operator()(void) {
+	do {
 #if __cplusplus >= 202002L
-		if (this->ube == einheit::nube)
+		while (this->ube == einheit::nube)
 			this->ube.wait(einheit::nube);
 		this->ubv();
 		this->ube = einheit::nube;
@@ -40,8 +40,7 @@ void durchgangeinheit::lf(void) {
 #else
 		{
 			std::unique_lock<std::mutex> l(this->m);
-			if (this->ube == einheit::nube)
-				this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
+			this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
 			this->ubv();
 			this->ube = einheit::nube;
 		}
@@ -51,7 +50,7 @@ void durchgangeinheit::lf(void) {
 			do {
 				this->a(a, this->az);
 				this->af(a);
-			} while (this->zs && this->ube == einheit::nube);
+			} while (this->an && this->ube == einheit::nube);
 		} catch (sonderfalle const &e) {
 			h64 ue;
 			this->l(ue, this->uez);
@@ -59,7 +58,7 @@ void durchgangeinheit::lf(void) {
 			this->zs = false;
 		}
 #endif
-	}
+	} while (this->an);
 }
 
 void durchgangeinheit::af(h64 a) {

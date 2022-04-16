@@ -21,9 +21,10 @@ struct einheit {
 
 protected:
 	verwandlungseinheit se;
-	virtual void lf(void) = 0;
-	std::thread t;
+	virtual void operator()(void) = 0;
 	std::atomic<h64> ube;
+	std::atomic<bool> an;
+	std::thread t;
 #if __cplusplus < 202002L
 	std::condition_variable cv;
 	std::mutex m;

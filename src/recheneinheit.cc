@@ -7,7 +7,7 @@ using namespace kunstspeicher;
 
 
 recheneinheit::recheneinheit(wahrspeicher &hs):
-	einheit(hs), zses(false) {}
+	einheit(hs), zs(false) {}
 
 template <class art> void recheneinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
@@ -19,51 +19,58 @@ template <class art> void recheneinheit::a(art &a, h32 k) {
 	this->se.a(a, k, this->gfb);
 }
 
-void recheneinheit::lf(void) {
-	for (;;) {
+void recheneinheit::operator()(void) {
+	do {
 #if __cplusplus >= 202002L
-		if (this->ube == einheit::nube)
+		while (this->ube == einheit::nube)
 			this->ube.wait(einheit::nube);
 		h64 aze(0);
-		if (this->zses) {
+		if (this->zs) {
 			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
 		}
 		this->gfb = (this->ube >> 32) & 0xFFFFF000;
 		this->b   = (this->ube >> 32) & 0x00000006;
 		this->az  =  this->ube & 0xFFFFFFFE;
 		this->zs  =  this->ube & 1;
-		if (this->zses) {
+		if (aze & 1) {
 			this->s(0, aze);
 		}
 		this->ube =  einheit::nube;
-#else
-		{
-			unique_lock<mutex> l(this->m);
-			if (this->ube == einheit::nube)
-				this->cv.wait(l, [this]{ return this->ube != einheit::nube; });
-			h64 aze(0);
-			if (this->zses) {
-				aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
-			}
-			this->gfb = (this->ube >> 32) & 0xFFFFF000;
-			this->b   = (this->ube >> 32) & 0x00000006;
-			this->az  =  this->ube & 0xFFFFFFFE;
-			this->zs  =  this->ube & 1;
-			if (this->zses) {
-				this->s(0, aze);
-			}
-			this->ube =  einheit::nube;
-		}
-#endif
-		this->zses = true;
 		if (this->zs) {
 			h32 a;
 			do {
 				this->a(a, this->az);
 				this->af(a);
-			} while (this->ube == einheit::nube);
+			} while (this->an && this->ube == einheit::nube);
 		}
-	}
+#else
+		{
+			unique_lock<mutex> l(this->m);
+			this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
+			if (!this->an)
+				break;
+			h64 aze(0);
+			if (this->zs) {
+				aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
+			}
+			this->gfb = (this->ube >> 32) & 0xFFFFF000;
+			this->b   = (this->ube >> 32) & 0x00000006;
+			this->az  =  this->ube & 0xFFFFFFFE;
+			this->zs  =  bool(this->ube & 1);
+			if (aze & 1) {
+				this->s(0, aze);
+			}
+			this->ube =  einheit::nube;
+		}
+		if (this->an && this->zs) {
+			h32 a;
+			do {
+				this->a(a, this->az);
+				this->af(a);
+			} while (this->an && this->ube == einheit::nube);
+		}
+#endif
+	} while (this->an);
 }
 
 bool recheneinheit::ls(void) {

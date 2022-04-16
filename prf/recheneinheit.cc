@@ -1,15 +1,8 @@
 #include "../src/recheneinheit.h"
+#include <memory>
 #include <trace.h>
-#include <fstream>
-#include <sstream>
-#include <iostream>
-#include <cstring>
-#include <stdexcept>
-#include <thread>
-#include <set>
-#include <pthread.h>
-#include <signal.h>
 
+using namespace std;
 using namespace kunstspeicher;
 
 int main(void) {
@@ -52,12 +45,10 @@ int main(void) {
 	hs.s(aaf + 24, 0x72004008);
 
 
-	einheit &&e1((recheneinheit(hs))), &&e2((recheneinheit(hs)));
-	e1.ub(ze);
-	while (!e2.ls());
-	e1.as();
-	while (e2.ls());
-	e2.as();
+	shared_ptr<einheit> e1(make_shared<recheneinheit>(hs));
+	e1->ub(ze);
+	while (e1->ls());
+	e1->as();
 
 	return 0;
 }

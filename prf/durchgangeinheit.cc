@@ -48,9 +48,9 @@ int main(void) {
 
 
 	einheit &&e((durchgangeinheit(hs, nullptr)));
-	std::thread lf(std::ref(e));
 	e.ub((h64)0x0080400000800000);
-	lf.join();
+	while (e.ls());
+	e.as();
 
 	return 0;
 }
