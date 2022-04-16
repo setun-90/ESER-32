@@ -4,13 +4,6 @@ RM := rm -rf
 # Flags
 CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11
 LDFLAGS      := -ldl -pthread
-ifeq (${MODE},gdb)
-CXXFLAGS     := ${CXXFLAGS} -Og -ggdb
-LDFLAGS      := -Wl,-O1 ${LDFLAGS}
-else
-CXXFLAGS     := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
-LDFLAGS      := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
-endif
 LD           := ${CXX}
 
 # Items
@@ -30,19 +23,27 @@ ${info ${shell [ -d lib ] || mkdir lib}}
 
 .PRECIOUS: ${OBJS}
 
+
 all:  zuse ${PRFN}
 
-clean:
-	${RM} ${wildcard bin/*} ${wildcard obj/*} ${PRFN}
-
-
-zuse:      bin/zuse
+zuse: CXXFLAGS := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
+zuse: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
+zuse: bin/zuse
 
 bin/%: ${OBJS} obj/%.o
 	${LD} ${LDFLAGS} $^ -o $@
 
-obj/%.o:  src/%.cc
+obj/%.o: src/%.cc
 	${CXX} ${CXXFLAGS} -c $^ -o $@
 
+
+
+prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+prf/%: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
 prf/%: ${OBJS} prf/%.o
 	${LD} ${LDFLAGS} $^ -o $@
+
+
+
+clean:
+	${RM} ${wildcard bin/*} ${wildcard obj/*} ${PRFN}
