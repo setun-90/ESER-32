@@ -6,7 +6,7 @@ using namespace std;
 using namespace kunstspeicher;
 
 int main(void) {
-	std::ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 
 	/* Main memory */
 	wahrspeicher hs(10);
