@@ -33,6 +33,8 @@ struct durchgangeinheit: public einheit {
 		this->se.a(a, k, this->gfb);
 	}
 
+	bool ls(void) override;
+
 private:
 	void af(h64 a);
 	void ubv(void);

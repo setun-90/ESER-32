@@ -61,6 +61,10 @@ void durchgangeinheit::operator()(void) {
 	} while (this->an);
 }
 
+bool durchgangeinheit::ls(void) {
+	return this->zs;
+}
+
 void durchgangeinheit::af(h64 a) {
 	h64 p(1ULL << (64 - 11));
 
