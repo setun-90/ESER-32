@@ -25,6 +25,8 @@ int main(int argc, char **argv) {
 		string l;
 		cnf >> ws;
 		while (getline(cnf, l)) {
+			if (l.empty())
+				continue;
 			istringstream il(l);
 			char p;
 			unsigned u;
