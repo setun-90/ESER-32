@@ -119,7 +119,7 @@ void recheneinheit::af(h32 a) {
 		// Gestalten
 		h32 q;
 		switch ((a >> 24) & 0xF) {
-		case 0x0: {
+		case 0x0: { // BWG - Bewegung
 			switch ((a >> a_g) & 0x3) {
 			case 0x0: { // Beständergestalt
 				az += 4;
@@ -164,7 +164,7 @@ void recheneinheit::af(h32 a) {
 			}
 			break;
 		}
-		case 0x1: {
+		case 0x1: { // UWG - Ungeschnittende Bewegung
 			switch ((a >> a_g) & 0x3) {
 			case 0x1: { // Hauptspeicherquellegestalt
 				az += 4;
@@ -178,7 +178,7 @@ void recheneinheit::af(h32 a) {
 			}
 			break;
 		}
-		case 0x2: {
+		case 0x2: { // Zustandseintragsanweisungen
 			h32 q;
 			{
 				h32 t;
