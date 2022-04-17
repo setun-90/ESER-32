@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);
 	if (argc <= 1) {
-		cerr << "Verwendung: " << argv[0] << " $Konfig-Datei-Name $Gerät-Verzeichnis/\n";
+		cerr << "Verwendung:  " << argv[0] << "  $Konfig-Datei-Name  $Gerät-Verzeichnis/\n";
 		return 1;
 	}
 
