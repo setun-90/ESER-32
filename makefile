@@ -12,7 +12,7 @@ TGT-SRC := src/zuse.cc
 TGT-OBJ := obj/zuse.o
 PRF-SRCS := ${wildcard prf/*.cc}
 PRFN := ${PRF-SRCS:%.cc=%}
-SRCS := ${shell find src -name '*.cc'}
+SRCS := ${wildcard src/*.cc}
 OBJS := ${filter-out ${TGT-OBJ},${SRCS:src/%.cc=obj/%.o}}
 
 .PHONY: all clean
@@ -37,7 +37,7 @@ obj/%.o: src/%.cc
 
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
 prf/%: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
-prf/%: ${OBJS} prf/%.o
+prf/%: ${OBJS} prf/%.o obj/gerat/prufung.o
 	${LD} ${LDFLAGS} $^ -o $@
 
 
