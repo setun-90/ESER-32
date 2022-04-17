@@ -13,7 +13,7 @@ using namespace std;
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);
 	if (argc <= 1) {
-		cerr << "Verwendung: " << argv[0] << " $Konfig-Datei-Name\n";
+		cerr << "Verwendung: " << argv[0] << " $Konfig-Datei-Name $Gerät-Verzeichnis/\n";
 		return 1;
 	}
 
@@ -39,16 +39,15 @@ int main(int argc, char **argv) {
 				string n;
 				il >> n;
 				TRACE("n = " + n);
-				auto m(dlopen(n.c_str(), RTLD_LAZY));
-				auto e(dlerror());
-				if (e) {
+				auto m(dlopen((string(argv[2]) + n).c_str(), RTLD_LAZY));
+				char *e;
+				if (e = dlerror()) {
 					TRACE("Ladung ist gescheitert: " + string(e));
 					return 1;
 				}
-				unique_ptr<durchgangeinheit::gerat> &&(*abb)(istringstream const &);
+				durchgangeinheit::gerat &&(*abb)(istringstream const &);
 				*(void **)(&abb) = dlsym(m, "abb");
-				e = dlerror();
-				if (e) {
+				if (e = dlerror()) {
 					TRACE("Anschalt ist gescheitert: " + string(e));
 					return 1;
 				}

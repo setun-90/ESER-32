@@ -1,13 +1,14 @@
 #include <sonderfalle.h>
 #include "durchgangeinheit.h"
+#include <utility>
 
 using namespace std;
 using namespace kunstspeicher;
 
 
 
-durchgangeinheit::durchgangeinheit(wahrspeicher &e, unique_ptr<gerat> &&g):
-	einheit(e), zs(false), gr(std::move(g)) {}
+durchgangeinheit::durchgangeinheit(wahrspeicher &e, gerat &&g):
+	einheit(e), zs(false), gr(move(g)) {}
 
 void durchgangeinheit::ubv(void) {
 	h32 gf((this->ube >> 32) & 0xFFFFF000), ka(this->ube >> 32);
@@ -69,7 +70,7 @@ void durchgangeinheit::af(h64 a) {
 	h64 p(1ULL << (64 - 11));
 
 	if ((a >> (64 - 9)) & ((1 << 6) - 1)) {
-		this->gr->operator()(this, a);
+		this->gr(this, a);
 		return;
 	}
 	// Regelungsanweisung
@@ -98,10 +99,10 @@ void durchgangeinheit::af(h64 a) {
 
 		if (a & (1ULL << (64 - 4))) {
 			// Lesung
-			this->gr->l(this, z, ab);
+			this->gr.l(this, z, ab);
 		} else {
 			// Schreibung
-			this->gr->s(this, z, ab);
+			this->gr.s(this, z, ab);
 		}
 		return;
 	}
