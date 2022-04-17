@@ -9,16 +9,6 @@ using namespace kunstspeicher;
 recheneinheit::recheneinheit(wahrspeicher &hs):
 	einheit(hs), zs(false) {}
 
-template <class art> void recheneinheit::s(h32 k, art a) {
-	this->se.s(k, this->gfb, a);
-}
-template <class art> void recheneinheit::l(art &a, h32 k) {
-	this->se.l(a, k, this->gfb);
-}
-template <class art> void recheneinheit::a(art &a, h32 k) {
-	this->se.a(a, k, this->gfb);
-}
-
 void recheneinheit::operator()(void) {
 	do {
 #if __cplusplus >= 202002L
