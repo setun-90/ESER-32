@@ -1,5 +1,11 @@
 #include "prufung.h"
 
+using namespace std;
+
+durchgangeinheit::gerat &&durchgangeinheit::gerat::abb(istringstream &i) {
+	return move(prufung());
+}
+
 void prufung::operator()(durchgangeinheit *d, h64 &a) {
 	return;
 }
