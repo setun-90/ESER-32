@@ -188,7 +188,6 @@ void recheneinheit::af(h32 a) {
 			h64 ze;
 			this->se.g(ze, q, this->gfb);
 			this->ube = ze;
-			this->zses = (bool)(a & (1 << 31));
 			break;
 		}
 		default:

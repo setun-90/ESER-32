@@ -44,7 +44,7 @@ private:
 	h32 az;
 	h32 gfb;
 	h8  b;
-	bool zs, zses;
+	bool zs;
 };
 
 
