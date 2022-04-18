@@ -7,13 +7,14 @@ using namespace kunstspeicher;
 
 
 recheneinheit::recheneinheit(wahrspeicher &hs):
-	einheit(hs), zs(false) {}
+	einheit(hs), b(0), zs(false) {
+	this->ns[0] = 0;
+}
 
 void recheneinheit::operator()(void) {
-	do {
 #if __cplusplus >= 202002L
-		while (this->ube == einheit::nube)
-			this->ube.wait(einheit::nube);
+	do {
+		this->ube.wait(einheit::nube);
 		h64 aze(0);
 		if (this->zs) {
 			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
@@ -33,34 +34,36 @@ void recheneinheit::operator()(void) {
 				this->af(a);
 			} while (this->an && this->ube == einheit::nube);
 		}
+	} while (this->an);
 #else
-		{
-			unique_lock<mutex> l(this->m);
-			this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
-			if (!this->an)
-				break;
-			h64 aze(0);
-			if (this->zs) {
-				aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
-			}
-			this->gfb = (this->ube >> 32) & 0xFFFFF000;
-			this->b   = (this->ube >> 32) & 0x00000006;
-			this->az  =  this->ube & 0xFFFFFFFE;
-			this->zs  =  bool(this->ube & 1);
-			if (aze & 1) {
-				this->s(0, aze);
-			}
-			this->ube =  einheit::nube;
+	unique_lock<mutex> l(this->m);
+	while (this->an) {
+		h64 aze(0);
+		if (this->zs) {
+			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
 		}
-		if (this->an && this->zs) {
+		this->gfb = (this->ube >> 32) & 0xFFFFF000;
+		this->b   = (this->ube >> 32) & 0x00000006;
+		this->az  =  this->ube & 0xFFFFFFFE;
+		this->zs  =  bool(this->ube & 1);
+		if (aze & 1) {
+			this->s(0, aze);
+		}
+		this->ube =  einheit::nube;
+		l.unlock();
+
+		if (this->zs) {
 			h32 a;
 			do {
 				this->a(a, this->az);
 				this->af(a);
 			} while (this->an && this->ube == einheit::nube);
+		} else {
+			l.lock();
+			this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
 		}
+	}
 #endif
-	} while (this->an);
 }
 
 bool recheneinheit::ls(void) {
@@ -72,6 +75,9 @@ void recheneinheit::nss(h8 z, h32 a) {
 }
 void recheneinheit::nsl(h32 &a, h8 q) {
 	a = q ? this->ns[q] : 0;
+}
+h8 recheneinheit::zb(h32 a) {
+	return !a ? 0 : a > 0 ? 1 : 2;
 }
 
 void recheneinheit::af(h32 a) {
@@ -123,12 +129,15 @@ void recheneinheit::af(h32 a) {
 			switch ((a >> a_g) & 0x3) {
 			case 0x0: { // Beständergestalt
 				az += 4;
-				this->nss((a >> a_z) & 0xF, (a & a_w));
+				h32 q(a & a_w);
+				this->b = recheneinheit::zb(q);
+				this->nss((a >> a_z) & 0xF, q);
 				break;
 			}
 			case 0x3: { // Nahspeichergestalt
 				az += 2;
 				this->nsl(q, (a >> a_q) & 0xF);
+				this->b = recheneinheit::zb(q);
 				this->nss((a >> a_z) & 0xF, q);
 				break;
 			}
@@ -138,10 +147,12 @@ void recheneinheit::af(h32 a) {
 				this->nsl(g, gns);
 				if (a & (1 << 17)) {
 					this->l(q, g);
+					this->b = recheneinheit::zb(q);
 					this->nss(zns, q);
 					this->nss(gns, g + (a & a_a));
 				} else {
 					this->l(q, g + (a & a_a));
+					this->b = recheneinheit::zb(q);
 					this->nss(zns, q);
 				}
 				break;
@@ -154,9 +165,11 @@ void recheneinheit::af(h32 a) {
 					g += (a & a_a);
 					this->nss(gns, g);
 					this->nsl(q, qns);
+					this->b = recheneinheit::zb(q);
 					this->s(g, q);
 				} else {
 					this->nsl(q, qns);
+					this->b = recheneinheit::zb(q);
 					this->s(g + (a & a_a), q);
 				}
 				break;
@@ -179,15 +192,37 @@ void recheneinheit::af(h32 a) {
 			break;
 		}
 		case 0x2: { // Zustandseintragsanweisungen
-			h32 q;
-			{
-				h32 t;
-				this->nsl(t, (a >> a_q) & 0xF);
-				q = t + (a & a_ra);
+			switch ((a >> a_g) & 0x3) {
+			case 0x01: { // VWE - Verfahrenwechsel (Ladung)
+				h32 q;
+				{
+					h32 t;
+					this->nsl(t, (a >> a_q) & 0xF);
+					q = t + (a & a_ra);
+				}
+				h64 ze;
+				this->se.g(ze, q, this->gfb);
+				this->ube = ze;
+				break;
 			}
-			h64 ze;
-			this->se.g(ze, q, this->gfb);
-			this->ube = ze;
+			case 0x2: { // UTB - Unterbrechung
+				h64 q;
+				{
+					h32 t1, t2;
+					this->nsl(t1, (a >> a_q) & 0xE);
+					this->nsl(t2, ((a >> a_q) & 0xE) + 1);
+					q = (((h64)t1) << 32) | (h64)t2;
+				}
+				h32 ut;
+				{
+					h32 t;
+					this->nsl(t, (a >> a_z) & 0xE);
+					ut = t + (a & a_ra);
+				}
+				this->s(ut, q);
+				break;
+			}
+			}
 			break;
 		}
 		default:
