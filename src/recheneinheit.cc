@@ -81,7 +81,7 @@ h8 recheneinheit::zb(h32 a) {
 
 void recheneinheit::af(h32 a) {
 	// Regelungsanweisungen
-	if (!(a & (1 << (a_g - 1)))) {
+	if (!(a & (1 << 32 - 3))) {
 		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
 
 		// Gestalten
@@ -120,7 +120,7 @@ void recheneinheit::af(h32 a) {
 		return;
 	}
 	// Bewegungsanweisungen
-	if (a & (1 << 29)) {
+	if (a & (1 << 32 - 3)) {
 		// Gestalten
 		h32 q;
 		switch ((a >> 24) & 0xF) {
@@ -192,7 +192,7 @@ void recheneinheit::af(h32 a) {
 		}
 		case 0x2: { // Zustandseintragsanweisungen
 			switch ((a >> a_g) & 0x3) {
-			case 0x01: { // VWE - Verfahrenwechsel (Ladung)
+			case 0x1: { // VWE - Verfahrenwechsel (Ladung)
 				h32 q;
 				{
 					h32 t;
