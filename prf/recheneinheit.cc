@@ -35,11 +35,12 @@ int main(void) {
 	/**** Jump instructions */
 	hs.s(az, 0x00000004); az += 4;
 	hs.s(az, 0x0F000004); az += 4;
-	hs.s(az, 0x0F00000C); az += 4;
+	hs.s(az, 0x0F000004); az += 4;
 	hs.s(az, 0x0F0FFFF8); az += 4;
+	hs.s(az, (h16)0xCF10); az += 2;
 
 	/**** Move and conditional jump instructions */
-	hs.s(az, 0xF010); az += 2;
+	hs.s(az, (h16)0xF010); az += 2;
 //	hs.s(az, 0x07000004); az += 4;
 //	hs.s(az, 0x180F0000); az += 4;
 
