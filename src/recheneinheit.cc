@@ -210,7 +210,7 @@ void recheneinheit::af(h32 a) {
 					h32 t1, t2;
 					this->nsl(t1, (a >> a_q) & 0xE);
 					this->nsl(t2, ((a >> a_q) & 0xE) + 1);
-					q = (((h64)t1) << 32) | (h64)t2;
+					q = (((h64)t1) << 32) | t2;
 				}
 				h32 ut;
 				{
