@@ -57,10 +57,9 @@ void recheneinheit::operator()(void) {
 				this->a(a, this->az);
 				this->af(a);
 			} while (this->an && this->ube == einheit::nube);
-		} else {
-			l.lock();
-			this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
 		}
+		l.lock();
+		this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
 	}
 #endif
 }
