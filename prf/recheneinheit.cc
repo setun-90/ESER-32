@@ -31,22 +31,28 @@ int main(void) {
 	hs.s((ss::z & sbe) + 16, ze);
 
 	/* Test program */
-	h32 aaf(s1::z & sba);
+	h32 aaf(s1::z & sba), az(aaf);
 	/**** Jump instructions */
-	hs.s(aaf,      0x00000004);
-	hs.s(aaf + 4,  0x0F000004);
-	hs.s(aaf + 8,  0x0F00000C);
-	hs.s(aaf + 12, 0x0F0FFFF8);
+	hs.s(az, 0x00000004); az += 4;
+	hs.s(az, 0x0F000004); az += 4;
+	hs.s(az, 0x0F00000C); az += 4;
+	hs.s(az, 0x0F0FFFF8); az += 4;
 
-	/**** Move instructions */
-	hs.s(aaf + 16, 0x30102000);
+	/**** Move and conditional jump instructions */
+	hs.s(az, 0xF010); az += 2;
+//	hs.s(az, 0x07000004); az += 4;
+//	hs.s(az, 0x180F0000); az += 4;
+
+	/**** Interrupt next unit */
+//	hs.s(az, 0xB2004008); az += 4;
 
 	/**** Shutdown */
-	hs.s(aaf + 24, 0x72004008);
+	hs.s(az, 0x72004008);
 
 
 	shared_ptr<einheit> e1(make_shared<recheneinheit>(hs));
 	e1->ub(ze);
+	while (!e1->ls());
 	while (e1->ls());
 	e1->as();
 
