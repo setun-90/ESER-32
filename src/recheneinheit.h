@@ -21,7 +21,7 @@ struct recheneinheit: public einheit {
 
 private:
 	// Anweisungsabteilungen
-	static const h8 a_g = 32 - 1, a_b = 32 - 8, a_z = 32 - 12, a_q = 32 - 16, a_an = 32 - 17;
+	static const h8 a_g = 32 - 2, a_b = 32 - 8, a_z = 32 - 12, a_q = 32 - 16, a_an = 32 - 17;
 	static const h32 a_w = (1 << (32 - 12)) - 1, a_a = (1 << (32 - 20)) - 1, a_ra = (1 << (32 - 16)) - 1;
 
 	void operator()(void) override;
