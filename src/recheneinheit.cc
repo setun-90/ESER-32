@@ -38,17 +38,16 @@ void recheneinheit::operator()(void) {
 #else
 	unique_lock<mutex> l(this->m);
 	while (this->an) {
-		h64 aze(0);
+		h32 ngfb((this->ube >> 32) & 0xFFFFF000);
 		if (this->zs) {
-			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
+			h64 aze((((h64)(this->gfb | (this->b << 1))) << 32) | this->az | this->zs);
+			this->se.s(0, ngfb, aze);
 		}
-		this->gfb = (this->ube >> 32) & 0xFFFFF000;
+		this->gfb = ngfb;
 		this->b   = (this->ube >> 32) & 0x00000006;
 		this->az  =  this->ube & 0xFFFFFFFE;
 		this->zs  =  bool(this->ube & 1);
-		if (aze & 1) {
-			this->s(0, aze);
-		}
+
 		this->ube =  einheit::nube;
 		l.unlock();
 
