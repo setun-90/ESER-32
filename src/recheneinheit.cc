@@ -7,7 +7,7 @@ using namespace kunstspeicher;
 
 
 recheneinheit::recheneinheit(wahrspeicher &hs):
-	einheit(hs), b(0), zs(false) {
+	einheit(hs), b(0), zes(false), zs(false) {
 	this->ns[0] = 0;
 }
 
@@ -39,16 +39,17 @@ void recheneinheit::operator()(void) {
 	unique_lock<mutex> l(this->m);
 	while (this->an) {
 		h32 ngfb((this->ube >> 32) & 0xFFFFF000);
-		if (this->zs) {
+		if (this->zes) {
 			h64 aze((((h64)(this->gfb | (this->b << 1))) << 32) | this->az | this->zs);
 			this->se.s(0, ngfb, aze);
 		}
-		this->gfb = ngfb;
+		this->gfb =  ngfb;
 		this->b   = (this->ube >> 32) & 0x00000006;
 		this->az  =  this->ube & 0xFFFFFFFE;
 		this->zs  =  bool(this->ube & 1);
 
 		this->ube =  einheit::nube;
+		this->zes =  true;
 		l.unlock();
 
 		if (this->zs) {
@@ -201,6 +202,7 @@ void recheneinheit::af(h32 a) {
 				h64 ze;
 				this->se.g(ze, q, this->gfb);
 				this->ube = ze;
+				this->zes = false;
 				break;
 			}
 			case 0x2: { // UTB - Unterbrechung
