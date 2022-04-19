@@ -21,7 +21,7 @@ class wahrspeicher {
 	std::unordered_map<h32, std::shared_ptr<einheit>> ut;
 
 public:
-	wahrspeicher(h32 g): hs(g << 12) {}
+	wahrspeicher(h32 g);
 
 	void ute(h32 a, std::shared_ptr<einheit> e);
 	void ute(h32 a);

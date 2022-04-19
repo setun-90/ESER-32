@@ -3,6 +3,9 @@
 
 using namespace std;
 
+wahrspeicher::wahrspeicher(h32 g):
+	hs(g << 12) {}
+
 // Unterbrechungstore
 void wahrspeicher::ute(h32 w, shared_ptr<einheit> e) {
 	this->ut.emplace(w, e);
