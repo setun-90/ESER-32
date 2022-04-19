@@ -22,7 +22,7 @@ OBJS := ${filter-out ${TGT-OBJ},${SRCS:src/%.cc=obj/%.o}}
 
 all:  zuse ${PRFN}
 
-zuse: CXXFLAGS := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
+zuse: CXXFLAGS := ${CXXFLAGS} -Wa,-mbranches-within-32B-boundaries -O2 -fno-reorder-blocks-and-partition -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
 zuse: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 zuse: bin/zuse
 
