@@ -81,7 +81,7 @@ h8 recheneinheit::zb(h32 a) {
 
 void recheneinheit::af(h32 a) {
 	// Regelungsanweisungen
-	if (!(a & (1 << 32 - 3))) {
+	if (!(a & (1 << (32 - 3)))) {
 		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
 
 		// Gestalten
@@ -120,7 +120,7 @@ void recheneinheit::af(h32 a) {
 		return;
 	}
 	// Bewegungsanweisungen
-	if (a & (1 << 32 - 3)) {
+	if (a & (1 << (32 - 3))) {
 		// Gestalten
 		h32 q;
 		switch ((a >> 24) & 0xF) {
