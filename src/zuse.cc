@@ -47,7 +47,7 @@ int main(int argc, char **argv) {
 					TRACE("Ladung ist gescheitert: " + string(e));
 					return 1;
 				}
-				durchgangeinheit::gerat &&(*abb)(istringstream const &);
+				durchgangeinheit::gerat &&(*abb)(istringstream &);
 				*(void **)(&abb) = dlsym(m, "abb");
 				if (e = dlerror()) {
 					TRACE("Anschalt ist gescheitert: " + string(e));
