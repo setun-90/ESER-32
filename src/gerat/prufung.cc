@@ -2,8 +2,8 @@
 
 using namespace std;
 
-durchgangeinheit::gerat &&durchgangeinheit::gerat::abb(istringstream &i) {
-	return move(prufung());
+prufung abb(istringstream &i) {
+	return prufung();
 }
 
 void prufung::operator()(durchgangeinheit *d, h64 &a) {

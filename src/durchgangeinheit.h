@@ -18,7 +18,6 @@ struct durchgangeinheit: public einheit {
 		virtual void operator()(durchgangeinheit *d, h64 &a) = 0;
 		virtual void s(durchgangeinheit *d, h32 z, h32 ab)   = 0;
 		virtual void l(durchgangeinheit *d, h32 z, h32 ab)   = 0;
-		static gerat &&abb(std::istringstream &bs);
 	};
 
 	durchgangeinheit(wahrspeicher &e, gerat &&g);
