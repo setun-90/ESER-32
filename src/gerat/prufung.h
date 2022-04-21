@@ -18,6 +18,8 @@ private:
 	std::mt19937_64 e;
 };
 
+extern "C" prufung abb(std::istringstream &i);
+
 
 
 #endif /* _PG_H */
