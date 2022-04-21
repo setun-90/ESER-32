@@ -20,24 +20,23 @@ PRFN := ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
 
 all:  zuse gerate prufungen # ${PRFN}
 
-zuse: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
-zuse: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 zuse: bin/zuse
-
+bin/%: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
+bin/%: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 bin/%: src/%.o ${KERN}
 	${LD} ${LDFLAGS} $^ -o $@
 
-gerate: LDFLAGS := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc -shared ${LDFLAGS}
 gerate: ${GRTE:src/gerat/%.o=lib/%.so}
-lib/%.so: src/durchgangeinheit.o src/gerat/%.o
+lib/%.so: LDFLAGS := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc -shared ${LDFLAGS}
+lib/%.so: ${KERN} src/gerat/%.o
 	${LD} ${LDFLAGS} $^ -o $@
 
 
 
 
-prufungen: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
-prufungen: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
 prufungen: ${PRFN}
+prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+prf/%: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
 prf/%: prf/%.o ${filter-out src/zuse.o,${KERN}}
 	${LD} ${LDFLAGS} $^ -o $@
 
