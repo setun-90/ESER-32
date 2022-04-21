@@ -37,7 +37,7 @@ lib/%.so: ${KERN} src/gerat/%.o
 prufungen: ${PRFN}
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
 prf/%: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
-prf/%: prf/%.o ${filter-out src/zuse.o,${KERN}}
+prf/%: prf/%.o lib/prufung.so ${filter-out src/zuse.o,${KERN}}
 	${LD} ${LDFLAGS} $^ -o $@
 
 
