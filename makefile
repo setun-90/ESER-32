@@ -7,40 +7,44 @@ LDFLAGS      := -ldl -pthread
 LD           := ${CXX}
 
 # Items
-TGT := zuse
-TGT-SRC := src/zuse.cc
-TGT-OBJ := obj/zuse.o
-PRF-SRCS := ${wildcard prf/*.cc}
-PRFN := ${PRF-SRCS:%.cc=%}
-SRCS := ${wildcard src/*.cc}
-OBJS := ${filter-out ${TGT-OBJ},${SRCS:src/%.cc=obj/%.o}}
+SRCS := ${shell find src/ prf/ -name '*.cc'}
+OBJS := ${SRCS:%.cc=%.o}
+KERN := ${filter-out prf/% src/gerat/%,${OBJS}}
+GRTE := ${filter src/gerat/%,${OBJS}}
 
 .PHONY: all clean
 
 .PRECIOUS: ${OBJS}
 
 
-all:  zuse ${PRFN}
+all:  zuse gerate prufungen # ${PRFN}
 
 zuse: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fipa-pta -fno-plt -fno-semantic-interposition -flto=auto -fdevirtualize-at-ltrans -floop-nest-optimize -fgraphite-identity
 zuse: LDFLAGS  := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc ${LDFLAGS}
 zuse: bin/zuse
 
-bin/%:  obj/%.o ${OBJS}
+bin/%: src/%.o ${KERN}
 	${LD} ${LDFLAGS} $^ -o $@
 
-obj/%.o: src/%.cc
-	${shell [[ ! -d ${@D} ]] && mkdir -p ${@D}}
+gerate: LDFLAGS := -Wl,-s,-O1,--sort-common,-Bsymbolic,-z,relro,-z,combreloc -shared ${LDFLAGS}
+gerate: ${GRTE:src/gerat/%.o=lib/%.so}
+lib/%.so: src/durchgangeinheit.o src/gerat/%.o
+	${LD} ${LDFLAGS} $^ -o $@
+
+
+
+
+prufungen: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+prufungen: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
+prufungen: ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
+prf/%: prf/%.o ${KERN}
+	${LD} ${LDFLAGS} $^ -o $@
+
+
+
+%.o: %.cc
 	${CXX} ${CXXFLAGS} -c $^ -o $@
 
 
-
-prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
-prf/%: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
-prf/%: ${OBJS} prf/%.o obj/gerat/prufung.o
-	${LD} ${LDFLAGS} $^ -o $@
-
-
-
 clean:
-	${RM} ${wildcard bin/*} ${wildcard obj/*} ${PRFN}
+	${RM} ${wildcard bin/*} ${wildcard lib/*} ${OBJS}
