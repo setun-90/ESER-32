@@ -11,6 +11,7 @@ SRCS := ${shell find src/ prf/ -name '*.cc'}
 OBJS := ${SRCS:%.cc=%.o}
 KERN := ${filter-out prf/% src/gerat/%,${OBJS}}
 GRTE := ${filter src/gerat/%,${OBJS}}
+PRFN := ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
 
 .PHONY: all clean
 
@@ -36,15 +37,11 @@ lib/%.so: src/durchgangeinheit.o src/gerat/%.o
 
 prufungen: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
 prufungen: LDFLAGS  := -Wl,-O1 ${LDFLAGS}
-prufungen: ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
-prf/%: prf/%.o ${KERN}
+prufungen: ${PRFN}
+prf/%: prf/%.o ${filter-out src/zuse.o,${KERN}}
 	${LD} ${LDFLAGS} $^ -o $@
 
 
 
-%.o: %.cc
-	${CXX} ${CXXFLAGS} -c $^ -o $@
-
-
 clean:
-	${RM} ${wildcard bin/*} ${wildcard lib/*} ${OBJS}
+	${RM} ${wildcard bin/*} ${wildcard lib/*} ${PRFN} ${OBJS}
