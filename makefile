@@ -2,7 +2,7 @@
 RM := rm -rf
 
 # Flags
-CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -falign-functions=32 -falign-jumps=32 -falign-loops=32
+CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -fPIC -falign-functions=32 -falign-jumps=32 -falign-loops=32
 LDFLAGS      := -ldl -pthread
 LD           := ${CXX}
 
