@@ -1,5 +1,8 @@
 #include "../src/durchgangeinheit.h"
 #include <trace.h>
+#include <dlfcn.h>
+#include <sstream>
+#include <iostream>
 #include <memory>
 
 using namespace std;
@@ -42,8 +45,22 @@ int main(void) {
 	hs.s(aaf + 16, (h32)0x003FFFF8);
 
 
-	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, nullptr));
+	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
+	char *f;
+	if (f = dlerror()) {
+		TRACE("Ladung ist gescheitert: " + string(f));
+		return 1;
+	}
+	durchgangeinheit::gerat &&(*abb)(istringstream &);
+	*(void **)(&abb) = dlsym(m, "abb");
+	if (f = dlerror()) {
+		TRACE("Anschalt ist gescheitert: " + string(f));
+		return 1;
+	}
+	istringstream i;
+	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, abb(i)));
 	e->ub((h64)0x0080400000800000);
+	while (!e->ls());
 	while (e->ls());
 	e->as();
 
