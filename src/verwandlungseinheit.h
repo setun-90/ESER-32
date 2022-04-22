@@ -28,35 +28,11 @@ template <> struct std::hash<umstand> {
 using namespace kunstspeicher;
 
 struct verwandlungseinheit {
-	verwandlungseinheit(wahrspeicher &s): hs(s) {}
+	verwandlungseinheit(wahrspeicher &s);
 
-	template <class type> void s(h32 k, h32 g, type a) {
-		h32 w[sizeof a];
-		this->vwl(w, k, sizeof a, g, zugriff::s);
-		for (size_t i(0); i < sizeof a; i++)
-			this->hs.s(w[i], static_cast<h8>(a >> (((sizeof a) - i - 1)*CHAR_BIT)));
-	}
-	template <class type> void l(type &a, h32 k, h32 g) {
-		h32 w[sizeof a];
-		this->vwl(w, k, sizeof a, g, zugriff::l);
-		h8 b;
-		a = 0;
-		for (size_t i(0); i < sizeof a; i++) {
-			this->hs.l(b, w[i]);
-			a |= static_cast<type>(b) << (((sizeof a) - i - 1)*CHAR_BIT);
-		}
-	}
-	template <class type> void a(type &a, h32 k, h32 g) {
-		h32 w[sizeof a];
-		this->vwl(w, k, sizeof a, g, zugriff::a);
-		h8 b;
-		a = 0;
-		for (size_t i(0); i < sizeof a; i++) {
-			this->hs.l(b, w[i]);
-			a |= static_cast<type>(b) << (((sizeof a) - i - 1)*CHAR_BIT);
-		}
-	}
-
+	template <class type> void s(h32 k, h32 g, type a);
+	template <class type> void l(type &a, h32 k, h32 g);
+	template <class type> void a(type &a, h32 k, h32 g);
 	void g(h64 &a, h32 k, h32 g);
 
 	void enk(h32 k, h32 g);

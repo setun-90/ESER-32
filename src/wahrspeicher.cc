@@ -15,6 +15,13 @@ void wahrspeicher::ute(h32 w) {
 }
 
 // Schreiben
+template <class type> void wahrspeicher::s(h32 w, type a) {
+	h8 b[sizeof a];
+	for (size_t i(0); i < sizeof a; i++)
+		b[i] = static_cast<h8>(a >> (((sizeof a) - i - 1)*CHAR_BIT));
+	std::lock_guard<std::mutex> l(this->m);
+	memcpy(this->hs.data() + w, b, sizeof a);
+}
 template <> void wahrspeicher::s(h32 w, h8 a) {
 	lock_guard<mutex> n(this->m);
 	this->hs[w] = a;
@@ -35,13 +42,30 @@ template <> void wahrspeicher::s(h32 w, h64 a) {
 	lock_guard<mutex> n(this->m);
 	memcpy(this->hs.data() + w, b, sizeof a);
 }
+template void wahrspeicher::s(h32,   h8);
+template void wahrspeicher::s(h32,   h16);
+template void wahrspeicher::s(h32,   h32);
+template void wahrspeicher::s(h32,   h64);
 
 // Lesen
+template <class type> void wahrspeicher::l(type &a, h32 w) {
+	h8 b[sizeof a];
+	{
+		std::lock_guard<std::mutex> l(this->m);
+		memcpy(b, this->hs.data() + w, sizeof a);
+	}
+	a = 0;
+	for (size_t i(0); i < sizeof a; i++)
+		a |= static_cast<type>(b[i]) << (((sizeof a) - i - 1)*CHAR_BIT);
+}
 template <> void wahrspeicher::l(h8 &a, h32 w) {
 	lock_guard<mutex> n(this->m);
 	a = this->hs[w];
 }
-
 size_t wahrspeicher::g() {
 	return this->hs.size();
 }
+template void wahrspeicher::l(h8 &,  h32);
+template void wahrspeicher::l(h16 &, h32);
+template void wahrspeicher::l(h32 &, h32);
+template void wahrspeicher::l(h64 &, h32);
