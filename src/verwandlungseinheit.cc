@@ -30,7 +30,7 @@ void verwandlungseinheit::g(h64 &a, h32 k, h32 g) {
 	}
 }
 void verwandlungseinheit::enk(h32 k, h32 g) {
-	pair<h32, h32> z(g, ((ka::gz & k) >> 22));
+	umstand z(g, ((ka::gz & k) >> 22));
 	if (this->s2f.find(z) == this->s2f.end())
 		return;
 	auto e(this->s2f[z]);
@@ -39,7 +39,7 @@ void verwandlungseinheit::enk(h32 k, h32 g) {
 		return;
 	}
 
-	z = pair<h32, h32>(s1::z & e, ((ka::s1z & k) >> 12));
+	z = umstand(s1::z & e, ((ka::s1z & k) >> 12));
 	if (this->s1f.find(z) == this->s1f.end())
 		return;
 	this->s1f.erase(z);
@@ -49,7 +49,7 @@ void verwandlungseinheit::vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z) {
 	for (size_t i(0); i < l; i++) {
 		auto ki(k + i);
 		// Grundfeldlauf
-		pair<h32, h32> le(g, ((ka::gz & ki) >> 22));
+		umstand le(g, ((ka::gz & ki) >> 22));
 		if (this->s2f.find(le) == this->s2f.end()) {
 			h32 f;
 			this->hs.l(f, le.first + (le.second << 2));
@@ -64,7 +64,7 @@ void verwandlungseinheit::vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z) {
 		}
 
 		// 1-Seitefeldlauf
-		le = pair<h32, h32>(s1::z & e, ((ka::s1z & ki) >> 12));
+		le = umstand(s1::z & e, ((ka::s1z & ki) >> 12));
 		if (this->s1f.find(le) == this->s1f.end()) {
 			h32 f;
 			this->hs.l(f, le.first + (le.second << 2));

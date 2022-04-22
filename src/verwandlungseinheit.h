@@ -13,15 +13,15 @@
 #include <functional>
 #include <climits>
 
-template <> struct std::hash<std::pair<h32, h32>> {
+using umstand = std::pair<h32, h32>;
+
+template <> struct std::hash<umstand> {
 	std::hash<h32> h;
-	size_t operator()(const std::pair<h32, h32> &k) const {
+	size_t operator()(umstand const &k) const {
 		if (sizeof(size_t) == 8)
-			return ((static_cast<size_t>(k.first)) << 32) | static_cast<size_t>(k.second);
-		else {
-			auto h_first(h(k.first));
-			return ((h_first << 16) | (h_first >> 16)) ^ h(k.second);
-		}
+			return (static_cast<size_t>(k.first) << 32) | static_cast<size_t>(k.second);
+		else
+			return 3*h(k.first) + h(k.second);
 	}
 };
 
@@ -64,8 +64,7 @@ struct verwandlungseinheit {
 private:
 	wahrspeicher &hs;
 
-	std::unordered_map<std::pair<h32, h32>, h32> s1f;
-	std::unordered_map<std::pair<h32, h32>, h32> s2f;
+	std::unordered_map<umstand, h32> s1f, s2f;
 
 	void vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z);
 	h32 s2zg(h32 e, zugriff z, h32 k, h32 g);
