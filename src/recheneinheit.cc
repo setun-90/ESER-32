@@ -1,4 +1,5 @@
 #include <sonderfalle.h>
+#include <unterbrechung.h>
 #include "recheneinheit.h"
 
 using namespace std;
@@ -38,15 +39,15 @@ void recheneinheit::operator()(void) {
 #else
 	unique_lock<mutex> l(this->m);
 	while (this->an) {
-		h32 ngfb((this->ube >> 32) & 0xFFFFF000);
+		h32 ngfb((this->ube >> 32) & 0xFFFFF000U);
 		if (this->zes) {
-			h64 aze((((h64)(this->gfb | (this->b << 1))) << 32) | this->az | this->zs);
+			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
 			this->se.s(0, ngfb, aze);
 		}
 		this->gfb =  ngfb;
-		this->b   = (this->ube >> 32) & 0x00000006;
-		this->az  =  this->ube & 0xFFFFFFFE;
-		this->zs  =  bool(this->ube & 1);
+		this->b   =  static_cast<h32>(this->ube >> 32) & 0x00000006U;
+		this->az  =  static_cast<h32>(this->ube) & 0xFFFFFFFEU;
+		this->zs  =  static_cast<bool>(this->ube & 1);
 
 		this->ube =  einheit::nube;
 		this->zes =  true;
