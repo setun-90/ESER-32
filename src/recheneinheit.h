@@ -14,12 +14,7 @@
 #include <condition_variable>
 #include <mutex>
 
-struct recheneinheit: public einheit {
-	recheneinheit(wahrspeicher &hs);
-
-	bool ls(void) override;
-
-private:
+class recheneinheit: public einheit {
 	// Anweisungsabteilungen
 	static const h8 a_g = 32 - 2, a_b = 32 - 8, a_z = 32 - 12, a_q = 32 - 16, a_an = 32 - 17;
 	static const h32 a_w = (1 << (32 - 12)) - 1, a_a = (1 << (32 - 20)) - 1, a_ra = (1 << (32 - 16)) - 1;
@@ -46,6 +41,11 @@ private:
 	h32 gfb;
 	h8  b;
 	bool zs, zes;
+
+public:
+	recheneinheit(wahrspeicher &hs);
+
+	bool ls(void) override;
 };
 
 

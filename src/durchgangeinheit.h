@@ -21,20 +21,6 @@ struct durchgangeinheit: public einheit {
 		virtual void l(durchgangeinheit *d, h32 z, h32 ab)   = 0;
 	};
 
-	durchgangeinheit(wahrspeicher &e, gerat &&g);
-
-	bool ls(void) override;
-
-	template <class art> void s(h32 k, art a) {
-		this->se.s(k, this->gfb, a);
-	}
-	template <class art> void l(art &a, h32 k) {
-		this->se.l(a, k, this->gfb);
-	}
-	template <class art> void a(art &a, h32 k) {
-		this->se.a(a, k, this->gfb);
-	}
-
 private:
 	void af(h64 a);
 	void ubv(void);
@@ -48,6 +34,21 @@ private:
 	bool zs;
 
 	gerat &&gr;
+
+public:
+	durchgangeinheit(wahrspeicher &e, gerat &&g);
+
+	bool ls(void) override;
+
+	template <class art> void s(h32 k, art a) {
+		this->se.s(k, this->gfb, a);
+	}
+	template <class art> void l(art &a, h32 k) {
+		this->se.l(a, k, this->gfb);
+	}
+	template <class art> void a(art &a, h32 k) {
+		this->se.a(a, k, this->gfb);
+	}
 };
 
 
