@@ -9,6 +9,16 @@ char const *sonderfalle::what() const noexcept {
 	return this->m.str().c_str();
 }
 
+ostream &operator<<(ostream &s, zugriff z) {
+	switch (z) {
+	case zugriff::s: s << 's'; break;
+	case zugriff::l: s << 'l'; break;
+	case zugriff::a: s << 'a'; break;
+	case zugriff::g: s << 'g'; break;
+	}
+	return s;
+}
+
 ZEE::ZEE(h32 k, h32 f):
 	sonderfalle(), _k(k), _f(f) {
 	this->m << hex << setfill('0');

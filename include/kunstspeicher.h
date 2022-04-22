@@ -59,14 +59,6 @@ namespace s2 {
 }
 }
 
-std::ostream &operator<<(std::ostream &s, kunstspeicher::zugriff z) {
-	switch (z) {
-	case kunstspeicher::zugriff::s: s << 's'; break;
-	case kunstspeicher::zugriff::l: s << 'l'; break;
-	case kunstspeicher::zugriff::a: s << 'a'; break;
-	case kunstspeicher::zugriff::g: s << 'g'; break;
-	}
-	return s;
-}
+
 
 #endif /* _KS_H */
