@@ -7,11 +7,6 @@
 /*     (C) 1979, 1988, 1992      */
 
 #include "einheit.h"
-#include "wahrspeicher.h"
-#include <unterbrechung.h>
-#include <kunstspeicher.h>
-
-#include <sstream>
 
 struct durchgangeinheit: public einheit {
 	struct gerat {
@@ -36,7 +31,7 @@ private:
 	gerat &&gr;
 
 public:
-	durchgangeinheit(wahrspeicher &e, gerat &&g);
+	durchgangeinheit(wahrspeicher &hs, gerat &&g);
 
 	bool ls(void) override;
 	template <class art> void s(h32 k, art a);

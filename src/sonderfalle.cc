@@ -1,10 +1,13 @@
 #include <sonderfalle.h>
+
 #include <sstream>
 #include <iomanip>
 #include <bitset>
 
 using namespace std;
 using namespace kunstspeicher;
+
+
 
 char const *sonderfalle::what() const noexcept {
 	return this->m.c_str();

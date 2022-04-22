@@ -3,7 +3,8 @@
 
 
 
-/* Überschrift hier */
+/* EZER Anschriftverwandlungseinheitsbegriffserklärung */
+/*                 (C) 1979, 1988, 1992                */
 
 #include <kunstspeicher.h>
 #include "wahrspeicher.h"

@@ -4,7 +4,7 @@
 
 
 /* EZER Hauptspeicher Begriffserklärungen */
-/*         (C) 1979, 1988, 1992           */
+/*          (C) 1979, 1988, 1992          */
 
 #include <cstdint>
 #include <cstddef>

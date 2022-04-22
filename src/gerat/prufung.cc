@@ -2,6 +2,8 @@
 
 using namespace std;
 
+
+
 prufung abb(istringstream &) {
 	return prufung();
 }

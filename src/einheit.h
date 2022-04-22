@@ -3,6 +3,9 @@
 
 
 
+/* EZER Einheitsentwurf */
+/* (C) 1979, 1988, 1992 */
+
 #include <hauptspeicher.h>
 #include <unterbrechung.h>
 #include "verwandlungseinheit.h"
@@ -44,6 +47,7 @@ h64 vzw(h64 n, h8 p);
 template <class type> type feld(h8 p1, h8 p2) {
 	return ((static_cast<type>(1) << (p1 - p2 + 1)) - 1) << p2;
 }
+
 
 
 #endif /* _VE_H */

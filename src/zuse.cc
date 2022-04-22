@@ -1,14 +1,18 @@
+#include <trace.h>
 #include "recheneinheit.h"
 #include "durchgangeinheit.h"
 #include "wahrspeicher.h"
-#include <trace.h>
-#include <dlfcn.h>
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <vector>
 
+#include <dlfcn.h>
+
 using namespace std;
+
+
 
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);

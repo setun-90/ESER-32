@@ -1,5 +1,6 @@
 #include "../src/recheneinheit.h"
 #include <memory>
+#include <ios>
 #include <trace.h>
 
 using namespace std;

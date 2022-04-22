@@ -1,6 +1,7 @@
+#include "recheneinheit.h"
+
 #include <sonderfalle.h>
 #include <unterbrechung.h>
-#include "recheneinheit.h"
 
 using namespace std;
 using namespace kunstspeicher;
@@ -11,6 +12,7 @@ recheneinheit::recheneinheit(wahrspeicher &hs):
 	einheit(hs), b(0), zs(false), zes(false) {
 	this->ns[0] = 0;
 }
+
 template <class art> void recheneinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
 }

@@ -4,10 +4,9 @@
 
 
 /* EZER Kunstspeicher Begriffserklärungen */
-/*        (C) 1979, 1988, 1992            */
+/*          (C) 1979, 1988, 1992          */
 
 #include "hauptspeicher.h"
-#include <sstream>
 
 namespace kunstspeicher {
 enum class zugriff {

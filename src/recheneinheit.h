@@ -7,8 +7,6 @@
 /*    (C) 1979, 1988, 1992    */
 
 #include "einheit.h"
-#include "wahrspeicher.h"
-#include <unterbrechung.h>
 
 #include <utility>
 #include <condition_variable>

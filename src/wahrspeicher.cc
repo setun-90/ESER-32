@@ -1,7 +1,10 @@
-#include "einheit.h"
 #include "wahrspeicher.h"
 
+#include "einheit.h"
+
 using namespace std;
+
+
 
 wahrspeicher::wahrspeicher(h32 g):
 	hs(g << 12) {}

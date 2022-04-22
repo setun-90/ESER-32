@@ -3,7 +3,8 @@
 
 
 
-/* Überschrift hier */
+/* EZER Wahrspeicherbegriffserklärung */
+/*        (C) 1979, 1988, 1992        */
 #include <hauptspeicher.h>
 
 #include <vector>

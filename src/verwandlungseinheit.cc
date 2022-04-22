@@ -1,9 +1,12 @@
+#include "verwandlungseinheit.h"
+
 #include <sonderfalle.h>
 #include <trace.h>
-#include "verwandlungseinheit.h"
 
 using namespace std;
 using namespace kunstspeicher;
+
+
 
 verwandlungseinheit::verwandlungseinheit(wahrspeicher &s):
 	hs(s) {}

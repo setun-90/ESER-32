@@ -1,15 +1,15 @@
+#include "durchgangeinheit.h"
+
 #include <sonderfalle.h>
 #include <unterbrechung.h>
-#include "durchgangeinheit.h"
-#include <utility>
 
 using namespace std;
 using namespace kunstspeicher;
 
 
 
-durchgangeinheit::durchgangeinheit(wahrspeicher &e, gerat &&g):
-	einheit(e), zs(false), gr(move(g)) {}
+durchgangeinheit::durchgangeinheit(wahrspeicher &hs, gerat &&g):
+	einheit(hs), zs(false), gr(move(g)) {}
 
 void durchgangeinheit::ubv(void) {
 	h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
