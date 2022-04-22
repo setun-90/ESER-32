@@ -7,7 +7,7 @@
 /*        (C) 1979, 1988, 1992            */
 
 #include "hauptspeicher.h"
-#include <ostream>
+#include <sstream>
 
 namespace kunstspeicher {
 enum class zugriff {
@@ -59,14 +59,14 @@ namespace s2 {
 }
 }
 
-template <class CharT, class traits> std::basic_ostringstream<CharT, traits> &&operator<<(std::basic_ostringstream<CharT, traits> &&s, kunstspeicher::zugriff z) {
+std::ostream &operator<<(std::ostream &s, kunstspeicher::zugriff z) {
 	switch (z) {
-	case kunstspeicher::zugriff::s: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 's'; break;
-	case kunstspeicher::zugriff::l: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'l'; break;
-	case kunstspeicher::zugriff::a: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'a'; break;
-	case kunstspeicher::zugriff::g: static_cast<std::basic_ostream<CharT, traits> &&>(s) << 'g'; break;
+	case kunstspeicher::zugriff::s: s << 's'; break;
+	case kunstspeicher::zugriff::l: s << 'l'; break;
+	case kunstspeicher::zugriff::a: s << 'a'; break;
+	case kunstspeicher::zugriff::g: s << 'g'; break;
 	}
-	return std::move(s);
+	return s;
 }
 
 #endif /* _KS_H */

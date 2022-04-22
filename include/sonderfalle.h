@@ -7,11 +7,12 @@
 
 #include "kunstspeicher.h"
 
+#include <sstream>
 #include <exception>
 
 class sonderfalle: public std::exception {
 protected:
-	std::string m;
+	std::ostringstream m;
 public:
 	char const *what() const noexcept;
 };
