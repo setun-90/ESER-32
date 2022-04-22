@@ -8,7 +8,7 @@ using namespace kunstspeicher;
 
 
 recheneinheit::recheneinheit(wahrspeicher &hs):
-	einheit(hs), b(0), zes(false), zs(false) {
+	einheit(hs), b(0), zs(false), zes(false) {
 	this->ns[0] = 0;
 }
 
