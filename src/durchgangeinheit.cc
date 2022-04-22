@@ -1,4 +1,5 @@
 #include <sonderfalle.h>
+#include <unterbrechung.h>
 #include "durchgangeinheit.h"
 #include <utility>
 
@@ -11,7 +12,7 @@ durchgangeinheit::durchgangeinheit(wahrspeicher &e, gerat &&g):
 	einheit(e), zs(false), gr(move(g)) {}
 
 void durchgangeinheit::ubv(void) {
-	h32 gf((this->ube >> 32) & 0xFFFFF000U), ka(this->ube & 0xFFFFFFFFU);
+	h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
 	this->se.l(this->uez, ka, gf);
 	this->se.l(this->utz, ka + 4, gf);
 	this->se.l(this->gfb, ka + 8, gf);
