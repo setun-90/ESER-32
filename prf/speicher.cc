@@ -9,17 +9,18 @@
 #include <tuple>
 #include <bitset>
 
+using namespace std;
 using namespace kunstspeicher;
 
 int main(void) {
-	std::ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
 
 	TRACE("*** Hauptspeicheranfang");
 	wahrspeicher hs(2048 + 5);
-	TRACE("Hauptspeichergröße: " + std::to_string(hs.g()));
+	TRACE("Hauptspeichergröße: " + to_string(hs.g()));
 
 	TRACE("*** Beispielzugriffe in den Hauptspeicher");
-	h64 q64(0x0000030405060708);
+	h64 q64(0x0000030405060708U);
 	hs.s(7, q64);
 
 	h8 z8[sizeof q64];
@@ -35,15 +36,15 @@ int main(void) {
 	  | (static_cast<h64>(z8[6]) << 8)
 	  | static_cast<h64>(z8[7]));
 	if (z64 != q64)
-		throw std::logic_error(std::to_string(z64) + " != " + std::to_string(q64));
+		throw logic_error(to_string(z64) + " != " + to_string(q64));
 
 	TRACE("*** Beispielzugriffe in den Kunstspeicher");
-	h32  gf(0x00804000),
-		s2b(0x00200000),
-		s2s(0x00802001), s2t(0x00600000);
-	h32 s1f(0x00803800),
-		s1b(0x00800800),
-		s1s(0x00802011), s1t(0x00801800);
+	h32  gf(0x00804000U),
+		s2b(0x00200000U),
+		s2s(0x00802001U), s2t(0x00600000U);
+	h32 s1f(0x00803800U),
+		s1b(0x00800800U),
+		s1s(0x00802011U), s1t(0x00801800U);
 
 	verwandlungseinheit e(hs);
 
@@ -56,16 +57,16 @@ int main(void) {
 	hs.s((s1::z & s1f) + 12, s1s);
 	hs.s(ss::z & s2s,        s2t);
 	hs.s(ss::z & s1s,        s1t);
-	for (auto ka: {(h32)0x003FFFFC, (h32)0x01000FFC}) {
+	for (auto ka: {static_cast<h32>(0x003FFFFCU), static_cast<h32>(0x01000FFCU)}) {
 		try {
 			e.s(ka, gf, q64);
-			throw std::logic_error("Unmapped address accepted");
+			throw logic_error("Unmapped address accepted");
 		} catch (ZEE const &e) {
 			TRACE(e.what());
 		}
 	}
 
-	h32 ka1(0x00300FFC), ka2(0x010000FC), ka3(0x00BFFFFC), ka4(0x01002FFC);
+	h32 ka1(0x00300FFCU), ka2(0x010000FCU), ka3(0x00BFFFFCU), ka4(0x01002FFCU);
 
 	hs.s(gf,          s2b);
 	hs.s(s1::z & s1f, s1b);
@@ -73,17 +74,17 @@ int main(void) {
 	e.enk(ka2, s1::z & s1f);
 
 	for (auto ez: {
-		std::make_tuple(ka1, s2b,                gf),
-		std::make_tuple(ka2, s1b,       s1f & s1::z),
-		std::make_tuple(ka3, s2b,            gf + 8),
-		std::make_tuple(ka4, s1b, (s1f & s1::z) + 8)
+		make_tuple(ka1, s2b,                gf),
+		make_tuple(ka2, s1b,       s1f & s1::z),
+		make_tuple(ka3, s2b,            gf + 8),
+		make_tuple(ka4, s1b, (s1f & s1::z) + 8)
 	}) {
-		auto ka(std::get<0>(ez)), fe(std::get<1>(ez)), fa(std::get<2>(ez));
+		auto ka(get<0>(ez)), fe(get<1>(ez)), fa(get<2>(ez));
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		try {
 			e.s(ka, gf, q64);
-			throw std::logic_error("Forbidden write succeeded");
+			throw logic_error("Forbidden write succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
@@ -92,7 +93,7 @@ int main(void) {
 		e.enk(ka + 4, gf);
 		try {
 			e.l(z64, ka, gf);
-			throw std::logic_error("Forbidden read succeeded");
+			throw logic_error("Forbidden read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
@@ -101,7 +102,7 @@ int main(void) {
 		e.enk(ka + 4, gf);
 		try {
 			e.a(z64, ka, gf);
-			throw std::logic_error("Forbidden instruction read succeeded");
+			throw logic_error("Forbidden instruction read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
@@ -110,7 +111,7 @@ int main(void) {
 		e.enk(ka + 4, gf);
 		try {
 			e.g(z64, ka, gf);
-			throw std::logic_error("Forbidden context entry read succeeded");
+			throw logic_error("Forbidden context entry read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
@@ -118,14 +119,14 @@ int main(void) {
 	}
 
 	for (auto ez: {
-		std::make_tuple(ka1,                 gf,          gf),
-		std::make_tuple(ka2,        s1::z & s1f, s1::z & s1f),
-		std::make_tuple(ka3,            gf + 12, ss::z & s2s),
-		std::make_tuple(ka4, (s1::z & s1f) + 12, ss::z & s1s)
+		make_tuple(ka1,                 gf,          gf),
+		make_tuple(ka2,        s1::z & s1f, s1::z & s1f),
+		make_tuple(ka3,            gf + 12, ss::z & s2s),
+		make_tuple(ka4, (s1::z & s1f) + 12, ss::z & s1s)
 	}) {
-		auto ka(std::get<0>(ez)),
-			sa(std::get<1>(ez)),
-			ta(std::get<2>(ez));
+		auto ka(get<0>(ez)),
+			sa(get<1>(ez)),
+			ta(get<2>(ez));
 		h32 fs, ft;
 		hs.l(fs, sa);
 		hs.s(sa, fs | ss::s);
@@ -136,7 +137,7 @@ int main(void) {
 		e.enk(ka + 4, gf);
 		try {
 			e.s(ka, gf, q64);
-			throw std::logic_error("Write to absent page succeeded");
+			throw logic_error("Write to absent page succeeded");
 		} catch (ZSW const &e) {
 			TRACE(e.what());
 		}
@@ -158,7 +159,7 @@ int main(void) {
 		ka3,
 		ka4
 	}) {
-		TRACE((std::ostringstream() << std::hex << std::setfill('0') << std::setw(8) << gf).str());
+		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str());
 		e.s(ka, gf, q64);
 		TRACE("");
 		for (size_t i(0); i < sizeof q64; i++) {
@@ -174,7 +175,7 @@ int main(void) {
 		    | (static_cast<h64>(z8[6]) << 8)
 		    | static_cast<h64>(z8[7]);
 		if (z64 != q64)
-			throw std::logic_error(std::to_string(z64) + " != " + std::to_string(q64));
+			throw logic_error(to_string(z64) + " != " + to_string(q64));
 	}
 
 	return 0;

@@ -10,9 +10,9 @@ int main(void) {
 
 	/* Main memory */
 	wahrspeicher hs(10);
-	h32  gf1(0x00000000), gf2(0x00001000);
-	h32  s1f1(0x00002800), s1f2(0x00003800);
-	h32  sgs(0x00000FF1), sgt(0x00004000), sb1(0x00005800), sb2(0x00006800), sba(0x00007800), sbe(0x00009800);
+	h32  gf1(0x00000000U), gf2(0x00001000U);
+	h32  s1f1(0x00002800U), s1f2(0x00003800U);
+	h32  sgs(0x00000FF1U), sgt(0x00004000U), sb1(0x00005800U), sb2(0x00006800U), sba(0x00007800U), sbe(0x00009800U);
 
 	hs.s(gf1, s1f1);
 	hs.s(gf2, s1f2);
@@ -27,20 +27,20 @@ int main(void) {
 
 	h64 ze(0x3001ULL);
 	hs.s(ss::z & sgs, sgt);
-	hs.s((ss::z & sbe) + 8,  0ULL);
+	hs.s((ss::z & sbe) + 8,  static_cast<h64>(0ULL));
 	hs.s((ss::z & sbe) + 16, ze);
 
 	/* Test program */
 	h32 aaf(s1::z & sba), az(aaf);
 	/**** Jump instructions */
-	hs.s(az, 0x00000004); az += 4;
-	hs.s(az, 0x0F000004); az += 4;
-	hs.s(az, 0x0F000004); az += 4;
-	hs.s(az, 0x0F0FFFF8); az += 4;
-	hs.s(az, (h16)0xCF10); az += 2;
+	hs.s(az, static_cast<h32>(0x00000004U)); az += 4;
+	hs.s(az, static_cast<h32>(0x0F000004U)); az += 4;
+	hs.s(az, static_cast<h32>(0x0F000004U)); az += 4;
+	hs.s(az, static_cast<h32>(0x0F0FFFF8U)); az += 4;
+	hs.s(az, static_cast<h16>(0xCF10U)); az += 2;
 
 	/**** Move and conditional jump instructions */
-	hs.s(az, (h16)0xF010); az += 2;
+	hs.s(az, static_cast<h16>(0xF010U)); az += 2;
 //	hs.s(az, 0x07000004); az += 4;
 //	hs.s(az, 0x180F0000); az += 4;
 
@@ -48,7 +48,7 @@ int main(void) {
 //	hs.s(az, 0xB2004008); az += 4;
 
 	/**** Shutdown */
-	hs.s(az, 0x72004008);
+	hs.s(az, static_cast<h32>(0x72004008U));
 
 
 	shared_ptr<einheit> e1(make_shared<recheneinheit>(hs));
