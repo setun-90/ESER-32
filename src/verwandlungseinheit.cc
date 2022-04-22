@@ -1,9 +1,6 @@
 #include <sonderfalle.h>
 #include <trace.h>
 #include "verwandlungseinheit.h"
-#include <string>
-#include <cstring>
-#include <iostream>
 
 using namespace std;
 using namespace kunstspeicher;
