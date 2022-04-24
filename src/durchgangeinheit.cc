@@ -48,13 +48,12 @@ void durchgangeinheit::operator()(void) {
 		this->ube = einheit::nube;
 		l.unlock();
 
-		this->zs = true;
 		try {
-			h64 a;
 			do {
-				this->a(a, this->az);
-				this->af(a);
+				this->af();
 			} while (this->ss && this->zs && this->ube == einheit::nube);
+			if (!this->ss)
+				break;
 		} catch (sonderfalle const &e) {
 			h64 ue;
 			this->l(ue, this->uez);
@@ -69,13 +68,16 @@ bool durchgangeinheit::ls(void) {
 	return this->zs;
 }
 
-void durchgangeinheit::af(h64 a) {
+void durchgangeinheit::af(void) {
+	h64 a;
+	this->a(a, this->az);
+
 	h64 p(1ULL << (64 - 11));
 
 	// Regelungsanweisung
 	if (!((a >> (64 - 3)) & 1) && !((a >> (64 - 10)) & ((1U << 6) - 1))) {
-		this->az += (vzw(a, p) >> 32) + 4;
 		this->zs = !((a >> (64 - 1)) & 1);
+		this->az += (vzw(a, p) >> 32) + 4;
 		return;
 	// Übertragungsanweisung
 	} else if (((a >> (64 - 10)) & ((1U << 6) - 1)) < 3) {

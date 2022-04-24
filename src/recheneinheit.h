@@ -18,7 +18,7 @@ class recheneinheit: public einheit {
 	static const h32 a_w = (1 << (32 - 12)) - 1, a_a = (1 << (32 - 20)) - 1, a_ra = (1 << (32 - 16)) - 1;
 
 	void operator()(void) override;
-	void af(h32 a);
+	void af(void);
 	template <class art> void s(h32 k, art a);
 	template <class art> void l(art &a, h32 k);
 	template <class art> void a(art &a, h32 k);

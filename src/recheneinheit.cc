@@ -55,10 +55,8 @@ void recheneinheit::operator()(void) {
 		if (!this->zs)
 			break;
 		this->zes =  true;
-		h32 a;
 		do {
-			this->a(a, this->az);
-			this->af(a);
+			this->af();
 		} while (this->ss && this->zs && this->ube == einheit::nube);
 		if (!this->ss)
 			break;
@@ -80,7 +78,9 @@ h8 recheneinheit::zb(h32 a) {
 	return !a ? 0 : a > 0 ? 1 : 2;
 }
 
-void recheneinheit::af(h32 a) {
+void recheneinheit::af(void) {
+	h32 a;
+	this->a(a, this->az);
 	// Regelungsanweisungen
 	if (!(a & (1 << (32 - 3)))) {
 		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
