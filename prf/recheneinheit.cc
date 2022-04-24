@@ -53,10 +53,11 @@ int main(void) {
 
 
 	shared_ptr<einheit> e1(make_shared<recheneinheit>(hs));
+	e1->an();
 	e1->ub(ze);
 	while (!e1->ls());
 	while (e1->ls());
-	e1->as();
+	e1->ab();
 
 	return 0;
 }
