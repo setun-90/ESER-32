@@ -59,10 +59,11 @@ int main(void) {
 	}
 	istringstream i;
 	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, abb(i)));
+	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000U));
 	while (!e->ls());
 	while (e->ls());
-	e->as();
+	e->ab();
 
 	return 0;
 }

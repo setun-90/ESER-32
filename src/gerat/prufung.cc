@@ -8,8 +8,8 @@ prufung abb(istringstream &) {
 	return prufung();
 }
 
-void prufung::operator()(durchgangeinheit *, h64 &) {
-	return;
+void prufung::operator()(durchgangeinheit *, h64, h32 &az) {
+	az += 4;
 }
 
 void prufung::s(durchgangeinheit *d, h32 z, h32 ab) {

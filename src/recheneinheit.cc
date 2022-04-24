@@ -34,32 +34,11 @@ template void recheneinheit::a(h16 &a, h32 k);
 template void recheneinheit::a(h32 &a, h32 k);
 
 void recheneinheit::operator()(void) {
-#if __cplusplus >= 202002L
-	do {
-		this->ube.wait(einheit::nube);
-		h64 aze(0);
-		if (this->zs) {
-			aze = ((h64)(this->gfb | (this->b << 1)) << 32) | this->az | this->zs;
-		}
-		this->gfb = (this->ube >> 32) & 0xFFFFF000;
-		this->b   = (this->ube >> 32) & 0x00000006;
-		this->az  =  this->ube & 0xFFFFFFFE;
-		this->zs  =  this->ube & 1;
-		if (aze & 1) {
-			this->s(0, aze);
-		}
-		this->ube =  einheit::nube;
-		if (this->zs) {
-			h32 a;
-			do {
-				this->a(a, this->az);
-				this->af(a);
-			} while (this->an && this->ube == einheit::nube);
-		}
-	} while (this->an);
-#else
 	unique_lock<mutex> l(this->m);
-	while (this->an) {
+	for (;;) {
+		this->cv.wait(l, [this]{ return !this->ss || this->ube != einheit::nube; });
+		if (!this->ss)
+			break;
 		h32 ngfb((this->ube >> 32) & 0xFFFFF000U);
 		if (this->zes) {
 			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
@@ -71,20 +50,20 @@ void recheneinheit::operator()(void) {
 		this->zs  =  static_cast<bool>(this->ube & 1);
 
 		this->ube =  einheit::nube;
-		this->zes =  true;
 		l.unlock();
 
-		if (this->zs) {
-			h32 a;
-			do {
-				this->a(a, this->az);
-				this->af(a);
-			} while (this->an && this->ube == einheit::nube);
-		}
+		if (!this->zs)
+			break;
+		this->zes =  true;
+		h32 a;
+		do {
+			this->a(a, this->az);
+			this->af(a);
+		} while (this->ss && this->zs && this->ube == einheit::nube);
+		if (!this->ss)
+			break;
 		l.lock();
-		this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
 	}
-#endif
 }
 
 bool recheneinheit::ls(void) {

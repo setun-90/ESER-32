@@ -13,40 +13,33 @@ h64 vzw(h64 n, h8 p) {
 }
 
 einheit::einheit(wahrspeicher &e):
-	se(e), ube(einheit::nube), an(false) {}
+	se(e), ss(false), ube(einheit::nube) {}
 
 void einheit::ub(h64 e) {
-	if (!this->an) {
-		this->an = true;
-		this->t = thread(&einheit::operator(), this);
-	}
-#if __cplusplus >= 202002L
-	this->ube = e;
-	this->ube.notify_one();
-#else
+	if (!this->ss)
+		return;
 	{
 		lock_guard<mutex> l(this->m);
 		this->ube = e;
 	}
 	this->cv.notify_one();
-#endif
 }
 
-void einheit::as(void) {
-#if __cplusplus >= 202002L
-	if (this->an) {
-		this->an = false;
-		this->an.notify_one();
-		this->t.join();
+void einheit::an(void) {
+	if (this->ss)
+		return;
+	this->ss = true;
+	this->t = thread(&einheit::operator(), this);
+	this->cv.notify_one();
+}
+
+void einheit::ab(void) {
+	if (!this->ss)
+		return;
+	{
+		lock_guard<mutex> l(this->m);
+		this->ss = false;
 	}
-#else
-	if (this->an) {
-		{
-			lock_guard<mutex> l(this->m);
-			this->an = false;
-		}
-		this->cv.notify_one();
-		this->t.join();
-	}
-#endif
+	this->cv.notify_one();
+	this->t.join();
 }

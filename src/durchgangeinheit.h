@@ -11,9 +11,15 @@
 struct durchgangeinheit: public einheit {
 	struct gerat {
 		virtual ~gerat() = default;
-		virtual void operator()(durchgangeinheit *d, h64 &a) = 0;
-		virtual void s(durchgangeinheit *d, h32 z, h32 ab)   = 0;
-		virtual void l(durchgangeinheit *d, h32 z, h32 ab)   = 0;
+		gerat() = default;
+		gerat(gerat const &) = delete;
+		gerat &operator=(gerat const &) = delete;
+		gerat(gerat &&) = default;
+		gerat &operator=(gerat &&) = default;
+
+		virtual void operator()(durchgangeinheit *d, h64 a, h32 &az) = 0;
+		virtual void s(durchgangeinheit *d, h32 z, h32 ab)           = 0;
+		virtual void l(durchgangeinheit *d, h32 z, h32 ab)           = 0;
 	};
 
 private:

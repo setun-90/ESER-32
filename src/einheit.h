@@ -19,19 +19,18 @@ struct einheit {
 	virtual ~einheit() = default;
 	virtual bool ls(void) = 0;
 	void ub(h64 e);
-	void as(void);
+	void an(void);
+	void ab(void);
 	static h64 const nube = static_cast<h64>(1) << 32;
 
 protected:
 	verwandlungseinheit se;
 	virtual void operator()(void) = 0;
+	std::atomic<bool> ss;
 	std::atomic<h64> ube;
-	std::atomic<bool> an;
 	std::thread t;
-#if __cplusplus < 202002L
 	std::condition_variable cv;
 	std::mutex m;
-#endif
 
 	einheit(wahrspeicher &e);
 	einheit(einheit const &) = delete;

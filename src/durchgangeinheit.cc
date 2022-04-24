@@ -39,29 +39,11 @@ template void durchgangeinheit::a(h32 &a, h32 k);
 template void durchgangeinheit::a(h64 &a, h32 k);
 
 void durchgangeinheit::operator()(void) {
-#if __cplusplus >= 202002L
-	do {
-		while (this->ube == einheit::nube)
-			this->ube.wait(einheit::nube);
-		this->ubv();
-		this->ube = einheit::nube;
-		this->zs = true;
-		h64 a;
-		try {
-			do {
-				this->a(a, this->az);
-				this->af(a);
-			} while (this->zs && this->ube == einheit::nube);
-		} catch (sonderfalle const &e) {
-			h64 ue;
-			this->l(ue, this->uez);
-			this->s(this->utz, ue);
-			this->zs = false;
-		}
-	} while (this->an);
-#else
 	unique_lock<mutex> l(this->m);
-	while (this->an) {
+	for (;;) {
+		this->cv.wait(l, [this]{ return !this->ss || this->ube != einheit::nube; });
+		if (!this->ss)
+			break;
 		this->ubv();
 		this->ube = einheit::nube;
 		l.unlock();
@@ -72,7 +54,7 @@ void durchgangeinheit::operator()(void) {
 			do {
 				this->a(a, this->az);
 				this->af(a);
-			} while (this->an && this->zs && this->ube == einheit::nube);
+			} while (this->ss && this->zs && this->ube == einheit::nube);
 		} catch (sonderfalle const &e) {
 			h64 ue;
 			this->l(ue, this->uez);
@@ -80,9 +62,7 @@ void durchgangeinheit::operator()(void) {
 			this->zs = false;
 		}
 		l.lock();
-		this->cv.wait(l, [this]{ return !this->an || this->ube != einheit::nube; });
 	}
-#endif
 }
 
 bool durchgangeinheit::ls(void) {
@@ -92,41 +72,39 @@ bool durchgangeinheit::ls(void) {
 void durchgangeinheit::af(h64 a) {
 	h64 p(1ULL << (64 - 11));
 
-	if ((a >> (64 - 9)) & ((1 << 6) - 1)) {
-		this->gr(this, a);
-		return;
-	}
 	// Regelungsanweisung
-	if (!(a & (1ULL << (64 - 3)))) {
-		switch ((a & (p - 1)) >> 32) {
-		case 0: {
-			az += (vzw(a, p) >> 32) + 4;
-			break;
-		}
-		// Verweiterungen dieser Teil des Entwurfs hier.
-		}
+	if (!((a >> (64 - 3)) & 1) && !((a >> (64 - 10)) & ((1U << 6) - 1))) {
+		this->az += (vzw(a, p) >> 32) + 4;
+		this->zs = !((a >> (64 - 1)) & 1);
 		return;
 	// Übertragungsanweisung
-	} else {
+	} else if (((a >> (64 - 10)) & ((1U << 6) - 1)) < 3) {
 		h32 z, ab;
-		if (a & (1ULL << (64 - 5))) {
+		if ((a >> (64 - 4)) & 1) {
 			// Beständergestalt
 			z  = ((a & (p - 1)) >> 32);
 			ab = (a & ((1ULL << 32) - 1));
+			this->az += 8;
 		} else {
 			// Speichergestalt
 			h32 ba((a & (p - 1)) >> 32);
 			this->l(ab,  ba);
 			this->l(z, ba + 4);
+			this->az += 4;
 		}
 
-		if (a & (1ULL << (64 - 4))) {
+		if (!((a >> (64 - 10)) & ((1U << 6) - 1))) {
 			// Lesung
 			this->gr.l(this, z, ab);
 		} else {
 			// Schreibung
 			this->gr.s(this, z, ab);
 		}
+		this->zs = !((a >> (64 - 1)) & 1);
+		return;
+	} else {
+		this->gr(this, a, this->az);
+		this->zs = !((a >> (64 - 1)) & 1);
 		return;
 	}
 
