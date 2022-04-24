@@ -13,10 +13,10 @@ h32 prufung::operator()(durchgangeinheit *, h64) {
 }
 
 void prufung::s(durchgangeinheit *d, h32 z, h32 ab) {
-	for (size_t i(0); i < z; i++)
+	for (h32 i(0); i < z; i++)
 		d->s(ab + i, this->e());
 }
 void prufung::l(durchgangeinheit *, h32 z, h32) {
-	for (size_t i(0); i < z; i++)
+	for (h32 i(0); i < z; i++)
 		this->e.discard(1);
 }
