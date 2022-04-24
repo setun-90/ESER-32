@@ -103,8 +103,8 @@ void durchgangeinheit::af(h64 a) {
 		this->zs = !((a >> (64 - 1)) & 1);
 		return;
 	} else {
-		this->gr(this, a, this->az);
-		this->zs = !((a >> (64 - 1)) & 1);
+		this->az += this->gr(this, a);
+		this->zs  = !((a >> (64 - 1)) & 1);
 		return;
 	}
 
