@@ -23,9 +23,8 @@ struct durchgangeinheit: public einheit {
 	};
 
 private:
-	void af(void);
-	void ubv(void);
 	void operator()(void) override;
+	void af(void);
 
 	h32 az;
 	h32 gfb;

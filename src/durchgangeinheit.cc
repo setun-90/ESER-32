@@ -11,13 +11,6 @@ using namespace kunstspeicher;
 durchgangeinheit::durchgangeinheit(wahrspeicher &hs, gerat &&g):
 	einheit(hs), zs(false), gr(move(g)) {}
 
-void durchgangeinheit::ubv(void) {
-	h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
-	this->se.l(this->uez, ka, gf);
-	this->se.l(this->utz, ka + 4, gf);
-	this->se.l(this->gfb, ka + 8, gf);
-	this->se.l(this->az, ka + 12, gf);
-}
 template <class art> void durchgangeinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
 }
@@ -44,9 +37,13 @@ void durchgangeinheit::operator()(void) {
 		this->cv.wait(l, [this]{ return !this->ss || this->ube != einheit::nube; });
 		if (!this->ss)
 			break;
-		this->ubv();
+		h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
 		this->ube = einheit::nube;
 		l.unlock();
+		this->se.l(this->uez, ka, gf);
+		this->se.l(this->utz, ka + 4, gf);
+		this->se.l(this->gfb, ka + 8, gf);
+		this->se.l(this->az, ka + 12, gf);
 
 		try {
 			do {

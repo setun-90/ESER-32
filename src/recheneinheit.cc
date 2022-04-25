@@ -12,6 +12,9 @@ recheneinheit::recheneinheit(wahrspeicher &hs):
 	einheit(hs), b(0), zs(false), zes(false) {
 	this->ns[0] = 0;
 }
+bool recheneinheit::ls(void) {
+	return this->zs;
+}
 
 template <class art> void recheneinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
@@ -39,18 +42,21 @@ void recheneinheit::operator()(void) {
 		this->cv.wait(l, [this]{ return !this->ss || this->ube != einheit::nube; });
 		if (!this->ss)
 			break;
-		h32 ngfb((this->ube >> 32) & 0xFFFFF000U);
-		if (this->zes) {
-			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
-			this->se.s(0, ngfb, aze);
-		}
-		this->gfb =  ngfb;
-		this->b   =  static_cast<h32>(this->ube >> 32) & 0x00000006U;
-		this->az  =  static_cast<h32>(this->ube) & 0xFFFFFFFEU;
-		this->zs  =  static_cast<bool>(this->ube & 1);
-
+		h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
 		this->ube =  einheit::nube;
 		l.unlock();
+
+		h64 ze;
+		this->se.g(ze, ka, gf);
+		h32 ngfb((ze >> 32) & 0xFFFFF000U);
+		if (this->zes) {
+			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
+			this->se.s(0, ngfb - 16, aze);
+		}
+		this->gfb =  ngfb;
+		this->b   =  (ze >> 32) & 0x00000006U;
+		this->az  =   ze & 0xFFFFFFFEU;
+		this->zs  =  static_cast<bool>(ze & 1);
 
 		if (!this->zs)
 			break;
@@ -62,10 +68,6 @@ void recheneinheit::operator()(void) {
 			break;
 		l.lock();
 	}
-}
-
-bool recheneinheit::ls(void) {
-	return this->zs;
 }
 
 void recheneinheit::nss(h8 z, h32 a) {
