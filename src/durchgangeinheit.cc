@@ -75,7 +75,6 @@ void durchgangeinheit::af(void) {
 	if (!((a >> (64 - 3)) & 1) && !((a >> (64 - 10)) & ((1U << 6) - 1))) {
 		this->zs = !((a >> (64 - 1)) & 1);
 		this->az += (vzw(a, p) >> 32) + 4;
-		return;
 	// Übertragungsanweisung
 	} else if (((a >> (64 - 10)) & ((1U << 6) - 1)) < 3) {
 		h32 z, ab;
@@ -100,12 +99,8 @@ void durchgangeinheit::af(void) {
 			this->gr.s(this, z, ab);
 		}
 		this->zs = !((a >> (64 - 1)) & 1);
-		return;
 	} else {
 		this->az += this->gr(this, a);
 		this->zs  = !((a >> (64 - 1)) & 1);
-		return;
 	}
-
-	throw AUA(this->az, this->gfb, a);
 }
