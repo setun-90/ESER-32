@@ -37,4 +37,4 @@ The principal documentation are the PDFs in doc/:
 * de\_64.pdf / ae\_32.pdf: The original texts of the EZER-64 specification, in German and Ard English.
 
 ## Further information
-Visit #EZER on Libera for any questions (9:00-23:00 UTC-3); you will need to be registered to join.
+Visit #EZER on Libera for any questions (9:00-23:00 UTC+1); you will need to be registered to join.
