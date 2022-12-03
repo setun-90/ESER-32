@@ -8,8 +8,8 @@ using namespace kunstspeicher;
 
 
 
-durchgangeinheit::durchgangeinheit(wahrspeicher &hs, gerat &&g):
-	einheit(hs), zs(false), gr(move(g)) {}
+durchgangeinheit::durchgangeinheit(wahrspeicher &hs, durchgangeinheit::gerat &&gr):
+	einheit(hs), zs(false), g(move(gr)) {}
 
 template <class art> void durchgangeinheit::s(h32 k, art a) {
 	this->se.s(k, this->gfb, a);
@@ -93,14 +93,14 @@ void durchgangeinheit::af(void) {
 
 		if (!((a >> (64 - 10)) & ((1U << 6) - 1))) {
 			// Lesung
-			this->gr.l(this, z, ab);
+			this->g.l(this, z, ab);
 		} else {
 			// Schreibung
-			this->gr.s(this, z, ab);
+			this->g.s(this, z, ab);
 		}
 		this->zs = !((a >> (64 - 1)) & 1);
 	} else {
-		this->az += this->gr(this, a);
+		this->az += this->g(this, a);
 		this->zs  = !((a >> (64 - 1)) & 1);
 	}
 }

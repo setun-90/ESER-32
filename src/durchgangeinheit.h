@@ -43,7 +43,7 @@ private:
 	h8  b;
 	bool zs;
 
-	gerat &&gr;
+	gerat &&g;
 
 public:
 	durchgangeinheit(wahrspeicher &hs, gerat &&g);
