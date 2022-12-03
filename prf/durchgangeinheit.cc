@@ -33,7 +33,7 @@ int main(void) {
 	/* Channel interrupt data structure */
 	h32 aaf(0x00000200U);
 	hs.s(0,  static_cast<h32>(0x00800000U));
-	hs.s(4,  static_cast<h32>(0x00000010U));
+	hs.s(4,  static_cast<h32>(0x00C00010U));
 	hs.s(8,  gf);
 	hs.s(12, aaf);
 
