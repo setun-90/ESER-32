@@ -18,6 +18,8 @@
 
 #include "hauptspeicher.h"
 
+#include <unordered_map>
+
 namespace kunstspeicher {
 enum class zugriff {
 	s = 0x4, // 0b100
@@ -25,6 +27,13 @@ enum class zugriff {
 	a = 0x1, // 0b001
 	g = 0    // 0b000
 };
+
+static std::unordered_map<zugriff, char> zugriff_wb({
+	{zugriff::s, 's'},
+	{zugriff::l, 'l'},
+	{zugriff::a, 'a'},
+	{zugriff::g, 'g'}
+});
 
 /* Angaben */
 /*** Kunstanschriften */

@@ -13,15 +13,6 @@ char const *sonderfalle::what() const noexcept {
 	return this->m.c_str();
 }
 
-char zu_char(zugriff z) {
-	switch (z) {
-	case zugriff::s: return 's';
-	case zugriff::l: return 'l';
-	case zugriff::a: return 'a';
-	case zugriff::g: return 'g';
-	}
-}
-
 ZEE::ZEE(h32 k, h32 f):
 	sonderfalle(), _k(k), _f(f) {
 	this->m = (ostringstream() << hex << setfill('0')
@@ -34,7 +25,7 @@ ZZE::ZZE(h32 k, h32 f, zugriff e, int l):
 	this->m = (ostringstream() << hex << setfill('0')
 	<< "(k = " << setw(8) << this->_k
 	<< ",f = " << setw(8) << this->_f
-	<< ")(z = " << zu_char(this->_e)
+	<< ")(z = " << zugriff_wb[this->_e]
 	<< ",e = " << setw(3) << bitset<3>(this->_l)
 	<< ')').str();
 }
