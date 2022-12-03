@@ -36,7 +36,8 @@ lib/%.so: src/gerat/%.o ${KERN}
 
 
 prufungen: ${PRFN}
-prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb -fsanitize=address
+prf/%: LDFLAGS := ${LDFLAGS} -fsanitize=address
 prf/%: prf/%.o lib/prufung.so ${filter-out src/zuse.o,${KERN}}
 	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
 
