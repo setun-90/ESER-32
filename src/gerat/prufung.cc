@@ -4,7 +4,7 @@ using namespace std;
 
 
 
-prufung abb(istringstream &) {
+prufung &&abb(istringstream &) {
 	return prufung();
 }
 
