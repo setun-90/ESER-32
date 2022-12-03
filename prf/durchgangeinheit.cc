@@ -38,11 +38,11 @@ int main(void) {
 	hs.s(12, aaf);
 
 	/* Channel program */
-	hs.s(aaf,      static_cast<h32>(0x00000000U));
-	hs.s(aaf + 4,  static_cast<h32>(0x00000008U));
+	hs.s(aaf,      static_cast<h32>(0x10000000U));
+	hs.s(aaf + 4,  static_cast<h32>(0x10000008U));
 	hs.s(aaf + 8,  static_cast<h32>(0x10000000U));
 	hs.s(aaf + 12, static_cast<h32>(0x10000000U));
-	hs.s(aaf + 16, static_cast<h32>(0x003FFFF8U));
+	hs.s(aaf + 16, static_cast<h32>(0x103FFFF8U));
 
 
 	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));

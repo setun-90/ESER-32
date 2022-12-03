@@ -69,23 +69,30 @@ void durchgangeinheit::af(void) {
 	h64 a;
 	this->a(a, this->az);
 
-	h64 p(1ULL << (64 - 11));
-
+	this->zs = !((a >> (64 - 1)) & 1);
 	// Regelungsanweisung
 	if (!((a >> (64 - 3)) & 1) && !((a >> (64 - 10)) & ((1U << 6) - 1))) {
-		this->zs = !((a >> (64 - 1)) & 1);
-		this->az += (vzw(a, p) >> 32) + 4;
+		h32 ba(vzw((a >> 32) & ((1U << (32 - 11)) - 1), 32 - 11) + 4);
+		if (((a >> (64 - 4)) & 1)) {
+			// Beständergestalt
+			this->az += ba;
+		} else {
+			// Speichergestalt
+			h32 ab;
+			this->l(ab, this->az + ba);
+			this->az = ab;
+		}
 	// Übertragungsanweisung
 	} else if (((a >> (64 - 10)) & ((1U << 6) - 1)) < 3) {
 		h32 z, ab;
 		if ((a >> (64 - 4)) & 1) {
 			// Beständergestalt
-			z  = ((a & (p - 1)) >> 32);
+			z  = (a >> 32) & ((1ULL << (32 - 10)) - 1);
 			ab = (a & ((1ULL << 32) - 1));
 			this->az += 8;
 		} else {
 			// Speichergestalt
-			h32 ba((a & (p - 1)) >> 32);
+			h32 ba((a & ((1ULL << (64 - 11)) - 1)) >> 32);
 			this->l(ab,  ba);
 			this->l(z, ba + 4);
 			this->az += 4;
@@ -98,9 +105,7 @@ void durchgangeinheit::af(void) {
 			// Schreibung
 			this->g.s(this, z, ab);
 		}
-		this->zs = !((a >> (64 - 1)) & 1);
 	} else {
 		this->az += this->g(this, a);
-		this->zs  = !((a >> (64 - 1)) & 1);
 	}
 }
