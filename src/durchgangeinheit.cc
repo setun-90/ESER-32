@@ -69,11 +69,11 @@ void durchgangeinheit::af(void) {
 	h64 a;
 	this->a(a, this->az);
 
-	this->zs = !((a >> (64 - 1)) & 1);
+	this->zs = !stelle<1>(a);
 	// Regelungsanweisung
-	if (!((a >> (64 - 3)) & 1) && !((a >> (64 - 10)) & ((1U << 6) - 1))) {
-		h32 ba(vzw((a >> 32) & ((1U << (32 - 11)) - 1), 32 - 11) + 4);
-		if (((a >> (64 - 4)) & 1)) {
+	if (!stelle<3>(a) && !feld<5, 10>(a)) {
+		h32 ba(vzw(feld<11, 32>(a), 32 - 11) + 4);
+		if (stelle<4>(a)) {
 			// Beständergestalt
 			this->az += ba;
 		} else {
@@ -83,22 +83,22 @@ void durchgangeinheit::af(void) {
 			this->az = ab;
 		}
 	// Übertragungsanweisung
-	} else if (((a >> (64 - 10)) & ((1U << 6) - 1)) < 3) {
+	} else if (feld<5, 10>(a) < 3) {
 		h32 z, ab;
-		if ((a >> (64 - 4)) & 1) {
+		if (stelle<4>(a)) {
 			// Beständergestalt
-			z  = (a >> 32) & ((1ULL << (32 - 10)) - 1);
-			ab = (a & ((1ULL << 32) - 1));
+			z  = feld<11, 32>(a);
+			ab = feld<33, 64>(a);
 			this->az += 8;
 		} else {
 			// Speichergestalt
-			h32 ba((a & ((1ULL << (64 - 11)) - 1)) >> 32);
+			h32 ba(feld<11, 32>(a));
 			this->l(ab,  ba);
 			this->l(z, ba + 4);
 			this->az += 4;
 		}
 
-		if (!((a >> (64 - 10)) & ((1U << 6) - 1))) {
+		if (!feld<5, 10>(a)) {
 			// Lesung
 			this->g.l(this, z, ab);
 		} else {

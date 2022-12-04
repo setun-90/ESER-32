@@ -53,10 +53,6 @@ h16 vzw(h16 n, h8 p);
 h32 vzw(h32 n, h8 p);
 h64 vzw(h64 n, h8 p);
 
-template <class type> type feld(h8 p1, h8 p2) {
-	return ((static_cast<type>(1) << (p1 - p2 + 1)) - 1) << p2;
-}
-
 
 
 #endif /* _VE_H */
