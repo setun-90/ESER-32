@@ -17,7 +17,7 @@
 /*          (C) 1979, 1988, 1992          */
 
 #include <cstdint>
-#include <cstddef>
+#include <climits>
 
 using h8  = uint8_t;
 using h16 = uint16_t;

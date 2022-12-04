@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <utility>
 #include <functional>
-#include <climits>
+#include <cstddef>
 
 using umstand = std::pair<h32, h32>;
 
