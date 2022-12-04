@@ -22,7 +22,7 @@ template <class type> void wahrspeicher::s(h32 w, type a) {
 	h8 b[sizeof a];
 	for (size_t i(0); i < sizeof a; i++)
 		b[i] = static_cast<h8>(a >> (((sizeof a) - i - 1)*CHAR_BIT));
-	std::lock_guard<std::mutex> l(this->m);
+	lock_guard<mutex> l(this->m);
 	memcpy(this->hs.data() + w, b, sizeof a);
 }
 template <> void wahrspeicher::s(h32 w, h8 a) {
@@ -54,7 +54,7 @@ template void wahrspeicher::s(h32,   h64);
 template <class type> void wahrspeicher::l(type &a, h32 w) {
 	h8 b[sizeof a];
 	{
-		std::lock_guard<std::mutex> l(this->m);
+		lock_guard<mutex> l(this->m);
 		memcpy(b, this->hs.data() + w, sizeof a);
 	}
 	a = 0;
