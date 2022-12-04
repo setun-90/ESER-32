@@ -45,8 +45,8 @@ int main(void) {
 	hs.s(aaf + 16, static_cast<h32>(0x103FFFF8U));
 
 
-	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
 	char *f;
+	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
 	if (f = dlerror()) {
 		TRACE("Ladung ist gescheitert: " + string(f));
 		return 1;
@@ -64,6 +64,8 @@ int main(void) {
 	while (!e->ls());
 	while (e->ls());
 	e->ab();
+
+	dlclose(m);
 
 	return 0;
 }
