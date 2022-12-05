@@ -25,6 +25,7 @@ class sonderfalle: public std::exception {
 protected:
 	std::string m;
 public:
+	sonderfalle(std::string s);
 	char const *what() const noexcept;
 };
 

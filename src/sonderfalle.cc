@@ -9,38 +9,40 @@ using namespace kunstspeicher;
 
 
 
+sonderfalle::sonderfalle(string s):
+	m(s) {}
 char const *sonderfalle::what() const noexcept {
 	return this->m.c_str();
 }
 
 ZEE::ZEE(h32 k, h32 f):
-	sonderfalle(), _k(k), _f(f) {
-	this->m = (ostringstream() << hex << setfill('0')
-	<< "(k = " << setw(8) << this->_k
-	<< ",f = " << setw(8) << this->_f
-	<< ')').str();
-}
+	sonderfalle(
+		(ostringstream() << hex << setfill('0')
+		<< "(k = " << setw(8) << k
+		<< ",f = " << setw(8) << f
+		<< ')').str()
+	), _k(k), _f(f) {}
 ZZE::ZZE(h32 k, h32 f, zugriff e, int l):
-	sonderfalle(), _k(k), _f(f), _e(e), _l(l) {
-	this->m = (ostringstream() << hex << setfill('0')
-	<< "(k = " << setw(8) << this->_k
-	<< ",f = " << setw(8) << this->_f
-	<< ")(z = " << zugriff_wb[this->_e]
-	<< ",e = " << setw(3) << bitset<3>(this->_l)
-	<< ')').str();
-}
+	sonderfalle(
+		(ostringstream() << hex << setfill('0')
+		<< "(k = " << setw(8) << k
+		<< ",f = " << setw(8) << f
+		<< ")(z = " << zugriff_wb[e]
+		<< ",e = " << setw(3) << bitset<3>(l)
+		<< ')').str()
+	), _k(k), _f(f), _e(e), _l(l) {}
 ZSW::ZSW(h32 k, h32 f, h32 w):
-	sonderfalle(), _k(k), _f(f), _w(w) {
-	this->m = (ostringstream() << hex << setfill('0')
-	<< "(k = " << setw(8) << this->_k
-	<< ",f = " << setw(8) << this->_f
-	<< ')').str();
-}
+	sonderfalle(
+		(ostringstream() << hex << setfill('0')
+		<< "(k = " << setw(8) << k
+		<< ",f = " << setw(8) << f
+		<< ')').str()
+	), _k(k), _f(f), _w(w) {}
 AUA::AUA(h32 k, h32 f, h64 a):
-	sonderfalle(), _k(k), _f(f), _a(a) {
-	this->m = (ostringstream() << hex << setfill('0')
-	<< "(k = " << setw(8) << this->_k
-	<< ",f = " << setw(8) << this->_f
-	<< ")(a = " << setw(16) << this->_a
-	<< ')').str();
-}
+	sonderfalle(
+		(ostringstream() << hex << setfill('0')
+		<< "(k = " << setw(8) << k
+		<< ",f = " << setw(8) << f
+		<< ")(a = " << setw(16) << a
+		<< ')').str()
+	), _k(k), _f(f), _a(a) {}
