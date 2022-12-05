@@ -17,7 +17,7 @@ int main(void) {
 
 	TRACE("*** Hauptspeicheranfang");
 	wahrspeicher hs(2048 + 5);
-	TRACE("Hauptspeichergröße: " + to_string(hs.g()));
+	TRACE((ostringstream() << "Hauptspeichergröße: " << hs.g()).str().c_str());
 
 	TRACE("*** Beispielzugriffe in den Hauptspeicher");
 	h64 q64(0x0000030405060708U);
@@ -36,7 +36,7 @@ int main(void) {
 	  | (static_cast<h64>(z8[6]) << 8)
 	  | static_cast<h64>(z8[7]));
 	if (z64 != q64)
-		throw logic_error(to_string(z64) + " != " + to_string(q64));
+		throw logic_error((ostringstream() << z64 << " != " << q64).str().c_str());
 
 	TRACE("*** Beispielzugriffe in den Kunstspeicher");
 	h32  gf(0x00804000U),
@@ -159,7 +159,7 @@ int main(void) {
 		ka3,
 		ka4
 	}) {
-		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str());
+		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str().c_str());
 		e.s(ka, gf, q64);
 		TRACE("");
 		for (size_t i(0); i < sizeof q64; i++) {
@@ -175,7 +175,7 @@ int main(void) {
 		    | (static_cast<h64>(z8[6]) << 8)
 		    | static_cast<h64>(z8[7]);
 		if (z64 != q64)
-			throw logic_error(to_string(z64) + " != " + to_string(q64));
+			throw logic_error((ostringstream() << z64 << " != " << q64).str().c_str());
 	}
 
 	return 0;

@@ -48,13 +48,13 @@ int main(void) {
 	char *f;
 	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
 	if (f = dlerror()) {
-		TRACE("Ladung ist gescheitert: " + string(f));
+		TRACE(string("Ladung ist gescheitert: ").append(f).c_str());
 		return 1;
 	}
 	durchgangeinheit::gerat &&(*abb)(istringstream &)
 		(reinterpret_cast<durchgangeinheit::gerat &&(*)(istringstream &)>(dlsym(m, "abb")));
 	if (f = dlerror()) {
-		TRACE("Anschalt ist gescheitert: " + string(f));
+		TRACE(string("Anschalt ist gescheitert: ").append(f).c_str());
 		return 1;
 	}
 	istringstream i;
