@@ -47,8 +47,8 @@ int main(void) {
 	hs.s(az, static_cast<h32>(0x103FFFF8U)); az += 4;
 
 	/**** Transfer instructions */
-	hs.s(az, static_cast<h64>(0xB000000000000000U | ((0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
-	hs.s(az, static_cast<h64>(0xB040000000000000U | ((0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
+	hs.s(az, static_cast<h64>(0xB000000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
+	hs.s(az, static_cast<h64>(0xB040000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
 
 	char *f;
 	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
