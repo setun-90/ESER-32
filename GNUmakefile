@@ -3,10 +3,13 @@ RM := rm -rf
 READLINK := ${shell which c++ | xargs readlink -f}
 
 # Flags
+CPPFLAGS     := -I./include/
 ifneq "${findstring gnu,${READLINK}}" ""
-CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -mno-direct-extern-access -fPIC -falign-functions=32 -falign-jumps=32 -falign-loops=32
+CXXFLAGS     := -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -mno-direct-extern-access -fPIC -falign-functions=32 -falign-jumps=32 -falign-loops=32
 else "${findstring clang,${READLINK}}" ""
-CXXFLAGS     := -I./include/ -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -fPIC -falign-functions=32 -falign-loops=32
+CXXFLAGS     := -Wall -Wextra -Wpedantic -march=native -pipe -std=c++11 -Wa,-mbranches-within-32B-boundaries -fPIC -fno-direct-access-external-data -falign-functions=32 -falign-loops=32
+else
+${info Cannot determine compiler, set CXXFLAGS and LDFLAGS for optimizations and linking options}
 endif
 LDFLAGS      := -Wl,-O1,--as-needed,--sort-common
 LDLIBS       := -ldl -pthread
