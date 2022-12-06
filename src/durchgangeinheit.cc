@@ -88,11 +88,11 @@ void durchgangeinheit::af(void) {
 		if (stelle<4>(a)) {
 			// Beständergestalt
 			z  = feld<11, 32>(a);
-			ab = feld<33, 64>(a);
+			ab = feld<33, 64>(a) + this->az;
 			this->az += 8;
 		} else {
 			// Speichergestalt
-			h32 ba(feld<11, 32>(a));
+			h32 ba(feld<11, 32>(a) + this->az);
 			this->l(ab,  ba);
 			this->l(z, ba + 4);
 			this->az += 4;
