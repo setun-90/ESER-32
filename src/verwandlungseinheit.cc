@@ -22,7 +22,6 @@ template <> void verwandlungseinheit::s(h32 k, h32 g, h8 a) {
 	this->vwl(&w, k, 1, g, zugriff::s);
 	this->hs.s(w, a);
 }
-template void verwandlungseinheit::s(h32 k, h32 g, h8 a);
 template void verwandlungseinheit::s(h32 k, h32 g, h16 a);
 template void verwandlungseinheit::s(h32 k, h32 g, h32 a);
 template void verwandlungseinheit::s(h32 k, h32 g, h64 a);
@@ -42,7 +41,6 @@ template <> void verwandlungseinheit::l(h8 &a, h32 k, h32 g) {
 	this->vwl(&w, k, 1, g, zugriff::l);
 	this->hs.l(a, w);
 }
-template void verwandlungseinheit::l(h8 &a, h32 k, h32 g);
 template void verwandlungseinheit::l(h16 &a, h32 k, h32 g);
 template void verwandlungseinheit::l(h32 &a, h32 k, h32 g);
 template void verwandlungseinheit::l(h64 &a, h32 k, h32 g);
@@ -62,7 +60,6 @@ template <> void verwandlungseinheit::a(h8 &a, h32 k, h32 g) {
 	this->vwl(&w, k, 1, g, zugriff::a);
 	this->hs.l(a, w);
 }
-template void verwandlungseinheit::a(h8 &a, h32 k, h32 g);
 template void verwandlungseinheit::a(h16 &a, h32 k, h32 g);
 template void verwandlungseinheit::a(h32 &a, h32 k, h32 g);
 template void verwandlungseinheit::a(h64 &a, h32 k, h32 g);

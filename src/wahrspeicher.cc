@@ -45,7 +45,6 @@ template <> void wahrspeicher::s(h32 w, h64 a) {
 	lock_guard<mutex> n(this->m);
 	memcpy(this->hs.data() + w, b, sizeof a);
 }
-template void wahrspeicher::s(h32,   h8);
 template void wahrspeicher::s(h32,   h16);
 template void wahrspeicher::s(h32,   h32);
 template void wahrspeicher::s(h32,   h64);
@@ -65,10 +64,10 @@ template <> void wahrspeicher::l(h8 &a, h32 w) {
 	lock_guard<mutex> n(this->m);
 	a = this->hs[w];
 }
-size_t wahrspeicher::g() {
-	return this->hs.size();
-}
-template void wahrspeicher::l(h8 &,  h32);
 template void wahrspeicher::l(h16 &, h32);
 template void wahrspeicher::l(h32 &, h32);
 template void wahrspeicher::l(h64 &, h32);
+
+size_t wahrspeicher::g() {
+	return this->hs.size();
+}
