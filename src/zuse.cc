@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 			}
 			case 'd': {
 				il.clear();
-				char *n;
+				char *n(nullptr);
 				il >> n;
 				TRACE(string("n = ").append(n).c_str());
 				auto m(dlopen(string(argv[2]).append(n).c_str(), RTLD_LAZY));

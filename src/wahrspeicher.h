@@ -24,7 +24,7 @@
 #include <cstring>
 #include <cstddef>
 
-class einheit;
+struct einheit;
 
 class wahrspeicher {
 	std::vector<h8> hs;
