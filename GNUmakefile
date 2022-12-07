@@ -19,7 +19,7 @@ LD           := ${CXX}
 # Items
 SRCS := ${shell find src/ prf/ -name '*.cc'}
 OBJS := ${SRCS:%.cc=%.o}
-KERN := ${filter-out prf/% src/gerat/%,${OBJS}}
+KERN := ${filter-out prf/% src/gerat/% src/zuse.o,${OBJS}}
 GRTE := ${filter src/gerat/%,${OBJS}}
 PRFN := ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
 
@@ -53,7 +53,7 @@ lib/%.so: src/gerat/%.o ${KERN}
 prufungen: ${PRFN}
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb -fsanitize=address
 prf/%: LDFLAGS := ${LDFLAGS} -fsanitize=address
-prf/%: prf/%.o lib/prufung.so ${filter-out src/zuse.o,${KERN}}
+prf/%: prf/%.o lib/prufung.so ${KERN}
 	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
 
 
