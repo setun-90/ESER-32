@@ -17,9 +17,12 @@ This emulator emulates a 32-bit Zuse Elektra, configurable via a configuration f
 ### Systems
 #### Make
 Do set CXX in the make command:
+
 `make CXX=clang++ prf/durchgangeinheit  # To compile the channel test program with clang++`
+
 If your CXX is neither g++ nor clang++, you may pass CXXFLAGS to tune appropriately:
-`make CXX=icc CXXFLAGS='-qopenmp -debug=parallel # To compile the channel test program with the Intel C++ compiler, for example`
+
+`make CXX=icc CXXFLAGS='-qopenmp -debug=parallel' # To compile the channel test program with the Intel C++ compiler, for example`
 
 ### Dependencies
 The emulator is written in C++11, but a C++20-compatible compiler is recommended for increased performance.
