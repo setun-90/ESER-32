@@ -33,10 +33,11 @@ all:  zuse gerate prufungen # ${PRFN}
 zuse: bin/zuse
 ifeq "${CXX}" "g++"
 bin/%: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
+bin/%: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
 else ifeq "${CXX}" "clang++"
 bin/%: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
+bin/%: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc -flto=thin
 endif
-bin/%: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
 bin/%: src/%.o ${KERN}
 	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
 
