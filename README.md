@@ -29,7 +29,9 @@ The emulator is written in C++11, but a C++20-compatible compiler is recommended
 
 ### Targets
 * zuse: the emulator binary;
-* prf/*: the tests.
+* gerate: the devices;
+* prufungen: all tests;
+* prf/*: the individual tests.
 
 ### Testing
 Tests in prf/ are intended to be run in this order:

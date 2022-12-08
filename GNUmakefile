@@ -1,5 +1,6 @@
 # Commands
-RM := rm -rf
+RM    := rm -rf
+LINK   = ${LINK.cc} $^ ${LOADLIBES} ${LDLIBS} -o $@
 
 # Flags
 CPPFLAGS     := -I./include/
@@ -14,7 +15,6 @@ endif
 endif
 LDFLAGS      := -Wl,-O1,--as-needed,--sort-common
 LDLIBS       := -ldl -pthread
-LD           := ${CXX}
 
 # Items
 SRCS := ${shell find src/ prf/ -name '*.cc'}
@@ -23,38 +23,34 @@ KERN := ${filter-out prf/% src/gerat/% src/zuse.o,${OBJS}}
 GRTE := ${filter src/gerat/%,${OBJS}}
 PRFN := ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
 
-.PHONY: all clean
+.PHONY: zuse gerate prufungen clean
 
 .PRECIOUS: ${OBJS}
 
 
-all:  zuse gerate prufungen # ${PRFN}
 
-zuse: bin/zuse
 ifeq "${CXX}" "g++"
-bin/%: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
-bin/%: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
+zuse: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
 else ifeq "${CXX}" "clang++"
-bin/%: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
-bin/%: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc -flto=thin
+zuse: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
 endif
+zuse: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
+zuse: bin/zuse gerate
 bin/%: src/%.o ${KERN}
-	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
+	${LINK}
 
 gerate: ${GRTE:src/gerat/%.o=lib/%.so}
-#lib/%.so: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
-lib/%.so: LDFLAGS := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc -shared
+lib/%.so: LDFLAGS := ${LDFLAGS} -shared
 lib/%.so: src/gerat/%.o ${KERN}
-	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
+	${LINK}
 
 
 
 
 prufungen: ${PRFN}
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb -fsanitize=address
-prf/%: LDFLAGS := ${LDFLAGS} -fsanitize=address
 prf/%: prf/%.o lib/prufung.so ${KERN}
-	${LD} ${LDFLAGS} $^ ${LDLIBS} -o $@
+	${LINK}
 
 
 
