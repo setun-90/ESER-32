@@ -19,9 +19,9 @@ LDLIBS       := -ldl -pthread
 # Items
 SRCS := ${shell find src/ prf/ -name '*.cc'}
 OBJS := ${SRCS:%.cc=%.o}
-KERN := ${filter-out prf/% src/gerat/% src/zuse.o,${OBJS}}
 GRTE := ${filter src/gerat/%,${OBJS}}
-PRFN := ${filter-out src/%,${OBJS:prf/%.o=prf/%}}
+PRFN := ${filter prf/%,${OBJS}}
+KERN := ${filter-out ${PRFN} ${GRTE} src/zuse.o,${OBJS}}
 
 .PHONY: zuse gerate prufungen clean
 
@@ -47,12 +47,12 @@ lib/%.so: src/gerat/%.o ${KERN}
 
 
 
-prufungen: ${PRFN}
+prufungen: lib/prufung.so ${PRFN:%.o=%}
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb -fsanitize=address
-prf/%: prf/%.o lib/prufung.so ${KERN}
+prf/%: prf/%.o ${KERN}
 	${LINK}
 
 
 
 clean:
-	${RM} ${wildcard bin/*} ${wildcard lib/*} ${PRFN} ${OBJS}
+	${RM} ${wildcard bin/*} ${wildcard lib/*} ${PRFN:%.o=%} ${OBJS}
