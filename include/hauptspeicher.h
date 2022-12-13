@@ -17,7 +17,7 @@
 /*          (C) 1979, 1988, 1992          */
 
 #include <cstdint>
-#include <climits>
+#include <limits>
 
 using h8  = uint8_t;
 using h16 = uint16_t;
@@ -25,7 +25,7 @@ using h32 = uint32_t;
 using h64 = uint64_t;
 
 template <class type> h8 ss1(h8 i) {
-	return sizeof(type)*CHAR_BIT - i;
+	return std::numeric_limits<type>::digits - i;
 }
 
 template <class type, h8 i> type stelle(type a) {
@@ -45,7 +45,7 @@ template <h8 i> h64 stelle(h64 a) {
 }
 
 template <class type, h8 i, h8 j> type feld(type a) {
-	return (a >> ss1<type>(j)) & ((static_cast<type>(1) << (j - i)) - 1);
+	return (a >> ss1<type>(j)) & (j - i == std::numeric_limits<type>::digits - 1 ? std::numeric_limits<type>::max() : ((static_cast<type>(1) << (j - i + 1)) - 1));
 }
 template <h8 i, h8 j> h8 feld(h8 a) {
 	return feld<h8, i, j>(a);
