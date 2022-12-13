@@ -28,8 +28,8 @@ If your CXX is neither g++ nor clang++, you may pass CXXFLAGS to tune appropriat
 The emulator is written in C++11, but a C++20-compatible compiler is recommended for increased performance.
 
 ### Targets
-* zuse: the emulator binary;
-* gerate: the devices;
+* release: release builds of the emulator and devices;
+* debug: debug builds of the emulator and devices;
 * prufungen: all tests;
 * prf/*: the individual tests.
 

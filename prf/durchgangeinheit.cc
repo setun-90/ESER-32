@@ -44,21 +44,21 @@ int main(void) {
 	hs.s(az, static_cast<h32>(0x10000008U)); az += 4;
 	hs.s(az, static_cast<h32>(0x10000008U)); az += 4;
 	hs.s(az, static_cast<h32>(0x10000000U)); az += 4;
-	hs.s(az, static_cast<h32>(0x103FFFF8U)); az += 4;
+	hs.s(az, static_cast<h32>(0x103FFFF4U)); az += 4;
 
 	/**** Transfer instructions */
 	hs.s(az, static_cast<h64>(0xB000000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
 	hs.s(az, static_cast<h64>(0xB040000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
 
 	char *f;
-	auto m(dlopen("./lib/prufung.so", RTLD_LAZY));
-	if (f = dlerror()) {
+	auto m(dlopen("./debug/lib/prufung.so", RTLD_LAZY));
+	if ((f = dlerror())) {
 		TRACE(string("Ladung ist gescheitert: ").append(f).c_str());
 		return 1;
 	}
-	durchgangeinheit::gerat &&(*abb)(istringstream &)
-		(reinterpret_cast<durchgangeinheit::gerat &&(*)(istringstream &)>(dlsym(m, "abb")));
-	if (f = dlerror()) {
+	unique_ptr<durchgangeinheit::gerat> (*abb)(istringstream &)
+		(reinterpret_cast<unique_ptr<durchgangeinheit::gerat> (*)(istringstream &)>(dlsym(m, "abb")));
+	if ((f = dlerror())) {
 		TRACE(string("Anschalt ist gescheitert: ").append(f).c_str());
 		return 1;
 	}

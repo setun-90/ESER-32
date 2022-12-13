@@ -1,6 +1,5 @@
 # Commands
-RM    := rm -rf
-LINK   = ${LINK.cc} $^ ${LOADLIBES} ${LDLIBS} -o $@
+RM := rm -rf
 
 # Flags
 CPPFLAGS     := -I./include/
@@ -15,44 +14,80 @@ endif
 endif
 LDFLAGS      := -Wl,-O1,--as-needed,--sort-common
 LDLIBS       := -ldl -pthread
+# Recover compiler and link commands
+LINK         = ${LINK.cc} $^ ${LOADLIBES} ${LDLIBS} -o $@
+COMPILE      = ${COMPILE.cc} ${OUTPUT_OPTION} $<
+MKDIR        = [ -d ${@D} ] || mkdir -p ${@D}
 
 # Items
-SRCS := ${shell find src/ prf/ -name '*.cc'}
-OBJS := ${SRCS:%.cc=%.o}
-GRTE := ${filter src/gerat/%,${OBJS}}
-PRFN := ${filter prf/%,${OBJS}}
-KERN := ${filter-out ${PRFN} ${GRTE} src/zuse.o,${OBJS}}
-
-.PHONY: zuse gerate prufungen clean
-
-.PRECIOUS: ${OBJS}
+SRCS := ${shell find src/ prf/ \( -name '*.cc' -a \! -name zuse.cc \)}
+GRTE := ${filter src/gerat/%,${SRCS}}
+PRFN := ${filter prf/%,${SRCS}}
+KERN := ${filter-out ${GRTE} ${PRFN},${SRCS}}
+KERNEL = ${KERN:src/%.cc=${OUTPUT}/obj/%.o}
 
 
 
+.PHONY: release debug tests clean
+
+
+
+.SECONDEXPANSION:
+# Release build
 ifeq "${CXX}" "g++"
-zuse: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
+release: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
 else ifeq "${CXX}" "clang++"
-zuse: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
+release: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
 endif
-zuse: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
-zuse: bin/zuse gerate
-bin/%: src/%.o ${KERN}
+release: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
+release: OUTPUT   := release
+release: release/bin/zuse gerate
+release/bin/%: release/obj/%.o $${KERNEL}
+	${MKDIR}
 	${LINK}
-
-gerate: ${GRTE:src/gerat/%.o=lib/%.so}
-lib/%.so: LDFLAGS := ${LDFLAGS} -shared
-lib/%.so: src/gerat/%.o ${KERN}
+release/lib/%.so: LDFLAGS := ${LDFLAGS} -shared
+release/lib/%.so: release/obj/gerat/%.o $${KERNEL}
+	${MKDIR}
 	${LINK}
+release/obj/%.o: src/%.cc
+	${MKDIR}
+	${COMPILE}
 
 
 
-
-prufungen: lib/prufung.so ${PRFN:%.o=%}
-prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb -fsanitize=address
-prf/%: prf/%.o ${KERN}
+# Debug build
+debug: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+debug: LDFLAGS  := ${LDFLAGS},-Bsymbolic,-z,relro,-z,combreloc -fsanitize=address
+debug: OUTPUT   := debug
+debug: debug/bin/zuse gerate
+debug/bin/%: debug/obj/%.o $${KERNEL}
+	${MKDIR}
 	${LINK}
+debug/lib/%.so: LDFLAGS := ${LDFLAGS} -shared
+debug/lib/%.so: debug/obj/gerat/%.o $${KERNEL}
+	${MKDIR}
+	${LINK}
+debug/obj/%.o: src/%.cc
+	${MKDIR}
+	${COMPILE}
+
+
+
+# Test builds
+tests: debug/lib/prufung.so ${PRFN:%.cc=%}
+prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
+prf/%: LDFLAGS  := ${LDFLAGS},-Bsymbolic,-z,relro,-z,combreloc -fsanitize=address
+prf/%: OUTPUT   := debug
+prf/%: prf/%.o $${KERNEL}
+	${LINK}
+prf/durchgangeinheit: prf/durchgangeinheit.o debug/lib/prufung.so $${KERNEL}
+prf/%.o: prf/%.cc
+
+
+
+gerate: ${patsubst $${OUTPUT}/obj/gerat/%.o,$${OUTPUT}/lib/%.so,${GRTE:src/%.cc=$${OUTPUT}/obj/%.o}}
 
 
 
 clean:
-	${RM} ${wildcard bin/*} ${wildcard lib/*} ${PRFN:%.o=%} ${OBJS}
+	${RM} debug release ${PRFN:%.cc=%}
