@@ -1,6 +1,5 @@
 #include "../src/durchgangeinheit.h"
 #include <trace.h>
-#include <dlfcn.h>
 #include <sstream>
 #include <iostream>
 #include <memory>
@@ -50,27 +49,13 @@ int main(void) {
 	hs.s(az, static_cast<h64>(0xB000000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
 	hs.s(az, static_cast<h64>(0xB040000000000000U | (static_cast<h64>(0x00000800U - az) << 32) | 0x000003FFU)); az += 8;
 
-	char *f;
-	auto m(dlopen("./debug/lib/prufung.so", RTLD_LAZY));
-	if ((f = dlerror())) {
-		TRACE(string("Ladung ist gescheitert: ").append(f).c_str());
-		return 1;
-	}
-	unique_ptr<durchgangeinheit::gerat> (*abb)(istringstream &)
-		(reinterpret_cast<unique_ptr<durchgangeinheit::gerat> (*)(istringstream &)>(dlsym(m, "abb")));
-	if ((f = dlerror())) {
-		TRACE(string("Anschalt ist gescheitert: ").append(f).c_str());
-		return 1;
-	}
 	istringstream i;
-	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, abb(i)));
+	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, vb("./debug/lib/prufung.so", i)));
 	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000U));
 	while (!e->ls());
 	while (e->ls());
 	e->ab();
-
-	dlclose(m);
 
 	return 0;
 }

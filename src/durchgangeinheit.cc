@@ -8,7 +8,7 @@ using namespace kunstspeicher;
 
 
 
-durchgangeinheit::durchgangeinheit(wahrspeicher &hs, durchgangeinheit::gerat &&gr):
+durchgangeinheit::durchgangeinheit(wahrspeicher &hs, unique_ptr<gerat> gr):
 	einheit(hs), zs(false), g(move(gr)) {}
 
 template <class art> void durchgangeinheit::s(h32 k, art a) {
@@ -100,12 +100,12 @@ void durchgangeinheit::af(void) {
 
 		if (!feld<5, 10>(a)) {
 			// Lesung
-			this->g.l(this, z, ab);
+			this->g->l(this, z, ab);
 		} else {
 			// Schreibung
-			this->g.s(this, z, ab);
+			this->g->s(this, z, ab);
 		}
 	} else {
-		this->az += this->g(this, a);
+		this->az += (*this->g)(this, a);
 	}
 }

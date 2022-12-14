@@ -8,8 +8,6 @@
 #include <iostream>
 #include <vector>
 
-#include <dlfcn.h>
-
 using namespace std;
 
 
@@ -42,23 +40,10 @@ int main(int argc, char **argv) {
 			}
 			case 'd': {
 				il.clear();
-				char *n(nullptr);
+				string n;
 				il >> n;
 				TRACE(string("n = ").append(n).c_str());
-				auto m(dlopen(string(argv[2]).append(n).c_str(), RTLD_LAZY));
-				char *e;
-				if (e = dlerror()) {
-					TRACE(string("Ladung ist gescheitert: ").append(e).c_str());
-					return 1;
-				}
-				durchgangeinheit::gerat &&(*abb)(istringstream &)
-					(reinterpret_cast<durchgangeinheit::gerat &&(*)(istringstream &)>(dlsym(m, "abb")));
-				if (e = dlerror()) {
-					TRACE(string("Anschalt ist gescheitert: ").append(e).c_str());
-					return 1;
-				}
-
-				hs.ute(u, make_shared<durchgangeinheit>(hs, abb(il)));
+				hs.ute(u, make_shared<durchgangeinheit>(hs, vb(string(argv[2]).append(n).c_str(), il)));
 				break;
 			}
 			default: {

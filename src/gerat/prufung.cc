@@ -4,8 +4,8 @@ using namespace std;
 
 
 
-prufung &&abb(istringstream &) {
-	return prufung();
+unique_ptr<durchgangeinheit::gerat> abb(istringstream &) {
+	return unique_ptr<prufung>(new prufung());
 }
 
 h32 prufung::operator()(durchgangeinheit *, h64) {
