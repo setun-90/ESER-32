@@ -18,9 +18,7 @@ template <class type> void verwandlungseinheit::s(h32 k, h32 g, type a) {
 		this->hs.s(w[i], static_cast<h8>(a >> (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits)));
 }
 template <> void verwandlungseinheit::s(h32 k, h32 g, h8 a) {
-	h32 w;
-	this->vwl(&w, k, 1, g, zugriff::s);
-	this->hs.s(w, a);
+	this->hs.s(this->sfl(k, g, zugriff::s), a);
 }
 template void verwandlungseinheit::s(h32 k, h32 g, h16 a);
 template void verwandlungseinheit::s(h32 k, h32 g, h32 a);
@@ -37,9 +35,7 @@ template <class type> void verwandlungseinheit::l(type &a, h32 k, h32 g) {
 	}
 }
 template <> void verwandlungseinheit::l(h8 &a, h32 k, h32 g) {
-	h32 w;
-	this->vwl(&w, k, 1, g, zugriff::l);
-	this->hs.l(a, w);
+	this->hs.l(a, this->sfl(k, g, zugriff::l));
 }
 template void verwandlungseinheit::l(h16 &a, h32 k, h32 g);
 template void verwandlungseinheit::l(h32 &a, h32 k, h32 g);
@@ -56,9 +52,7 @@ template <class type> void verwandlungseinheit::a(type &a, h32 k, h32 g) {
 	}
 }
 template <> void verwandlungseinheit::a(h8 &a, h32 k, h32 g) {
-	h32 w;
-	this->vwl(&w, k, 1, g, zugriff::a);
-	this->hs.l(a, w);
+	this->hs.l(a, this->sfl(k, g, zugriff::a));
 }
 template void verwandlungseinheit::a(h16 &a, h32 k, h32 g);
 template void verwandlungseinheit::a(h32 &a, h32 k, h32 g);
@@ -68,6 +62,7 @@ void verwandlungseinheit::g(h64 &a, h32 k, h32 g) {
 	h32 w[sizeof a];
 	this->vwl(w, k, sizeof a, g, zugriff::g);
 	h8 b;
+	a = 0;
 	for (size_t i(0); i < sizeof a; i++) {
 		this->hs.l(b, w[i]);
 		a |= static_cast<h64>(b) << (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits);
@@ -90,37 +85,39 @@ void verwandlungseinheit::enk(h32 k, h32 g) {
 	this->s1f.erase(z);
 }
 
+h32 verwandlungseinheit::sfl(h32 k, h32 g, zugriff z) {
+	// Grundfeldlauf
+	umstand le(g, ((ka::gz & k) >> 22));
+	if (this->s2f.find(le) == this->s2f.end()) {
+		h32 f;
+		this->hs.l(f, le.first + (le.second << 2));
+		if (!(ss::r(f) || fb::r(f) || sb::s2(f)))
+			throw ZEE(k, g);
+		this->s2f[le] = f;
+	}
+	auto e(this->s2f[le]);
+	if (ss::r(e) || sb::s2(e)) {
+		return this->s2zg(e, z, k, le.first);
+	}
+
+	// 1-Seitefeldlauf
+	le = umstand(s1::z & e, ((ka::s1z & k) >> 12));
+	if (this->s1f.find(le) == this->s1f.end()) {
+		h32 f;
+		this->hs.l(f, le.first + (le.second << 2));
+		if (!(ss::r(f) || sb::s1(f)))
+			throw ZEE(k, g);
+		this->s1f[le] = f;
+	}
+	e = this->s1f[le];
+	{
+		return this->s1zg(e, z, k, le.first);
+	}
+}
+
 void verwandlungseinheit::vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z) {
 	for (size_t i(0); i < l; i++) {
-		auto ki(k + i);
-		// Grundfeldlauf
-		umstand le(g, ((ka::gz & ki) >> 22));
-		if (this->s2f.find(le) == this->s2f.end()) {
-			h32 f;
-			this->hs.l(f, le.first + (le.second << 2));
-			if (!(ss::r(f) || fb::r(f) || sb::s2(f)))
-				throw ZEE(ki, g);
-			this->s2f[le] = f;
-		}
-		auto e(this->s2f[le]);
-		if (ss::r(e) || sb::s2(e)) {
-			w[i] = this->s2zg(e, z, ki, le.first);
-			continue;
-		}
-
-		// 1-Seitefeldlauf
-		le = umstand(s1::z & e, ((ka::s1z & ki) >> 12));
-		if (this->s1f.find(le) == this->s1f.end()) {
-			h32 f;
-			this->hs.l(f, le.first + (le.second << 2));
-			if (!(ss::r(f) || sb::s1(f)))
-				throw ZEE(ki, g);
-			this->s1f[le] = f;
-		}
-		e = this->s1f[le];
-		{
-			w[i] = this->s1zg(e, z, ki, le.first);
-		}
+		w[i] = this->sfl(k + i, g, z);
 	}
 }
 

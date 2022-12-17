@@ -54,6 +54,7 @@ private:
 	std::unordered_map<umstand, h32> s1f, s2f;
 
 	void vwl(h32 *w, h32 k, size_t l, h32 g, zugriff z);
+	h32 sfl(h32 k, h32 g, zugriff z);
 	h32 s2zg(h32 e, zugriff z, h32 k, h32 g);
 	h32 s1zg(h32 e, zugriff z, h32 k, h32 g);
 };
