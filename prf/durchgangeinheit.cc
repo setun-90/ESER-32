@@ -1,8 +1,5 @@
 #include "../src/durchgangeinheit.h"
 #include <trace.h>
-#include <sstream>
-#include <iostream>
-#include <memory>
 
 using namespace std;
 using namespace kunstspeicher;

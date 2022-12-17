@@ -2,7 +2,6 @@
 #include "../src/verwandlungseinheit.h"
 #include <sonderfalle.h>
 #include <trace.h>
-#include <iostream>
 #include <sstream>
 #include <iomanip>
 #include <stdexcept>
