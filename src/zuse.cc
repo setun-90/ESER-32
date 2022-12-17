@@ -18,7 +18,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	fstream cnf(argv[1], ios_base::in);
+	ifstream cnf(argv[1], ios_base::in);
+	cnf.exceptions(ios::failbit | ios::badbit);
 	unsigned s;
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
 	wahrspeicher hs(s);
@@ -29,19 +30,20 @@ int main(int argc, char **argv) {
 			if (l.empty())
 				continue;
 			istringstream il(l);
+			il.exceptions(ios::badbit | ios::failbit);
 			char p;
-			unsigned u;
+			h32 u;
 			il >> p >> hex >> u;
 			switch (p) {
 			case 'r': {
+				TRACE((ostringstream() << "u = " << u).str().c_str());
 				hs.ute(u, make_shared<recheneinheit>(hs));
 				break;
 			}
 			case 'd': {
-				il.clear();
 				string n;
 				il >> n; TRACE(string("n = ").append(n).c_str());
-				hs.ute(u, make_shared<durchgangeinheit>(hs, vb(string(argv[2]).append(n).c_str(), il)));
+				hs.ute(u, make_shared<durchgangeinheit>(hs, vb(string(argv[2]).append(n).append(".so").c_str(), il)));
 				break;
 			}
 			default: {
