@@ -18,15 +18,10 @@
 
 #include "kunstspeicher.h"
 
-#include <string>
-#include <exception>
+#include <stdexcept>
 
-class sonderfalle: public std::exception {
-protected:
-	std::string m;
-public:
-	sonderfalle(std::string s);
-	char const *what() const noexcept;
+class sonderfalle: public std::runtime_error {
+	using std::runtime_error::runtime_error;
 };
 
 class ZEE: public sonderfalle {

@@ -9,12 +9,6 @@ using namespace kunstspeicher;
 
 
 
-sonderfalle::sonderfalle(string s):
-	m(s) {}
-char const *sonderfalle::what() const noexcept {
-	return this->m.c_str();
-}
-
 ZEE::ZEE(h32 k, h32 f):
 	sonderfalle(
 		(ostringstream() << hex << setfill('0')
