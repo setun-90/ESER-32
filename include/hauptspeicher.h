@@ -19,10 +19,10 @@
 #include <cstdint>
 #include <limits>
 
-using h8  = uint8_t;
-using h16 = uint16_t;
-using h32 = uint32_t;
-using h64 = uint64_t;
+using h8  = uint_least8_t;
+using h16 = uint_least16_t;
+using h32 = uint_least32_t;
+using h64 = uint_least64_t;
 
 template <class type> h8 ss1(h8 i) {
 	return std::numeric_limits<type>::digits - i;
