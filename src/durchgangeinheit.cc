@@ -72,7 +72,7 @@ void durchgangeinheit::af(void) {
 	this->zs = !stelle<1>(a);
 	// Regelungsanweisung
 	if (!stelle<3>(a) && !feld<5, 10>(a)) {
-		h32 ba(vzw(feld<11, 32>(a), 32 - 11) + 4);
+		h32 ba(vzw<ss1<h32>(11)>(feld<11, 32>(a)) + 4);
 		if (stelle<4>(a)) {
 			// Beständergestalt
 			this->az += ba;

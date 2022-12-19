@@ -37,12 +37,15 @@ constexpr h64 operator "" _64(unsigned long long int n) {
 	return static_cast<h64>(n);
 }
 
-template <class type> h8 ss1(h8 i) {
+template <class type> constexpr h8 ss1(h8 i) {
 	return std::numeric_limits<type>::digits - i;
 }
 
-template <h8 i, class type> type stelle(type a) {
+template <class type> type stelle(type a, h8 i) {
 	return a & (static_cast<type>(1) << ss1<type>(i));
+}
+template <h8 i, class type> type stelle(type a) {
+	return stelle(a, i);
 }
 
 template <h8 i, h8 j, class type> type feld(type a) {

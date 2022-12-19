@@ -49,9 +49,12 @@ protected:
 	einheit &operator=(einheit &&) = delete;
 };
 
-h16 vzw(h16 n, h8 p);
-h32 vzw(h32 n, h8 p);
-h64 vzw(h64 n, h8 p);
+template <class type> type vzw(type n, h8 p) {
+	return n | ~((n & (static_cast<type>(1) << p)) - 1);
+}
+template <h8 p, class type> type vzw(type n) {
+	return vzw(n, p);
+}
 
 
 
