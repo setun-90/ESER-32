@@ -45,7 +45,7 @@ template <h8 i> h64 stelle(h64 a) {
 }
 
 template <class type, h8 i, h8 j> type feld(type a) {
-	return (a >> ss1<type>(j)) & (j - i == std::numeric_limits<type>::digits - 1 ? std::numeric_limits<type>::max() : ((static_cast<type>(1) << (j - i + 1)) - 1));
+	return (a >> ss1<type>(j)) & (static_cast<type>(-1) >> ss1<type>(j - i + 1));
 }
 template <h8 i, h8 j> h8 feld(h8 a) {
 	return feld<h8, i, j>(a);
