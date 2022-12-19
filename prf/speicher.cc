@@ -19,7 +19,7 @@ int main(void) {
 	TRACE((ostringstream() << "Hauptspeichergröße: " << hs.g()).str().c_str());
 
 	TRACE("*** Beispielzugriffe in den Hauptspeicher");
-	h64 q64(0x0000030405060708U);
+	h64 q64(0x0102030005060708_64);
 	hs.s(7, q64);
 
 	h8 z8[sizeof q64];
@@ -38,25 +38,25 @@ int main(void) {
 		throw logic_error((ostringstream() << z64 << " != " << q64).str().c_str());
 
 	TRACE("*** Beispielzugriffe in den Kunstspeicher");
-	h32  gf(0x00804000U),
-		s2b(0x00200000U),
-		s2s(0x00802001U), s2t(0x00600000U);
-	h32 s1f(0x00803800U),
-		s1b(0x00800800U),
-		s1s(0x00802011U), s1t(0x00801800U);
+	h32  gf(0x00804000_32),
+		s2b(0x00200000_32),
+		s2s(0x00802001_32), s2t(0x00600000_32);
+	h32 s1f(0x00803800_32),
+		s1b(0x00800800_32),
+		s1s(0x00802011_32), s1t(0x00801800_32);
 
 	verwandlungseinheit e(hs);
 
-	hs.s(gf,                 s2b | ss::s);
-	hs.s(gf + 8,             s2b);
-	hs.s(gf + 12,            s2s);
-	hs.s(gf + 16,            s1f);
-	hs.s(s1::z & s1f,        s1b | ss::s);
-	hs.s((s1::z & s1f) + 8,  s1b);
-	hs.s((s1::z & s1f) + 12, s1s);
-	hs.s(ss::z & s2s,        s2t);
-	hs.s(ss::z & s1s,        s1t);
-	for (auto ka: {static_cast<h32>(0x003FFFFCU), static_cast<h32>(0x01000FFCU)}) {
+	hs.s(gf,                    s2b | ss::s);
+	hs.s(gf + 8_32,             s2b);
+	hs.s(gf + 12_32,            s2s);
+	hs.s(gf + 16_32,            s1f);
+	hs.s(s1::z & s1f,           s1b | ss::s);
+	hs.s((s1::z & s1f) + 8_32,  s1b);
+	hs.s((s1::z & s1f) + 12_32, s1s);
+	hs.s(ss::z & s2s,           s2t);
+	hs.s(ss::z & s1s,           s1t);
+	for (auto ka: {static_cast<h32>(0x003FFFFC_32), static_cast<h32>(0x01000FFC_32)}) {
 		try {
 			e.s(ka, gf, q64);
 			throw logic_error("Unmapped address accepted");
@@ -65,7 +65,7 @@ int main(void) {
 		}
 	}
 
-	h32 ka1(0x00300FFCU), ka2(0x010000FCU), ka3(0x00BFFFFCU), ka4(0x01002FFCU);
+	h32 ka1(0x00300FFC_32), ka2(0x010000FC_32), ka3(0x00BFFFFC_32), ka4(0x01002FFC_32);
 
 	hs.s(gf,          s2b);
 	hs.s(s1::z & s1f, s1b);
@@ -73,10 +73,10 @@ int main(void) {
 	e.enk(ka2, s1::z & s1f);
 
 	for (auto ez: {
-		make_tuple(ka1, s2b,                gf),
-		make_tuple(ka2, s1b,       s1f & s1::z),
-		make_tuple(ka3, s2b,            gf + 8),
-		make_tuple(ka4, s1b, (s1f & s1::z) + 8)
+		make_tuple(ka1, s2b,                   gf),
+		make_tuple(ka2, s1b,          s1f & s1::z),
+		make_tuple(ka3, s2b,            gf + 8_32),
+		make_tuple(ka4, s1b, (s1f & s1::z) + 8_32)
 	}) {
 		auto ka(get<0>(ez)), fe(get<1>(ez)), fa(get<2>(ez));
 		e.enk(ka, gf);
@@ -118,10 +118,10 @@ int main(void) {
 	}
 
 	for (auto ez: {
-		make_tuple(ka1,                 gf,          gf),
-		make_tuple(ka2,        s1::z & s1f, s1::z & s1f),
-		make_tuple(ka3,            gf + 12, ss::z & s2s),
-		make_tuple(ka4, (s1::z & s1f) + 12, ss::z & s1s)
+		make_tuple(ka1,                     gf,          gf),
+		make_tuple(ka2,           s1::z & s1f, s1::z & s1f),
+		make_tuple(ka3,            gf + 12_32, ss::z & s2s),
+		make_tuple(ka4, (s1::z & s1f) + 12_32, ss::z & s1s)
 	}) {
 		auto ka(get<0>(ez)),
 			sa(get<1>(ez)),
@@ -146,12 +146,12 @@ int main(void) {
 		e.enk(ka + 4, gf);
 	}
 
-	hs.s(gf,                 s2b | ss::s | ss::l);
-	hs.s(gf + 8,             s2b | ss::s | ss::l);
-	hs.s(gf + 12,            s2s | ss::s | ss::l);
-	hs.s(s1::z & s1f,        s1b | ss::s | ss::l);
-	hs.s((s1::z & s1f) + 8,  s1b | ss::s | ss::l);
-	hs.s((s1::z & s1f) + 12, s1s | ss::s | ss::l);
+	hs.s(gf,                    s2b | ss::s | ss::l);
+	hs.s(gf + 8_32,             s2b | ss::s | ss::l);
+	hs.s(gf + 12_32,            s2s | ss::s | ss::l);
+	hs.s(s1::z & s1f,           s1b | ss::s | ss::l);
+	hs.s((s1::z & s1f) + 8_32,  s1b | ss::s | ss::l);
+	hs.s((s1::z & s1f) + 12_32, s1s | ss::s | ss::l);
 	for (auto ka: {
 		ka1,
 		ka2,
