@@ -45,8 +45,8 @@ protected:
 	einheit(wahrspeicher &e);
 	einheit(einheit const &) = delete;
 	einheit &operator=(einheit const &) = delete;
-	einheit(einheit &&) = default;
-	einheit &operator=(einheit &&) = default;
+	einheit(einheit &&) = delete;
+	einheit &operator=(einheit &&) = delete;
 };
 
 h16 vzw(h16 n, h8 p);

@@ -47,7 +47,6 @@ template <> void wahrspeicher::s(h32 w, h64 a) {
 }
 template void wahrspeicher::s(h32,   h16);
 template void wahrspeicher::s(h32,   h32);
-template void wahrspeicher::s(h32,   h64);
 
 // Lesen
 template <class type> void wahrspeicher::l(type &a, h32 w) {
