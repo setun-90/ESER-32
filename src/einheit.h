@@ -31,7 +31,7 @@ struct einheit {
 	void ub(h64 e);
 	void an(void);
 	void ab(void);
-	static h64 const nube = static_cast<h64>(1) << 32;
+	static h64 const nube = 1_64 << 32;
 
 protected:
 	verwandlungseinheit se;

@@ -19,7 +19,7 @@
 #include "kunstspeicher.h"
 
 namespace unterbrechung {
-	static inline h32 g(h64 e) { return static_cast<h32>((e >> 32) & 0xFFFFF000U); }
+	static inline h32 g(h64 e) { return static_cast<h32>((e >> 32) & 0xFFFFF000_64); }
 	static inline h32 z(h64 e) { return static_cast<h32>(e); }
 }
 

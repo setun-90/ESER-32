@@ -38,42 +38,42 @@ static std::unordered_map<zugriff, char> zugriff_wb({
 /* Angaben */
 /*** Kunstanschriften */
 namespace ka {
-	h32 const  gz(0xFFC00000u);
-	h32 const s1z(0x003FF000u);
+	h32 const  gz(0xFFC00000_32);
+	h32 const s1z(0x003FF000_32);
 }
 
 /*** Schlüsseln */
 namespace ss {
-	static inline bool r(h32 e) { return e & 0x00000001u; }
-	h32 const z(0xFFFFFFF0u);
-	h32 const s(0x00000008u);
-	h32 const l(0x00000004u);
-	h32 const a(0x00000002u);
+	static inline bool r(h32 e) { return e & 0x00000001_32; }
+	h32 const z(0xFFFFFFF0_32);
+	h32 const s(0x00000008_32);
+	h32 const l(0x00000004_32);
+	h32 const a(0x00000002_32);
 }
 /*** Seitebeschreibungen */
 namespace sb {
-	static inline bool s1(h32 e) { return !ss::r(e) && (e & 0x00000800u); }
-	static inline bool s2(h32 e) { return !s1(e)    && (e & 0x00200000u); }
+	static inline bool s1(h32 e) { return !ss::r(e) && (e & 0x00000800_32); }
+	static inline bool s2(h32 e) { return !s1(e)    && (e & 0x00200000_32); }
 }
 /*** Tore */
 namespace st {
-	h32 const a(0x00000020u);
-	h32 const w(0x00000010u);
+	h32 const a(0x00000020_32);
+	h32 const w(0x00000010_32);
 }
 /*** Feldbeschreibungen */
 namespace fb {
-	static inline bool r(h32 e) { return !ss::r(e) && (e & 0x00000800u); }
-	h32 const z(0xFFFFF000u);
+	static inline bool r(h32 e) { return !ss::r(e) && (e & 0x00000800_32); }
+	h32 const z(0xFFFFF000_32);
 }
 
 /*** Zeiger- und Abstandsarten */
 namespace s1 {
-	h32 const a(0x00000FFFu);
-	h32 const z(0xFFFFF000u);
+	h32 const a(0x00000FFF_32);
+	h32 const z(0xFFFFF000_32);
 }
 namespace s2 {
-	h32 const a(0x003FFFFFu);
-	h32 const z(0xFFC00000u);
+	h32 const a(0x003FFFFF_32);
+	h32 const z(0xFFC00000_32);
 }
 }
 

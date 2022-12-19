@@ -24,6 +24,19 @@ using h16 = uint_least16_t;
 using h32 = uint_least32_t;
 using h64 = uint_least64_t;
 
+constexpr h8 operator "" _8(unsigned long long int n) {
+	return static_cast<h8>(n);
+}
+constexpr h16 operator "" _16(unsigned long long int n) {
+	return static_cast<h16>(n);
+}
+constexpr h32 operator "" _32(unsigned long long int n) {
+	return static_cast<h32>(n);
+}
+constexpr h64 operator "" _64(unsigned long long int n) {
+	return static_cast<h64>(n);
+}
+
 template <class type> h8 ss1(h8 i) {
 	return std::numeric_limits<type>::digits - i;
 }
