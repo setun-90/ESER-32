@@ -41,36 +41,12 @@ template <class type> h8 ss1(h8 i) {
 	return std::numeric_limits<type>::digits - i;
 }
 
-template <class type, h8 i> type stelle(type a) {
+template <h8 i, class type> type stelle(type a) {
 	return a & (static_cast<type>(1) << ss1<type>(i));
 }
-template <h8 i> h8 stelle(h8 a) {
-	return stelle<h8, i>(a);
-}
-template <h8 i> h16 stelle(h16 a) {
-	return stelle<h16, i>(a);
-}
-template <h8 i> h32 stelle(h32 a) {
-	return stelle<h32, i>(a);
-}
-template <h8 i> h64 stelle(h64 a) {
-	return stelle<h64, i>(a);
-}
 
-template <class type, h8 i, h8 j> type feld(type a) {
+template <h8 i, h8 j, class type> type feld(type a) {
 	return (a >> ss1<type>(j)) & (static_cast<type>(-1) >> ss1<type>(j - i + 1));
-}
-template <h8 i, h8 j> h8 feld(h8 a) {
-	return feld<h8, i, j>(a);
-}
-template <h8 i, h8 j> h16 feld(h16 a) {
-	return feld<h16, i, j>(a);
-}
-template <h8 i, h8 j> h32 feld(h32 a) {
-	return feld<h32, i, j>(a);
-}
-template <h8 i, h8 j> h64 feld(h64 a) {
-	return feld<h64, i, j>(a);
 }
 
 
