@@ -33,6 +33,8 @@ struct durchgangeinheit: public einheit {
 		virtual h32 operator()(durchgangeinheit *d, h64 a) = 0;
 		virtual void s(durchgangeinheit *d, h32 z, h32 ab) = 0;
 		virtual void l(durchgangeinheit *d, h32 z, h32 ab) = 0;
+
+		static std::unique_ptr<gerat> vb(char const *n, std::istringstream &i);
 	};
 
 private:
@@ -56,8 +58,6 @@ public:
 	template <class art> void l(art &a, h32 k);
 	template <class art> void a(art &a, h32 k);
 };
-
-std::unique_ptr<durchgangeinheit::gerat> vb(char const *n, std::istringstream &i);
 
 
 

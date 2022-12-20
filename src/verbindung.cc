@@ -12,7 +12,7 @@ using namespace std;
 
 
 
-unique_ptr<durchgangeinheit::gerat> vb(char const *n, istringstream &i) {
+unique_ptr<durchgangeinheit::gerat> durchgangeinheit::gerat::vb(char const *n, istringstream &i) {
 #if defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
 	auto m(dlopen(n, RTLD_LAZY));
 	char *f;
