@@ -48,14 +48,14 @@ void recheneinheit::operator()(void) {
 
 		h64 ze;
 		this->se.g(ze, ka, gf);
-		h32 ngfb((ze >> 32) & 0xFFFFF000U);
+		h32 ngfb((ze >> 32) & 0xFFFFF000_32);
 		if (this->zes) {
 			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
 			this->se.s(0, ngfb - 16, aze);
 		}
 		this->gfb =  ngfb;
-		this->b   =  (ze >> 32) & 0x00000006U;
-		this->az  =   ze & 0xFFFFFFFEU;
+		this->b   =  (ze >> 32) & 0x00000006_32;
+		this->az  =   ze & 0xFFFFFFFE_32;
 		this->zs  =  static_cast<bool>(ze & 1);
 
 		if (!this->zs)
@@ -84,7 +84,7 @@ void recheneinheit::af(void) {
 	h32 a;
 	this->a(a, this->az);
 	// Regelungsanweisungen
-	if (!(a & (1 << (32 - 3)))) {
+	if (!stelle<3>(a)) {
 		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
 
 		// Gestalten
@@ -112,7 +112,7 @@ void recheneinheit::af(void) {
 		h32 z((a >> 20) & 0xF);
 		this->nss(z, this->az);
 		if (a & (1 << (27 - this->b))) {
-			if (!(a & (1 << 28))) {
+			if (!stelle<28>(a)) {
 				// WGL - Weglass
 				this->az += q;
 			} else {
@@ -123,7 +123,7 @@ void recheneinheit::af(void) {
 		return;
 	}
 	// Bewegungsanweisungen
-	if (a & (1 << (32 - 3))) {
+	if (stelle<3>(a)) {
 		// Gestalten
 		h32 q;
 		switch ((a >> 24) & 0xF) {
