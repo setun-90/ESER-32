@@ -50,8 +50,8 @@ int main(void) {
 	shared_ptr<einheit> e(make_shared<durchgangeinheit>(hs, durchgangeinheit::gerat::vb("./debug/lib/prufung.so", i)));
 	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000_64));
-	while (!e->ls());
-	while (e->ls());
+	if (e->ls()) while (!e->ls());
+	if (!e->ls()) while (e->ls());
 	e->ab();
 
 	return 0;

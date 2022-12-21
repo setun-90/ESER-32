@@ -46,6 +46,7 @@ int main(void) {
 		s1s(0x00802011_32), s1t(0x00801800_32);
 
 	verwandlungseinheit e(hs);
+	e.gf = gf;
 
 	hs.s(gf,                    s2b | ss::s);
 	hs.s(gf + 8_32,             s2b);
@@ -58,7 +59,7 @@ int main(void) {
 	hs.s(ss::z & s1s,           s1t);
 	for (auto ka: {static_cast<h32>(0x003FFFFC_32), static_cast<h32>(0x01000FFC_32)}) {
 		try {
-			e.s(ka, gf, q64);
+			e.s(ka, q64);
 			throw logic_error("Unmapped address accepted");
 		} catch (ZEE const &e) {
 			TRACE(e.what());
@@ -73,55 +74,63 @@ int main(void) {
 	e.enk(ka2, s1::z & s1f);
 
 	for (auto ez: {
-		make_tuple(ka1, s2b,                   gf),
-		make_tuple(ka2, s1b,          s1f & s1::z),
-		make_tuple(ka3, s2b,            gf + 8_32),
-		make_tuple(ka4, s1b, (s1f & s1::z) + 8_32)
+		make_tuple(ka1, s2b,                   gf, s2b,                    gf),
+		make_tuple(ka2, s1b,          s1f & s1::z, s1b,           s1f & s1::z),
+		make_tuple(ka3, s2b,            gf + 8_32, s2s,            gf + 12_32),
+		make_tuple(ka4, s1b, (s1f & s1::z) + 8_32, s1s, (s1f & s1::z) + 12_32)
 	}) {
-		auto ka(get<0>(ez)), fe(get<1>(ez)), fa(get<2>(ez));
+		auto ka(get<0>(ez)), fe1(get<1>(ez)), fa1(get<2>(ez)), fe2(get<3>(ez)), fa2(get<4>(ez));
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
+		e.g(z64, ka);
 		try {
-			e.s(ka, gf, q64);
+			e.s(ka, q64);
 			throw logic_error("Forbidden write succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa, fe | ss::s);
+		hs.s(fa1, fe1 | ss::s);
+		hs.s(fa2, fe2 | ss::s);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
+		e.s(ka, q64);
 		try {
-			e.l(z64, ka, gf);
+			e.l(z64, ka);
 			throw logic_error("Forbidden read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa, fe | ss::l);
+		hs.s(fa1, fe1 | ss::l);
+		hs.s(fa2, fe2 | ss::l);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
+		e.l(z64, ka);
 		try {
-			e.a(z64, ka, gf);
+			e.a(z64, ka);
 			throw logic_error("Forbidden instruction read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa, fe | ss::a);
+		hs.s(fa1, fe1 | ss::a);
+		hs.s(fa2, fe2 | ss::a);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
+		e.a(z64, ka);
 		try {
-			e.g(z64, ka, gf);
+			e.g(z64, ka);
 			throw logic_error("Forbidden context entry read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa, fe | ss::s);
+		hs.s(fa1, fe1 | ss::s);
+		hs.s(fa2, fe2 | ss::s);
 	}
 
 	for (auto ez: {
-		make_tuple(ka1,                     gf,          gf),
-		make_tuple(ka2,           s1::z & s1f, s1::z & s1f),
-		make_tuple(ka3,            gf + 12_32, ss::z & s2s),
-		make_tuple(ka4, (s1::z & s1f) + 12_32, ss::z & s1s)
+		make_tuple(ka1,                   gf,          gf),
+		make_tuple(ka2,          s1::z & s1f, s1::z & s1f),
+		make_tuple(ka3,            gf + 8_32, ss::z & s2s),
+		make_tuple(ka4, (s1::z & s1f) + 8_32, ss::z & s1s)
 	}) {
 		auto ka(get<0>(ez)),
 			sa(get<1>(ez)),
@@ -135,7 +144,7 @@ int main(void) {
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		try {
-			e.s(ka, gf, q64);
+			e.s(ka, q64);
 			throw logic_error("Write to absent page succeeded");
 		} catch (ZSW const &e) {
 			TRACE(e.what());
@@ -159,10 +168,10 @@ int main(void) {
 		ka4
 	}) {
 		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str().c_str());
-		e.s(ka, gf, q64);
+		e.s(ka, q64);
 		TRACE("");
 		for (size_t i(0); i < sizeof q64; i++) {
-			e.l(z8[i], ka + i, gf);
+			e.l(z8[i], ka + i);
 		};
 		TRACE("");
 		z64 = (static_cast<h64>(z8[0]) << 56)

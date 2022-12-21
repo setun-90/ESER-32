@@ -12,21 +12,21 @@ durchgangeinheit::durchgangeinheit(wahrspeicher &hs, unique_ptr<gerat> gr):
 	einheit(hs), zs(false), g(move(gr)) {}
 
 template <class art> void durchgangeinheit::s(h32 k, art a) {
-	this->se.s(k, this->gfb, a);
+	this->se.s(k, a);
 }
 template void durchgangeinheit::s(h32 k, h8 a);
 template void durchgangeinheit::s(h32 k, h16 a);
 template void durchgangeinheit::s(h32 k, h32 a);
 template void durchgangeinheit::s(h32 k, h64 a);
 template <class art> void durchgangeinheit::l(art &a, h32 k) {
-	this->se.l(a, k, this->gfb);
+	this->se.l(a, k);
 }
 template void durchgangeinheit::l(h8 &a, h32 k);
 template void durchgangeinheit::l(h16 &a, h32 k);
 template void durchgangeinheit::l(h32 &a, h32 k);
 template void durchgangeinheit::l(h64 &a, h32 k);
 template <class art> void durchgangeinheit::a(art &a, h32 k) {
-	this->se.a(a, k, this->gfb);
+	this->se.a(a, k);
 }
 template void durchgangeinheit::a(h32 &a, h32 k);
 template void durchgangeinheit::a(h64 &a, h32 k);
@@ -40,10 +40,11 @@ void durchgangeinheit::operator()(void) {
 		h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
 		this->ube = einheit::nube;
 		l.unlock();
-		this->se.l(this->uez, ka, gf);
-		this->se.l(this->utz, ka + 4, gf);
-		this->se.l(this->gfb, ka + 8, gf);
-		this->se.l(this->az, ka + 12, gf);
+		this->se.gf = gf;
+		this->se.l(this->uez, ka);
+		this->se.l(this->utz, ka + 4);
+		this->se.l(this->gfb, ka + 8);
+		this->se.l(this->az, ka + 12);
 
 		try {
 			do {

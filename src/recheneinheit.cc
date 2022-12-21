@@ -17,21 +17,21 @@ bool recheneinheit::ls(void) {
 }
 
 template <class art> void recheneinheit::s(h32 k, art a) {
-	this->se.s(k, this->gfb, a);
+	this->se.s(k, a);
 }
 template void recheneinheit::s(h32 k, h8 a);
 template void recheneinheit::s(h32 k, h16 a);
 template void recheneinheit::s(h32 k, h32 a);
 template void recheneinheit::s(h32 k, h64 a);
 template <class art> void recheneinheit::l(art &a, h32 k) {
-	this->se.l(a, k, this->gfb);
+	this->se.l(a, k);
 }
 template void recheneinheit::l(h8 &a, h32 k);
 template void recheneinheit::l(h16 &a, h32 k);
 template void recheneinheit::l(h32 &a, h32 k);
 template void recheneinheit::l(h64 &a, h32 k);
 template <class art> void recheneinheit::a(art &a, h32 k) {
-	this->se.a(a, k, this->gfb);
+	this->se.a(a, k);
 }
 template void recheneinheit::a(h16 &a, h32 k);
 template void recheneinheit::a(h32 &a, h32 k);
@@ -47,16 +47,18 @@ void recheneinheit::operator()(void) {
 		l.unlock();
 
 		h64 ze;
-		this->se.g(ze, ka, gf);
+		this->se.gf = gf;
+		this->se.g(ze, ka);
 		h32 ngfb((ze >> 32) & 0xFFFFF000_32);
 		if (this->zes) {
 			h64 aze((static_cast<h64>(this->gfb | (this->b << 1)) << 32) | this->az | this->zs);
-			this->se.s(0, ngfb - 16, aze);
+			this->se.gf = ngfb - 16;
+			this->se.s(0, aze);
 		}
-		this->gfb =  ngfb;
-		this->b   =  (ze >> 32) & 0x00000006_32;
-		this->az  =   ze & 0xFFFFFFFE_32;
-		this->zs  =  static_cast<bool>(ze & 1);
+		this->se.gf = this->gfb =  ngfb;
+		this->b     =  ((ze >> 32) & 0x00000006_32) >> 1;
+		this->az    =   ze & 0xFFFFFFFE_32;
+		this->zs    =  static_cast<bool>(ze & 1);
 
 		if (!this->zs)
 			break;
@@ -203,7 +205,7 @@ void recheneinheit::af(void) {
 					q = t + (a & a_ra);
 				}
 				h64 ze;
-				this->se.g(ze, q, this->gfb);
+				this->se.g(ze, q);
 				this->ube = ze;
 				this->zes = false;
 				break;

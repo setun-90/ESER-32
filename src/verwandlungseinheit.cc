@@ -11,22 +11,22 @@ using namespace kunstspeicher;
 verwandlungseinheit::verwandlungseinheit(wahrspeicher &s):
 	hs(s) {}
 
-template <class type> void verwandlungseinheit::s(h32 k, h32 g, type a) {
+template <class type> void verwandlungseinheit::s(h32 k, type a) {
 	h32 w[sizeof a];
-	this->vwl(w, k, sizeof a, g, zugriff::s);
+	this->vwl(w, k, sizeof a, this->gf, zugriff::s);
 	for (size_t i(0); i < sizeof a; i++)
 		this->hs.s(w[i], static_cast<h8>(a >> (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits)));
 }
-template <> void verwandlungseinheit::s(h32 k, h32 g, h8 a) {
-	this->hs.s(this->sfl(k, g, zugriff::s), a);
+template <> void verwandlungseinheit::s(h32 k, h8 a) {
+	this->hs.s(this->sfl(k, this->gf, zugriff::s), a);
 }
-template void verwandlungseinheit::s(h32 k, h32 g, h16 a);
-template void verwandlungseinheit::s(h32 k, h32 g, h32 a);
-template void verwandlungseinheit::s(h32 k, h32 g, h64 a);
+template void verwandlungseinheit::s(h32 k, h16 a);
+template void verwandlungseinheit::s(h32 k, h32 a);
+template void verwandlungseinheit::s(h32 k, h64 a);
 
-template <class type> void verwandlungseinheit::l(type &a, h32 k, h32 g) {
+template <class type> void verwandlungseinheit::l(type &a, h32 k) {
 	h32 w[sizeof a];
-	this->vwl(w, k, sizeof a, g, zugriff::l);
+	this->vwl(w, k, sizeof a, this->gf, zugriff::l);
 	h8 b;
 	a = 0;
 	for (size_t i(0); i < sizeof a; i++) {
@@ -34,16 +34,16 @@ template <class type> void verwandlungseinheit::l(type &a, h32 k, h32 g) {
 		a |= static_cast<type>(b) << (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits);
 	}
 }
-template <> void verwandlungseinheit::l(h8 &a, h32 k, h32 g) {
-	this->hs.l(a, this->sfl(k, g, zugriff::l));
+template <> void verwandlungseinheit::l(h8 &a, h32 k) {
+	this->hs.l(a, this->sfl(k, this->gf, zugriff::l));
 }
-template void verwandlungseinheit::l(h16 &a, h32 k, h32 g);
-template void verwandlungseinheit::l(h32 &a, h32 k, h32 g);
-template void verwandlungseinheit::l(h64 &a, h32 k, h32 g);
+template void verwandlungseinheit::l(h16 &a, h32 k);
+template void verwandlungseinheit::l(h32 &a, h32 k);
+template void verwandlungseinheit::l(h64 &a, h32 k);
 
-template <class type> void verwandlungseinheit::a(type &a, h32 k, h32 g) {
+template <class type> void verwandlungseinheit::a(type &a, h32 k) {
 	h32 w[sizeof a];
-	this->vwl(w, k, sizeof a, g, zugriff::a);
+	this->vwl(w, k, sizeof a, this->gf, zugriff::a);
 	h8 b;
 	a = 0;
 	for (size_t i(0); i < sizeof a; i++) {
@@ -51,16 +51,16 @@ template <class type> void verwandlungseinheit::a(type &a, h32 k, h32 g) {
 		a |= static_cast<type>(b) << (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits);
 	}
 }
-template <> void verwandlungseinheit::a(h8 &a, h32 k, h32 g) {
-	this->hs.l(a, this->sfl(k, g, zugriff::a));
+template <> void verwandlungseinheit::a(h8 &a, h32 k) {
+	this->hs.l(a, this->sfl(k, this->gf, zugriff::a));
 }
-template void verwandlungseinheit::a(h16 &a, h32 k, h32 g);
-template void verwandlungseinheit::a(h32 &a, h32 k, h32 g);
-template void verwandlungseinheit::a(h64 &a, h32 k, h32 g);
+template void verwandlungseinheit::a(h16 &a, h32 k);
+template void verwandlungseinheit::a(h32 &a, h32 k);
+template void verwandlungseinheit::a(h64 &a, h32 k);
 
-void verwandlungseinheit::g(h64 &a, h32 k, h32 g) {
+void verwandlungseinheit::g(h64 &a, h32 k) {
 	h32 w[sizeof a];
-	this->vwl(w, k, sizeof a, g, zugriff::g);
+	this->vwl(w, k, sizeof a, this->gf, zugriff::g);
 	h8 b;
 	a = 0;
 	for (size_t i(0); i < sizeof a; i++) {

@@ -37,7 +37,7 @@ struct durchgangeinheit: public einheit {
 		static std::unique_ptr<gerat> vb(char const *n, std::istringstream &i);
 	};
 
-private:
+protected:
 	void operator()(void) override;
 	void af(void);
 

@@ -41,11 +41,12 @@ using namespace kunstspeicher;
 struct verwandlungseinheit {
 	verwandlungseinheit(wahrspeicher &s);
 
-	template <class type> void s(h32 k, h32 g, type a);
-	template <class type> void l(type &a, h32 k, h32 g);
-	template <class type> void a(type &a, h32 k, h32 g);
-	void g(h64 &a, h32 k, h32 g);
+	template <class type> void s(h32 k, type a);
+	template <class type> void l(type &a, h32 k);
+	template <class type> void a(type &a, h32 k);
+	void g(h64 &a, h32 k);
 
+	h32 gf;
 	void enk(h32 k, h32 g);
 
 private:
