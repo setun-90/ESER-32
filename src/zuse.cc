@@ -43,7 +43,7 @@ int main(int argc, char **argv) {
 			case 'd': {
 				string n;
 				il >> n; TRACE(string("n = ").append(n).c_str());
-				hs.ute(u, make_shared<durchgangeinheit>(hs, durchgangeinheit::gerat::vb(string(argv[2]).append(n).append(".so").c_str(), il)));
+				hs.ute(u, durchgangeinheit::vb(hs, string(argv[2]).append(n).append(".so").c_str(), il));
 				break;
 			}
 			default: {

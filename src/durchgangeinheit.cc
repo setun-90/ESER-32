@@ -8,8 +8,8 @@ using namespace kunstspeicher;
 
 
 
-durchgangeinheit::durchgangeinheit(wahrspeicher &hs, unique_ptr<gerat> gr):
-	einheit(hs), zs(false), g(move(gr)) {}
+durchgangeinheit::durchgangeinheit(wahrspeicher &hs):
+	einheit(hs), zs(false) {}
 
 template <class art> void durchgangeinheit::s(h32 k, art a) {
 	this->se.s(k, a);
@@ -54,8 +54,8 @@ void durchgangeinheit::operator()(void) {
 				break;
 		} catch (sonderfalle const &e) {
 			h64 ue;
-			this->l(ue, this->uez);
-			this->s(this->utz, ue);
+			this->se.l(ue, this->uez);
+			this->se.s(this->utz, ue);
 			this->zs = false;
 		}
 		l.lock();
@@ -68,7 +68,7 @@ bool durchgangeinheit::ls(void) {
 
 void durchgangeinheit::af(void) {
 	h64 a;
-	this->a(a, this->az);
+	this->se.a(a, this->az);
 
 	this->zs = !stelle<1>(a);
 	// Regelungsanweisung
@@ -80,7 +80,7 @@ void durchgangeinheit::af(void) {
 		} else {
 			// Speichergestalt
 			h32 ab;
-			this->l(ab, this->az + ba);
+			this->se.l(ab, this->az + ba);
 			this->az = ab;
 		}
 	// Übertragungsanweisung
@@ -94,19 +94,19 @@ void durchgangeinheit::af(void) {
 		} else {
 			// Speichergestalt
 			h32 ba(feld<11, 32>(a) + this->az);
-			this->l(ab,  ba);
-			this->l(z, ba + 4);
+			this->se.l(ab,  ba);
+			this->se.l(z, ba + 4);
 			this->az += 4;
 		}
 
 		if (!feld<5, 10>(a)) {
 			// Lesung
-			this->g->l(this, z, ab);
+			this->l(z, ab);
 		} else {
 			// Schreibung
-			this->g->s(this, z, ab);
+			this->s(z, ab);
 		}
 	} else {
-		this->az += (*this->g)(this, a);
+		this->az += (*this)(a);
 	}
 }

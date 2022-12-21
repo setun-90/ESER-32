@@ -4,19 +4,19 @@ using namespace std;
 
 
 
-unique_ptr<durchgangeinheit::gerat> abb(istringstream &) {
-	return unique_ptr<prufung>(new prufung());
+unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &) {
+	return unique_ptr<prufung>(new prufung(hs));
 }
 
-h32 prufung::operator()(durchgangeinheit *, h64) {
+h32 prufung::operator()(h64) {
 	return 4;
 }
 
-void prufung::s(durchgangeinheit *d, h32 z, h32 ab) {
+void prufung::s(h32 z, h32 ab) {
 	for (h32 i(0); i < z; i++)
-		d->s(ab + i, this->e());
+		this->se.s(ab + i, this->e());
 }
-void prufung::l(durchgangeinheit *, h32 z, h32) {
+void prufung::l(h32 z, h32) {
 	for (h32 i(0); i < z; i++)
 		this->e.discard(1);
 }

@@ -37,10 +37,11 @@ struct durchgangeinheit: public einheit {
 		static std::unique_ptr<gerat> vb(char const *n, std::istringstream &i);
 	};
 
-protected:
+private:
 	void operator()(void) override;
 	void af(void);
 
+protected:
 	h32 az;
 	h32 gfb;
 	h32 utz;
@@ -48,10 +49,14 @@ protected:
 	h8  b;
 	bool zs;
 
-	std::unique_ptr<gerat> g;
+	virtual h32 operator()(h64 a) = 0;
+	virtual void l(h32 z, h32 ab) = 0;
+	virtual void s(h32 z, h32 ab) = 0;
 
 public:
-	durchgangeinheit(wahrspeicher &hs, std::unique_ptr<gerat> g);
+	durchgangeinheit(wahrspeicher &hs);
+
+	static std::unique_ptr<durchgangeinheit> vb(wahrspeicher &hs, char const *n, std::istringstream &i);
 
 	bool ls(void) override;
 	template <class art> void s(h32 k, art a);
