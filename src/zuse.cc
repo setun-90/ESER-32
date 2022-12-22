@@ -11,14 +11,38 @@ using namespace std;
 
 
 
+istream &cp_getline(istream &i, string &s) {
+	s.clear();
+	istream::sentry si(i, true);
+	streambuf *ss(i.rdbuf());
+
+	for (;;) {
+		auto c(ss->sbumpc());
+		switch (c) {
+		case '\n':
+			return i;
+		case '\r':
+			if (ss->sgetc() == '\n')
+				ss->sbumpc();
+			return i;
+		case streambuf::traits_type::eof():
+			if (s.empty())
+				i.setstate(ios::eofbit);
+			return i;
+		default:
+			s += static_cast<char>(c);
+		}
+	}
+}
+
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);
 	if (argc <= 1) {
-		cerr << string("Verwendung:  ").append(argv[0]).append("  $Konfig_Datei_Name  $Gerät_Verzeichnis/").c_str() << endl;
+		cerr << string("Verwendung:  ").append(argv[0]).append("  $Konfig_Datei_Name  $Gerät_Verzeichnis/").c_str() << '\n';
 		return 1;
 	}
 
-	ifstream cnf(argv[1], ios_base::in);
+	ifstream cnf(argv[1]);
 	cnf.exceptions(ios::failbit | ios::badbit);
 	unsigned s;
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
@@ -26,7 +50,7 @@ int main(int argc, char **argv) {
 	{
 		string l;
 		cnf >> ws;
-		while (getline(cnf, l)) {
+		while (cp_getline(cnf, l)) {
 			if (l.empty())
 				continue;
 			istringstream il(l);

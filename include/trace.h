@@ -16,7 +16,7 @@
 /* Überschrift hier */
 
 #include <iostream>
-#define TRACE(X) std::cerr <<  __FILE__ << ':' << std::dec << __LINE__ << ": " << (X) << std::endl
+#define TRACE(X) std::cerr <<  __FILE__ << ':' << std::dec << __LINE__ << ": " << (X) << '\n'
 
 
 
