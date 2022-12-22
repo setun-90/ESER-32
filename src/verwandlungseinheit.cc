@@ -138,7 +138,7 @@ h32 verwandlungseinheit::s2zg(h32 e, zugriff z, h32 k, h32 g) {
 		throw ZSW(k, g, w);
 	if (z == zugriff::s)
 		this->hs.s(w, e | st::a);
-	return (s2::z & e) + (s2::a & k);
+	return (s2::z & e) | (s2::a & k);
 }
 
 h32 verwandlungseinheit::s1zg(h32 e, zugriff z, h32 k, h32 f) {
@@ -156,5 +156,5 @@ h32 verwandlungseinheit::s1zg(h32 e, zugriff z, h32 k, h32 f) {
 		throw ZSW(k, f, w);
 	if (z == zugriff::s)
 		this->hs.s(w, e | st::a);
-	return (s1::z & e) + (s1::a & k);
+	return (s1::z & e) | (s1::a & k);
 }
