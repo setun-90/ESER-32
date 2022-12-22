@@ -16,26 +16,6 @@ bool recheneinheit::ls(void) {
 	return this->zs;
 }
 
-template <class art> void recheneinheit::s(h32 k, art a) {
-	this->se.s(k, a);
-}
-template void recheneinheit::s(h32 k, h8 a);
-template void recheneinheit::s(h32 k, h16 a);
-template void recheneinheit::s(h32 k, h32 a);
-template void recheneinheit::s(h32 k, h64 a);
-template <class art> void recheneinheit::l(art &a, h32 k) {
-	this->se.l(a, k);
-}
-template void recheneinheit::l(h8 &a, h32 k);
-template void recheneinheit::l(h16 &a, h32 k);
-template void recheneinheit::l(h32 &a, h32 k);
-template void recheneinheit::l(h64 &a, h32 k);
-template <class art> void recheneinheit::a(art &a, h32 k) {
-	this->se.a(a, k);
-}
-template void recheneinheit::a(h16 &a, h32 k);
-template void recheneinheit::a(h32 &a, h32 k);
-
 void recheneinheit::operator()(void) {
 	unique_lock<mutex> l(this->m);
 	for (;;) {
@@ -84,7 +64,7 @@ h8 recheneinheit::zb(h32 a) {
 
 void recheneinheit::af(void) {
 	h32 a;
-	this->a(a, this->az);
+	this->se.a(a, this->az);
 	// Regelungsanweisungen
 	if (!stelle<3>(a)) {
 		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
@@ -107,7 +87,7 @@ void recheneinheit::af(void) {
 			h32 t;
 			this->nsl(t, (a >> a_z) & 0xF);
 			h32 qa(t + (a & a_a));
-			this->l(q, qa);
+			this->se.l(q, qa);
 			break;
 		}
 		}
@@ -150,12 +130,12 @@ void recheneinheit::af(void) {
 				h32 g, gns((a >> a_q) & 0xF), zns((a >> a_z) & 0xF);
 				this->nsl(g, gns);
 				if (a & (1 << 17)) {
-					this->l(q, g);
+					this->se.l(q, g);
 					this->b = recheneinheit::zb(q);
 					this->nss(zns, q);
 					this->nss(gns, g + (a & a_a));
 				} else {
-					this->l(q, g + (a & a_a));
+					this->se.l(q, g + (a & a_a));
 					this->b = recheneinheit::zb(q);
 					this->nss(zns, q);
 				}
@@ -170,11 +150,11 @@ void recheneinheit::af(void) {
 					this->nss(gns, g);
 					this->nsl(q, qns);
 					this->b = recheneinheit::zb(q);
-					this->s(g, q);
+					this->se.s(g, q);
 				} else {
 					this->nsl(q, qns);
 					this->b = recheneinheit::zb(q);
-					this->s(g + (a & a_a), q);
+					this->se.s(g + (a & a_a), q);
 				}
 				break;
 			}
@@ -224,7 +204,7 @@ void recheneinheit::af(void) {
 					this->nsl(t, (a >> a_z) & 0xE);
 					ut = t + (a & a_ra);
 				}
-				this->s(ut, q);
+				this->se.s(ut, q);
 				break;
 			}
 			}
@@ -263,9 +243,9 @@ void recheneinheit::af(void) {
 			h32 gr;
 			this->nsl(gr, (a >> a_z) & 0xF);
 			if (a & (1 << a_an)) {
-				this->l(q, gr);
+				this->se.l(q, gr);
 			} else {
-				this->l(q, gr + vzw(a & a_a, 12));
+				this->se.l(q, gr + vzw(a & a_a, 12));
 			}
 			break;
 		}
@@ -284,7 +264,7 @@ void recheneinheit::af(void) {
 		if (nsz) {
 			this->nsl(qz, z);
 		} else {
-			this->l(qz, z);
+			this->se.l(qz, z);
 		}
 		switch ((a >> 28) & 0xF) {
 		case 0x0: { // LVS - Linksverschiebung

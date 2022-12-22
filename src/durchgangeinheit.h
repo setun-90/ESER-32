@@ -21,23 +21,7 @@
 #include <memory>
 #include <sstream>
 
-struct durchgangeinheit: public einheit {
-	struct gerat {
-		virtual ~gerat() = default;
-		gerat() = default;
-		gerat(gerat const &) = delete;
-		gerat &operator=(gerat const &) = delete;
-		gerat(gerat &&) = default;
-		gerat &operator=(gerat &&) = default;
-
-		virtual h32 operator()(durchgangeinheit *d, h64 a) = 0;
-		virtual void s(durchgangeinheit *d, h32 z, h32 ab) = 0;
-		virtual void l(durchgangeinheit *d, h32 z, h32 ab) = 0;
-
-		static std::unique_ptr<gerat> vb(char const *n, std::istringstream &i);
-	};
-
-private:
+class durchgangeinheit: public einheit {
 	void operator()(void) override;
 	void af(void);
 
@@ -59,9 +43,6 @@ public:
 	static std::unique_ptr<durchgangeinheit> vb(wahrspeicher &hs, char const *n, std::istringstream &i);
 
 	bool ls(void) override;
-	template <class art> void s(h32 k, art a);
-	template <class art> void l(art &a, h32 k);
-	template <class art> void a(art &a, h32 k);
 };
 
 

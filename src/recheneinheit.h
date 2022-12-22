@@ -27,9 +27,6 @@ class recheneinheit: public einheit {
 	static const h8 a_g = 32 - 2, a_b = 32 - 8, a_z = 32 - 12, a_q = 32 - 16, a_an = 32 - 17;
 	static const h32 a_w = (1 << (32 - 12)) - 1, a_a = (1 << (32 - 20)) - 1, a_ra = (1 << (32 - 16)) - 1;
 
-	template <class art> void s(h32 k, art a);
-	template <class art> void l(art &a, h32 k);
-	template <class art> void a(art &a, h32 k);
 	void operator()(void) override;
 	void nss(h8 z,  h32 a);
 	void nsl(h32 &a, h8 z);

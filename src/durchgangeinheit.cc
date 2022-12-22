@@ -11,26 +11,6 @@ using namespace kunstspeicher;
 durchgangeinheit::durchgangeinheit(wahrspeicher &hs):
 	einheit(hs), zs(false) {}
 
-template <class art> void durchgangeinheit::s(h32 k, art a) {
-	this->se.s(k, a);
-}
-template void durchgangeinheit::s(h32 k, h8 a);
-template void durchgangeinheit::s(h32 k, h16 a);
-template void durchgangeinheit::s(h32 k, h32 a);
-template void durchgangeinheit::s(h32 k, h64 a);
-template <class art> void durchgangeinheit::l(art &a, h32 k) {
-	this->se.l(a, k);
-}
-template void durchgangeinheit::l(h8 &a, h32 k);
-template void durchgangeinheit::l(h16 &a, h32 k);
-template void durchgangeinheit::l(h32 &a, h32 k);
-template void durchgangeinheit::l(h64 &a, h32 k);
-template <class art> void durchgangeinheit::a(art &a, h32 k) {
-	this->se.a(a, k);
-}
-template void durchgangeinheit::a(h32 &a, h32 k);
-template void durchgangeinheit::a(h64 &a, h32 k);
-
 void durchgangeinheit::operator()(void) {
 	unique_lock<mutex> l(this->m);
 	for (;;) {
