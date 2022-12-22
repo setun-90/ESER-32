@@ -36,6 +36,7 @@ public:
 
 	void ute(h32 a, std::shared_ptr<einheit> e);
 	void ute(h32 a);
+	std::unordered_map<h32, std::shared_ptr<einheit>> &ute(void);
 
 	template <class type> void s(h32 w, type a);
 	template <class type> void l(type &a, h32 w);

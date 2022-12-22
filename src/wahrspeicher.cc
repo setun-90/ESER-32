@@ -70,3 +70,7 @@ template void wahrspeicher::l(h64 &, h32);
 size_t wahrspeicher::g() {
 	return this->hs.size();
 }
+
+unordered_map<h32, shared_ptr<einheit>> &wahrspeicher::ute() {
+	return this->ut;
+}
