@@ -23,7 +23,7 @@ int main(void) {
 	hs.s(7, q64);
 
 	h8 z8[sizeof q64];
-	for (size_t i(0); i < sizeof q64; i++) {
+	for (size_t i(0); i < sizeof q64; i += 1) {
 		hs.l(z8[i], 7 + i);
 	};
 	h64 z64((static_cast<h64>(z8[0]) << 56)
@@ -170,7 +170,7 @@ int main(void) {
 		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str().c_str());
 		e.s(ka, q64);
 		TRACE("");
-		for (size_t i(0); i < sizeof q64; i++) {
+		for (size_t i(0); i < sizeof q64; i += 1) {
 			e.l(z8[i], ka + i);
 		};
 		TRACE("");

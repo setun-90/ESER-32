@@ -20,7 +20,7 @@ void wahrspeicher::ute(h32 w) {
 // Schreiben
 template <class type> void wahrspeicher::s(h32 w, type a) {
 	h8 b[sizeof a];
-	for (size_t i(0); i < sizeof a; i++)
+	for (size_t i(0); i < sizeof a; i += 1)
 		b[i] = static_cast<h8>(a >> (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits));
 	lock_guard<mutex> l(this->m);
 	memcpy(this->hs.data() + w, b, sizeof a);
@@ -56,7 +56,7 @@ template <class type> void wahrspeicher::l(type &a, h32 w) {
 		memcpy(b, this->hs.data() + w, sizeof a);
 	}
 	a = 0;
-	for (size_t i(0); i < sizeof a; i++)
+	for (size_t i(0); i < sizeof a; i += 1)
 		a |= static_cast<type>(b[i]) << (((sizeof a) - i - 1)*std::numeric_limits<h8>::digits);
 }
 template <> void wahrspeicher::l(h8 &a, h32 w) {
