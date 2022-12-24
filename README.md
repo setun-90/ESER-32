@@ -1,17 +1,27 @@
 # Zuse Elektra emulator
 The Zuse Elektra is a system family from Zuse Gerätebau implementing the EZER/OSER architecture. Released in 1964, it has diversified into a line of mainframes, superminis, workstations and servers. The English Electric Electra is a licensed clone.
 
-This emulator emulates a 32-bit Zuse Elektra, configurable via a configuration file specifying:
-* the amount of RAM in 4K pages;
-* the units, in the format *k t [ p ]*, where
-* * *k* is the type of unit (**r** for processing, **d** for channel);
-* * *t* is the interrupt port address, in hex;
-* * *p* are the parameters for each unit.
-
+This emulator emulates a 32-bit Zuse Elektra.
 ## Status
 * Memory is verified; all specified features work, but some implementation features need to be frozen (such as cache sizing and replacement algorithms).
 * Channel units are in progress; tests and devices still need to be written.
+  * The actual directory structure for device sources needs to be replaced.
+  * The POSIX device needs a decent EZER test program.
 * Processing units are in progress; tests need to be written and some aspects need to be frozen, such as cache sizes.
+
+## Running
+Run it as:
+
+`${PATH}/zuse ${Config_File_Path} ${Device_Plugin_Directory}`
+
+The config file specifies the following:
+* the amount of RAM in 4K pages;
+* the units, in the format *k t [ p ]*, where
+  * *k* is the type of unit (**r** for processing, **d** for channel);
+  * *t* is the interrupt port address, in hex;
+  * *p* are the parameters for each unit.
+
+Channel units in turn take the basename of a device plugin (either a .so on POSIX or a .dll on Windows) as the first parameter of *p*.
 
 ## Building
 ### Systems
@@ -22,7 +32,8 @@ Do set CXX in the make command:
 
 If your CXX is neither g++ nor clang++, you may pass CXXFLAGS to tune appropriately:
 
-`make CXX=icc CXXFLAGS='-qopenmp -debug=parallel' # To compile the channel test program with the Intel C++ compiler, for example`
+`make CXX=icc CXXFLAGS='-qopenmp -debug=parallel' prf/durchgangeinheit  # To compile the channel test program with the Intel C++ compiler, for example`
+
 
 ### Dependencies
 The emulator is written in C++11, but a C++20-compatible compiler is recommended for increased performance.
@@ -32,14 +43,21 @@ The emulator is written in C++11, but a C++20-compatible compiler is recommended
 * debug: debug builds of the emulator and devices;
 * prufungen: all tests;
 * prf/*: the individual tests.
+  * speicher: tests memory, physical and virtual;
+  * durchgangeinheit: tests channels and some essential devices (in progress);
+  * recheneinheit: tests CPUs (in progress).
+
+Install targets are being considered.
 
 ### Testing
-Tests in prf/ are intended to be run in this order:
-* speicher (tests memory);
-* durchgangeinheit (tests channels and some essential devices) (in progress);
-* recheneinheit (tests CPUs) (in progress).
+The test order is:
+1. prf/speicher;
+2. prf/durchgangeinheit;
+3. prf/recheneinheit;
+4. all device tests.
 
 The test is successful if it returns normally, i.e. doesn't call terminate after throwing an exception or doesn't segfault. The tests can be run under gdb for debugging.
+
 
 ## Documentation
 The principal documentation are the PDFs in doc/:
