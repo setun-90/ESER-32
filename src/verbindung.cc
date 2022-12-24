@@ -1,10 +1,11 @@
+#include <platform.h>
 #include "durchgangeinheit.h"
 
 #include <string>
 
-#if defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
+#if defined(__POSIX__)
 #include <dlfcn.h>
-#elif defined(_WIN32) || defined(_WIN64)
+#elif defined(__WINDOWS__)
 #include <Windows.h>
 #endif
 
@@ -13,7 +14,7 @@ using namespace std;
 
 
 unique_ptr<durchgangeinheit> durchgangeinheit::vb(wahrspeicher &hs, char const *n, istringstream &i) {
-#if defined(__linux__) || defined(__unix__) || defined(__APPLE__) || defined(__MACH__)
+#if defined(__POSIX__)
 	auto m(dlopen(n, RTLD_LAZY));
 	char *f;
 	if ((f = dlerror()))
@@ -22,7 +23,7 @@ unique_ptr<durchgangeinheit> durchgangeinheit::vb(wahrspeicher &hs, char const *
 		(reinterpret_cast<unique_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(dlsym(m, "abb")));
 	if ((f = dlerror()))
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(f).c_str());
-#elif defined(_WIN32) || defined(_WIN64)
+#elif defined(__WINDOWS__)
 	auto m(LoadLibrary(n));
 	if (!m)
 		throw runtime_error("Ladung ist gescheitert");
