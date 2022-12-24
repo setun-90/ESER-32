@@ -1,5 +1,5 @@
-#ifndef   __H
-#define   __H
+#ifndef   _PLAT_H
+#define   _PLAT_H
 
 
 
@@ -24,4 +24,4 @@
 
 
 
-#endif /* __H */
+#endif /* _PLAT_H */
