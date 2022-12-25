@@ -12,7 +12,7 @@ else
 ${info Cannot determine compiler, set CXXFLAGS and LDFLAGS for optimizations and linking options}
 endif
 endif
-LDFLAGS      := -Wl,-O1,--as-needed,--sort-common
+LDFLAGS      := -Wl,-O1,--as-needed,--sort-common,-z,relro,-z,combreloc
 LDLIBS       := -ldl -pthread
 # Recover compiler and link commands
 LINK         = ${LINK.cc} $^ ${LOADLIBES} ${LDLIBS} -o $@
@@ -35,11 +35,11 @@ KERNEL = ${KERN:src/%.cc=${OUTPUT}/obj/%.o}
 .SECONDEXPANSION:
 # Release build
 ifeq "${CXX}" "g++"
-release: CXXFLAGS := ${CXXFLAGS} -O2 -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans
+release: CXXFLAGS := ${CXXFLAGS} -O2 -fvisibility=hidden -fno-reorder-blocks-and-partition -fno-reorder-functions -fira-region=mixed -ftree-cselim -flive-range-shrinkage -fpredictive-commoning -ftree-loop-distribution -fsched-pressure -fweb -frename-registers -fipa-pta -flto=auto -flto-partition=one -floop-nest-optimize -fgraphite-identity -fno-plt -fno-semantic-interposition -fdevirtualize-at-ltrans -fasynchronous-unwind-tables
 else ifeq "${CXX}" "clang++"
 release: CXXFLAGS := ${CXXFLAGS} -O2 -flto=thin -fno-plt
 endif
-release: LDFLAGS  := ${LDFLAGS},-s,-Bsymbolic,-z,relro,-z,combreloc
+release: LDFLAGS  := ${LDFLAGS},-s
 release: OUTPUT   := release
 release: release/bin/zuse gerate
 release/bin/%: release/obj/%.o $${KERNEL}
@@ -57,7 +57,7 @@ release/obj/%.o: src/%.cc
 
 # Debug build
 debug: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
-debug: LDFLAGS  := ${LDFLAGS},-Bsymbolic,-z,relro,-z,combreloc -fsanitize=address
+debug: LDFLAGS  := ${LDFLAGS} -fsanitize=address
 debug: OUTPUT   := debug
 debug: debug/bin/zuse gerate
 debug/bin/%: debug/obj/%.o $${KERNEL}
@@ -76,7 +76,7 @@ debug/obj/%.o: src/%.cc
 # Test builds
 tests: debug/lib/prufung.so ${PRFN:%.cc=%}
 prf/%: CXXFLAGS := ${CXXFLAGS} -Og -ggdb
-prf/%: LDFLAGS  := ${LDFLAGS},-Bsymbolic,-z,relro,-z,combreloc -fsanitize=address
+prf/%: LDFLAGS  := ${LDFLAGS} -fsanitize=address
 prf/%: OUTPUT   := debug
 prf/%: prf/%.o $${KERNEL}
 	${LINK}

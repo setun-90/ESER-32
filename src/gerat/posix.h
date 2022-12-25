@@ -17,6 +17,7 @@
 /*           (C) 1992            */
 
 #include <sonderfalle.h>
+#include <platform.h>
 #include "../durchgangeinheit.h"
 
 #include <fstream>
@@ -35,7 +36,7 @@ private:
 	buf f;
 };
 
-extern "C" std::unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+extern "C" ABBAU std::unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
 
 
 

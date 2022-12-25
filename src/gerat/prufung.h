@@ -16,6 +16,7 @@
 /* EZER Prüfungsgerätsbegriffserklärung */
 /*        (C) 1979, 1988, 1992          */
 
+#include <platform.h>
 #include "../durchgangeinheit.h"
 
 #include <random>
@@ -31,7 +32,7 @@ private:
 	std::mt19937_64 e;
 };
 
-extern "C" std::unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+extern "C" ABBAU std::unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
 
 
 #endif /* _PG_H */

@@ -21,6 +21,13 @@
 #define __WINDOWS__
 #endif
 
+#if defined(__GNUC__)
+#define ABBAU __attribute__((visibility("default")))
+#elif defined(_MSC_VER)
+#define ABBAU __declspec(dllexport)
+#else
+#define ABBAU
+#endif
 
 
 
