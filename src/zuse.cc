@@ -49,19 +49,13 @@ istream &cp_getline(istream &i, string &s) {
 }
 
 #if defined(__POSIX__)
-bool term(false);
-mutex m;
-condition_variable cv;
+atomic<bool> term(false);
 
 void handle_signal(int s) {
 	switch (s) {
 	case SIGINT:
 	case SIGTERM: {
-		{
-			lock_guard<mutex> l(m);
-			term = true;
-		}
-		cv.notify_one();
+		term = true;
 		break;
 	}
 	default:
@@ -109,7 +103,7 @@ int main(int argc, char **argv) {
 				break;
 			}
 			default: {
-				cerr << "Unbekannte Einheitsart: " << p << endl;
+				cerr << "Unbekannte Einheitsart: " << p << '\n';
 			}
 			}
 		}
@@ -138,10 +132,12 @@ int main(int argc, char **argv) {
 		sigaction(s, &sa, NULL);
 
 	TRACE(term);
-	unique_lock<mutex> l(m);
-	do {
-		cv.wait(l, []{ return term; });
-	} while (!term);
+	string c;
+	cout << "<< ";
+	term = cp_getline(cin, c).eof();
+	while (!term && cout << string("   ").append(c).append("\n<< ")) {
+		term = cp_getline(cin, c).eof();
+	}
 
 #endif
 
