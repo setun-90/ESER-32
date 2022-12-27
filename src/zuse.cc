@@ -48,9 +48,9 @@ istream &cp_getline(istream &i, string &s) {
 	}
 }
 
-#if defined(__POSIX__)
 atomic<bool> term(false);
 
+#if defined(__POSIX__)
 void handle_signal(int s) {
 	switch (s) {
 	case SIGINT:
@@ -62,7 +62,6 @@ void handle_signal(int s) {
 		abort();
 	}
 }
-
 #endif
 
 
@@ -130,16 +129,15 @@ int main(int argc, char **argv) {
 	sigfillset(&sa.sa_mask);
 	for (auto s: {SIGINT, SIGTERM})
 		sigaction(s, &sa, NULL);
+#endif
 
 	TRACE(term);
 	string c;
-	cout << "<< ";
-	term = cp_getline(cin, c).eof();
-	while (!term && cout << string("   ").append(c).append("\n<< ")) {
+	do {
+		cout << "<< ";
 		term = cp_getline(cin, c).eof();
-	}
-
-#endif
+	} while (!term && cout << string("   ").append(c) << '\n');
+	cout << '\n';
 
 	return 0;
 }
