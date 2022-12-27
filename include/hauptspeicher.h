@@ -41,14 +41,14 @@ template <class type> constexpr h8 ss1(h8 i) {
 	return std::numeric_limits<type>::digits - i;
 }
 
-template <class type> type stelle(type a, h8 i) {
+template <class type> constexpr type stelle(type a, h8 i) {
 	return a & (static_cast<type>(1) << ss1<type>(i));
 }
-template <h8 i, class type> type stelle(type a) {
+template <h8 i, class type> constexpr type stelle(type a) {
 	return stelle(a, i);
 }
 
-template <h8 i, h8 j, class type> type feld(type a) {
+template <h8 i, h8 j, class type> constexpr type feld(type a) {
 	return (a >> ss1<type>(j)) & (static_cast<type>(-1) >> ss1<type>(j - i + 1));
 }
 
