@@ -1,5 +1,5 @@
-#ifndef   _KS_H
-#define   _KS_H
+#ifndef   EZER_KS_H
+#define   EZER_KS_H
 
 
 
@@ -79,4 +79,4 @@ namespace s2 {
 
 
 
-#endif /* _KS_H */
+#endif /* EZER_KS_H */

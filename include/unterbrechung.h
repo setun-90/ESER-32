@@ -1,5 +1,5 @@
-#ifndef   _UB_H
-#define   _UB_H
+#ifndef   EZER_UB_H
+#define   EZER_UB_H
 
 
 
@@ -25,4 +25,4 @@ namespace unterbrechung {
 
 
 
-#endif /* _UB_H */
+#endif /* EZER_UB_H */

@@ -1,5 +1,5 @@
-#ifndef   _PLAT_H
-#define   _PLAT_H
+#ifndef   ZUSE_PLAT_H
+#define   ZUSE_PLAT_H
 
 
 
@@ -31,4 +31,4 @@
 
 
 
-#endif /* _PLAT_H */
+#endif /* ZUSE_PLAT_H */

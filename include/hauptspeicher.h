@@ -1,5 +1,5 @@
-#ifndef   _HS_H
-#define   _HS_H
+#ifndef   EZER_HS_H
+#define   EZER_HS_H
 
 
 
@@ -54,4 +54,4 @@ template <h8 i, h8 j, class type> constexpr type feld(type a) {
 
 
 
-#endif /* _HS_H */
+#endif /* EZER_HS_H */

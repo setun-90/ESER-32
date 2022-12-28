@@ -1,5 +1,5 @@
-#ifndef   _SF_H
-#define   _SF_H
+#ifndef   EZER_SF_H
+#define   EZER_SF_H
 
 
 
@@ -66,4 +66,4 @@ public:
 
 
 
-#endif /* _SF_H */
+#endif /* EZER_SF_H */

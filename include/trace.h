@@ -1,5 +1,5 @@
-#ifndef   _TRACE_H
-#define   _TRACE_H
+#ifndef   UTIL_TRACE_H
+#define   UTIL_TRACE_H
 
 
 
@@ -20,4 +20,4 @@
 
 
 
-#endif /* _TRACE_H */
+#endif /* UTIL_TRACE_H */
