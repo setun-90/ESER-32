@@ -3,9 +3,9 @@
 
 #include <string>
 
-#if defined(__POSIX__)
+#if defined(ZUSE_POSIX)
 #include <dlfcn.h>
-#elif defined(__WINDOWS__)
+#elif defined(ZUSE_WINDOWS)
 #include <Windows.h>
 #endif
 
@@ -14,7 +14,7 @@ using namespace std;
 
 
 unique_ptr<durchgangeinheit> durchgangeinheit::vb(wahrspeicher &hs, char const *n, istringstream &i) {
-#if defined(__POSIX__)
+#if defined(ZUSE_POSIX)
 	auto m(dlopen(n, RTLD_LAZY));
 	char *f;
 	if ((f = dlerror()))
@@ -23,7 +23,7 @@ unique_ptr<durchgangeinheit> durchgangeinheit::vb(wahrspeicher &hs, char const *
 		(reinterpret_cast<unique_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(dlsym(m, "abb")));
 	if ((f = dlerror()))
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(f).c_str());
-#elif defined(__WINDOWS__)
+#elif defined(ZUSE_WINDOWS)
 	auto m(LoadLibrary(n));
 	if (!m)
 		throw runtime_error("Ladung ist gescheitert");

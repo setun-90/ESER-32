@@ -16,9 +16,9 @@
 /* EZER Platform definitions */
 
 #if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
-#define __POSIX__
+#define ZUSE_POSIX
 #elif defined(_WIN32) || defined(_WIN64)
-#define __WINDOWS__
+#define ZUSE_WINDOWS
 #endif
 
 #if defined(__GNUC__)

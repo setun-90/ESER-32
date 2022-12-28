@@ -9,13 +9,13 @@
 #include <sstream>
 #include <vector>
 
-#if defined(__POSIX__)
+#if defined(ZUSE_POSIX)
 #include <atomic>
 #include <condition_variable>
 
 #include <signal.h>
 #include <unistd.h>
-#elif defined(__WINDOWS__)
+#elif defined(ZUSE_WINDOWS)
 #endif
 
 
@@ -50,7 +50,7 @@ istream &cp_getline(istream &i, string &s) {
 
 atomic<bool> term(false);
 
-#if defined(__POSIX__)
+#if defined(ZUSE_POSIX)
 void handle_signal(int s) {
 	switch (s) {
 	case SIGINT:
@@ -122,7 +122,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Handle signals/keyboard
-#if defined(__POSIX__)
+#if defined(ZUSE_POSIX)
 	struct sigaction sa;
 	memset(&sa, 0, sizeof sa);
 	sa.sa_handler = handle_signal;
