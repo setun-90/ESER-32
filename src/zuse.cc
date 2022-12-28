@@ -2,7 +2,7 @@
 #include <platform.h>
 #include <trace.h>
 #include "recheneinheit.h"
-#include "durchgangeinheit.h"
+#include "verbindung.h"
 #include "wahrspeicher.h"
 
 #include <fstream>
@@ -77,34 +77,34 @@ int main(int argc, char **argv) {
 	cnf.exceptions(ios::badbit);
 	unsigned s;
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
+	cnf >> ws;
+
 	wahrspeicher hs(s);
-	{
-		string l;
-		cnf >> ws;
-		while (cp_getline(cnf, l)) {
-			if (l.empty())
-				continue;
-			istringstream il(l);
-			il.exceptions(ios::badbit | ios::failbit);
-			char p;
-			h32 u;
-			il >> p >> hex >> u;
-			switch (p) {
-			case 'r': {
-				TRACE((ostringstream() << "u = " << u).str().c_str());
-				hs.ute(u, make_shared<recheneinheit>(hs));
-				break;
-			}
-			case 'd': {
-				string n;
-				il >> n; TRACE(string("n = ").append(n).c_str());
-				hs.ute(u, durchgangeinheit::vb(hs, string(argv[2]).append(n).append(".so").c_str(), il));
-				break;
-			}
-			default: {
-				cerr << "Unbekannte Einheitsart: " << p << '\n';
-			}
-			}
+	vector<durchgangeinheit::verbindung> v;
+	for (string l; cp_getline(cnf, l);) {
+		if (l.empty())
+			continue;
+		istringstream il(l);
+		il.exceptions(ios::badbit | ios::failbit);
+		char p;
+		h32 u;
+		il >> p >> hex >> u;
+		switch (p) {
+		case 'r': {
+			TRACE((ostringstream() << "u = " << u).str().c_str());
+			hs.ute(u, make_shared<recheneinheit>(hs));
+			break;
+		}
+		case 'd': {
+			string n;
+			il >> n; TRACE(string("n = ").append(n).c_str());
+			v.emplace_back(hs, string(argv[2]).append(n).append(".so").c_str(), il);
+			hs.ute(u, v.back().ab());
+			break;
+		}
+		default: {
+			cerr << "Unbekannte Einheitsart: " << p << '\n';
+		}
 		}
 	}
 

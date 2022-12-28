@@ -14,14 +14,14 @@ using namespace kunstspeicher;
 posix::posix(wahrspeicher &hs, posix::buf f):
 	durchgangeinheit(hs), f(move(f)) {}
 
-unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &i) {
+shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &i) {
 	string n;
 	i >> n;
 	posix::buf f;
 	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out))
 		throw runtime_error(n.append(": ").append(strerror(errno)).c_str());
 
-	return unique_ptr<posix>(new posix(hs, move(f)));
+	return make_shared<posix>(hs, move(f));
 }
 
 h32 posix::operator()(h64 a) {

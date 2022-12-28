@@ -1,4 +1,4 @@
-#include "../src/durchgangeinheit.h"
+#include "../src/verbindung.h"
 #include <trace.h>
 
 using namespace std;
@@ -47,12 +47,15 @@ int main(void) {
 	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8;
 
 	istringstream i;
-	shared_ptr<einheit> e(durchgangeinheit::vb(hs, "./debug/lib/prufung.so", i));
-	e->an();
-	e->ub(static_cast<h64>(0x0080400000800000_64));
-	if (e->ls()) while (!e->ls());
-	if (!e->ls()) while (e->ls());
-	e->ab();
+	durchgangeinheit::verbindung vb(hs, "./debug/lib/prufung.so", i);
+	{
+		shared_ptr<einheit> e(vb.ab());
+		e->an();
+		e->ub(static_cast<h64>(0x0080400000800000_64));
+		while (e->ls());
+		e->ab();
+	}
+	vb.zs();
 
 	return 0;
 }

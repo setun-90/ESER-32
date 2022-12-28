@@ -4,8 +4,8 @@ using namespace std;
 
 
 
-unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &) {
-	return unique_ptr<prufung>(new prufung(hs));
+shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &) {
+	return make_shared<prufung>(hs);
 }
 
 h32 prufung::operator()(h64) {

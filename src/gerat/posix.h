@@ -36,7 +36,7 @@ private:
 	buf f;
 };
 
-extern "C" ABBAU std::unique_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+extern "C" ABBAU std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
 
 
 

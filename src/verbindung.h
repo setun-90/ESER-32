@@ -1,9 +1,9 @@
-#ifndef   _DE_H
-#define   _DE_H
+#ifndef   ZUSE_VB_H
+#define   ZUSE_VB_H
 
 
 
-// Copyright 2020 Daniel Campos do Nascimento
+// Copyright 2020, 2022 Daniel Campos do Nascimento
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -13,39 +13,33 @@
 
 
 
-/* EZER Durchgangeinheitsentwurf */
-/*     (C) 1979, 1988, 1992      */
+/* Zuse Elektra Verbindungbegriffserklärung */
+/*      (C) 1993, 1998, 2003, 2011          */
 
-#include "einheit.h"
+#include <platform.h>
+#include "durchgangeinheit.h"
 
-#include <memory>
-#include <sstream>
+#if defined(ZUSE_POSIX)
+#include <dlfcn.h>
+using buchse = void *;
+#elif defined(ZUSE_WINDOWS)
+#include <Windows.h>
+using buchse = HMODULE;
+#endif
 
-class durchgangeinheit: public einheit {
-	void operator()(void) override;
-	void af(void);
+struct durchgangeinheit::verbindung {
+	verbindung(wahrspeicher &hs, char const *n, std::istringstream &i);
 
-protected:
-	h32 az;
-	h32 gfb;
-	h32 utz;
-	h32 uez;
-	h8  b;
-	bool zs;
+	~verbindung();
 
-	virtual h32 operator()(h64 a) = 0;
-	virtual void l(h32 z, h32 ab) = 0;
-	virtual void s(h32 z, h32 ab) = 0;
+	std::shared_ptr<durchgangeinheit> ab(void);
+	void zs(void);
 
-public:
-	durchgangeinheit(wahrspeicher &hs);
-	virtual ~durchgangeinheit() = default;
-
-	struct verbindung;
-
-	bool ls(void) override;
+private:
+	buchse b;
+	std::shared_ptr<durchgangeinheit> d;
 };
 
 
 
-#endif /* _DE_H */
+#endif /* ZUSE_VB_H */
