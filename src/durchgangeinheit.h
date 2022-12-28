@@ -39,6 +39,7 @@ protected:
 
 public:
 	durchgangeinheit(wahrspeicher &hs);
+	virtual ~durchgangeinheit() = default;
 
 	static std::unique_ptr<durchgangeinheit> vb(wahrspeicher &hs, char const *n, std::istringstream &i);
 
