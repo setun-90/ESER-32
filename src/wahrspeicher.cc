@@ -16,6 +16,9 @@ void wahrspeicher::ute(h32 w, shared_ptr<einheit> e) {
 void wahrspeicher::ute(h32 w) {
 	this->ut.erase(w);
 }
+unordered_map<h32, shared_ptr<einheit>> &wahrspeicher::ute() {
+	return this->ut;
+}
 
 // Schreiben
 template <class type> void wahrspeicher::s(h32 w, type a) {
@@ -69,8 +72,4 @@ template void wahrspeicher::l(h64 &, h32);
 
 size_t wahrspeicher::g() {
 	return this->hs.size();
-}
-
-unordered_map<h32, shared_ptr<einheit>> &wahrspeicher::ute() {
-	return this->ut;
 }
