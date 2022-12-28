@@ -18,6 +18,7 @@
 #if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
 #define ZUSE_POSIX
 #elif defined(_WIN32) || defined(_WIN64)
+#define WIN32_LEAN_AND_MEAN
 #define ZUSE_WINDOWS
 #endif
 
