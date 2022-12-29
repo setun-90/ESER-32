@@ -9,18 +9,35 @@
 #include <sstream>
 #include <vector>
 
-#if defined(ZUSE_POSIX)
-#include <atomic>
-#include <condition_variable>
-
-#include <signal.h>
-#include <unistd.h>
-#elif defined(ZUSE_WINDOWS)
-#endif
-
-
 using namespace std;
 using namespace kunstspeicher;
+
+
+
+#if defined(ZUSE_POSIX)
+#include <stdlib.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <unistd.h>
+
+volatile sig_atomic_t handling = 0;
+
+void handle_signal(int s) {
+	switch (s) {
+	case SIGINT:
+	case SIGTERM: {
+		if (handling)
+			raise(s);
+		handling = 1;
+		signal(s, SIG_DFL);
+		raise(s);
+		break;
+	}
+	default:
+		exit(s);
+	}
+}
+#endif
 
 
 
@@ -48,21 +65,6 @@ istream &cp_getline(istream &i, string &s) {
 	}
 }
 
-atomic<bool> term(false);
-
-#if defined(ZUSE_POSIX)
-void handle_signal(int s) {
-	switch (s) {
-	case SIGINT:
-	case SIGTERM: {
-		term = true;
-		break;
-	}
-	default:
-		abort();
-	}
-}
-#endif
 
 
 int main(int argc, char **argv) {
@@ -129,15 +131,13 @@ int main(int argc, char **argv) {
 	sigfillset(&sa.sa_mask);
 	for (auto s: {SIGINT, SIGTERM})
 		sigaction(s, &sa, NULL);
-#endif
 
-	TRACE(term);
 	string c;
-	do {
-		cout << "<< ";
-		term = cp_getline(cin, c).eof();
-	} while (!term && cout << string("   ").append(c) << '\n');
+	while (cout << "<< " && !cp_getline(cin, c).eof()) {
+		cout << string("   ").append(c) << '\n';
+	}
 	cout << '\n';
+#endif
 
 	return 0;
 }
