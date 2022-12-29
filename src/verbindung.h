@@ -31,6 +31,8 @@ struct durchgangeinheit::verbindung {
 	verbindung(wahrspeicher &hs, char const *n, std::istringstream &i);
 
 	~verbindung();
+	verbindung(verbindung const &) = default;
+	verbindung &operator=(verbindung const &) = default;
 
 	std::shared_ptr<durchgangeinheit> ab(void);
 	void zs(void);
