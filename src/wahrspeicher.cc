@@ -11,7 +11,7 @@ wahrspeicher::wahrspeicher(h32 g):
 
 // Unterbrechungstore
 void wahrspeicher::ute(h32 w, shared_ptr<einheit> e) {
-	this->ut.emplace(w, e);
+	this->ut.emplace(w, move(e));
 }
 void wahrspeicher::ute(h32 w) {
 	this->ut.erase(w);
