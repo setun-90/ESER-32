@@ -67,6 +67,8 @@ shared_ptr<durchgangeinheit> durchgangeinheit::verbindung::ab(void) {
 	return this->d;
 }
 durchgangeinheit::verbindung::~verbindung() {
+	if (this->d)
+		return;
 	try {
 		this->zs();
 	} catch (runtime_error const &r) {
