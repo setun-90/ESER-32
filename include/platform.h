@@ -19,6 +19,9 @@
 #define ZUSE_POSIX
 #elif defined(_WIN32) || defined(_WIN64)
 #define WIN32_LEAN_AND_MEAN
+#ifndef UNICODE
+#define UNICODE
+#endif
 #define ZUSE_WINDOWS
 #endif
 
