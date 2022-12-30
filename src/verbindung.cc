@@ -15,22 +15,25 @@ using namespace std;
 
 
 #if defined(ZUSE_POSIX)
-durchgangeinheit::verbindung::verbindung(wahrspeicher &hs, char const *n, std::istringstream &i) {
-	this->b = dlopen(n, RTLD_NOW);
+durchgangeinheit::verbindung::verbindung(string n):
+	n(n) {
+	this->b = dlopen(n.c_str(), RTLD_NOW);
 	char *f;
-	if ((f = dlerror()))
+	if (!this->b && (f = dlerror()))
 		throw runtime_error(string("Ladung ist gescheitert: ").append(f).c_str());
-	shared_ptr<durchgangeinheit> (*abb)(wahrspeicher &, istringstream &)
-		(reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(dlsym(this->b, "abb")));
-	if ((f = dlerror()))
+	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(dlsym(this->b, "abb"));
+	if (!this->a && (f = dlerror())) {
+		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(f).c_str());
-	this->d = abb(hs, i);
+	}
 }
 void durchgangeinheit::verbindung::zs(void) {
-	dlclose(this->b);
-	char *f;
-	if ((f = dlerror()))
-		throw runtime_error(string("Abschalt ist gescheitert: ").append(f).c_str());
+	this->a = nullptr;
+	if (this->b) {
+		dlclose(this->b);
+		this->b = nullptr;
+	}
+	this->n.clear();
 }
 #elif defined(ZUSE_WINDOWS)
 static LPTSTR format_error(void) {
@@ -47,31 +50,44 @@ static LPTSTR format_error(void) {
 	return f;
 }
 
-durchgangeinheit::verbindung::verbindung(wahrspeicher &hs, char const *n, std::istringstream &i) {
-	this->b = LoadLibrary(n);
+durchgangeinheit::verbindung::verbindung(string n):
+	n(n) {
+	this->b = LoadLibrary(n.c_str());
 	if (!this->b)
 		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error()).c_str());
-	shared_ptr<durchgangeinheit> (*abb)(wahrspeicher &, istringstream &)
-		(reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, "abb")));
-	if (!abb)
+	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, "abb"));
+	if (!abb) {
+		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error()).c_str());
-	this->d = abb(hs, i);
+	}
 }
 void durchgangeinheit::verbindung::zs(void) {
-	if (!FreeLibrary(this->b))
-		throw runtime_error(string("Abschalt ist gescheitert: ").append(format_error()).c_str());
+	this->a = nullptr;
+	if (this->b) {
+		FreeLibrary(this->b);
+		this->b = nullptr;
+	}
+	this->n.clear();
 }
 #endif
+durchgangeinheit::verbindung::verbindung():
+	n(), b(nullptr), a(nullptr) {}
+durchgangeinheit::verbindung::verbindung(verbindung &&v):
+	verbindung() {
+	*this = move(v);
+}
+durchgangeinheit::verbindung &durchgangeinheit::verbindung::operator=(verbindung &&v) {
+	this->n = move(v.n);
+	this->b = v.b;
+	this->a = v.a;
+	v.a = nullptr;
+	v.b = nullptr;
+	return *this;
+}
 
-shared_ptr<durchgangeinheit> durchgangeinheit::verbindung::ab(void) {
-	return this->d;
+shared_ptr<durchgangeinheit> durchgangeinheit::verbindung::abb(wahrspeicher &hs, std::istringstream &i) {
+	return this->a(hs, i);
 }
 durchgangeinheit::verbindung::~verbindung() {
-	if (this->d)
-		return;
-	try {
-		this->zs();
-	} catch (runtime_error const &r) {
-		TRACE(r.what());
-	}
+	this->zs();
 }

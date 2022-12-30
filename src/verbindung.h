@@ -19,27 +19,31 @@
 #include <platform.h>
 #include "durchgangeinheit.h"
 
+#include <string>
+
 #if defined(ZUSE_POSIX)
 #include <dlfcn.h>
 using buchse = void *;
 #elif defined(ZUSE_WINDOWS)
 #include <Windows.h>
-using buchse = HMODULE;
+using name = LPCSTR;
 #endif
 
 struct durchgangeinheit::verbindung {
-	verbindung(wahrspeicher &hs, char const *n, std::istringstream &i);
-
-	~verbindung();
-	verbindung(verbindung const &) = default;
-	verbindung &operator=(verbindung const &) = default;
-
-	std::shared_ptr<durchgangeinheit> ab(void);
+	explicit verbindung(std::string n);
 	void zs(void);
 
+	~verbindung();
+	verbindung();
+	verbindung(verbindung &&);
+	verbindung &operator=(verbindung &&);
+
+	std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+
 private:
+	std::string n;
 	buchse b;
-	std::shared_ptr<durchgangeinheit> d;
+	std::shared_ptr<durchgangeinheit> (*a)(wahrspeicher &hs, std::istringstream &i);
 };
 
 

@@ -81,8 +81,9 @@ int main(int argc, char **argv) {
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
 	cnf >> ws;
 
-	wahrspeicher hs(s);
 	vector<durchgangeinheit::verbindung> v;
+	{
+	wahrspeicher hs(s);
 	for (string l; cp_getline(cnf, l);) {
 		if (l.empty())
 			continue;
@@ -100,8 +101,8 @@ int main(int argc, char **argv) {
 		case 'd': {
 			string n;
 			il >> n; TRACE(string("n = ").append(n).c_str());
-			v.emplace_back(hs, string(argv[2]).append(n).append(".so").c_str(), il);
-			hs.ute(u, v.back().ab());
+			v.emplace_back(string(argv[2]).append(n).append(".so"));
+			hs.ute(u, v.back().abb(hs, il));
 			break;
 		}
 		default: {
@@ -138,6 +139,7 @@ int main(int argc, char **argv) {
 	}
 	cout << '\n';
 #endif
+	}
 
 	return 0;
 }
