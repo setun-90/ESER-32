@@ -20,6 +20,7 @@ void einheit::an(void) {
 		return;
 	this->ss = true;
 	this->t = thread(&einheit::operator(), this);
+	this->t.detach();
 	this->cv.notify_one();
 }
 
@@ -31,5 +32,4 @@ void einheit::ab(void) {
 		this->ss = false;
 	}
 	this->cv.notify_one();
-	this->t.join();
 }
