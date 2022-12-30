@@ -1,6 +1,9 @@
 #include "../src/verbindung.h"
 #include <trace.h>
 
+#include <thread>
+#include <chrono>
+
 using namespace std;
 using namespace kunstspeicher;
 
@@ -50,7 +53,7 @@ int main(void) {
 	shared_ptr<einheit> e(durchgangeinheit::verbindung("./debug/lib/prufung.so").abb(hs, i));
 	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000_64));
-	while (e->ls());
+	this_thread::sleep_for(chrono::milliseconds(1000));
 	e->ab();
 
 	return 0;
