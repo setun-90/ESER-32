@@ -25,23 +25,20 @@ Channel units in turn take the basename of a device plugin (either a .so on POSI
 
 ## Building
 ### Systems
+CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself.
 #### Make
-Do set CXX in the make command:
-
-`make CXX=clang++ prf/durchgangeinheit  # To compile the channel test program with clang++`
-
-If your CXX is neither g++ nor clang++, you may pass CXXFLAGS to tune appropriately:
-
-`make CXX=icc CXXFLAGS='-qopenmp -debug=parallel' prf/durchgangeinheit  # To compile the channel test program with the Intel C++ compiler, for example`
-
+Create the directory `$type` corresponding to the build type: either release or build.
+`$ mkdir $type`
+`$ cd $type`
+`$ cmake ..`
+`$ make -j$n`
 
 ### Dependencies
 The emulator is written in C++11, but a C++20-compatible compiler is recommended for increased performance.
 
 ### Targets
-* release: release builds of the emulator and devices;
-* debug: debug builds of the emulator and devices;
-* prufungen: all tests;
+* zuse: the emulator binary;
+* gerate: the devices binaries
 * prf/*: the individual tests.
   * speicher: tests memory, physical and virtual;
   * durchgangeinheit: tests channels and some essential devices (in progress);
