@@ -45,6 +45,7 @@ function(common_compile_options Target)
 		target_link_libraries("${Target}" PRIVATE -ldl -pthread)
 	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		target_compile_options("${Target}" PRIVATE
+			/Wall
 		)
 	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 		target_compile_options("${Target}" PRIVATE
@@ -109,6 +110,8 @@ function(compile_options Target)
 		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 			target_compile_options("${Target}" PRIVATE
 				/Od
+				/ZI
+				/fsanitize=address
 			)
 		endif()
 	endif()
