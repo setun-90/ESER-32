@@ -46,6 +46,7 @@ function(common_compile_options Target)
 	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 		target_compile_options("${Target}" PRIVATE
 			/Wall
+			/permissive-
 		)
 	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 		target_compile_options("${Target}" PRIVATE
@@ -93,7 +94,9 @@ function(compile_options Target)
 			)
 		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 			target_compile_options("${Target}" PRIVATE
+				/MD
 				/O2
+				/Zi
 			)
 		endif()
 	elseif(CMAKE_BUILD_TYPE STREQUAL Debug)
@@ -109,6 +112,7 @@ function(compile_options Target)
 			)
 		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 			target_compile_options("${Target}" PRIVATE
+				/MDd
 				/Od
 				/ZI
 				/fsanitize=address
