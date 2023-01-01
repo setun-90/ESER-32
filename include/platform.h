@@ -26,7 +26,7 @@
 #endif
 
 #if defined(__GNUC__)
-#	define ABBAU __attribute__((visibility("default")))
+#	define ABBAU extern "C" __attribute__((visibility("default")))
 #elif defined(_MSC_VER)
 #	define ABBAU __declspec(dllexport)
 #else

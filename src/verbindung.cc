@@ -37,7 +37,7 @@ void durchgangeinheit::verbindung::zs(void) {
 }
 #elif defined(ZUSE_WINDOWS)
 static char *format_error(void) {
-	char *f;
+	char *f(nullptr);
 	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		nullptr,
@@ -55,7 +55,7 @@ durchgangeinheit::verbindung::verbindung(string n):
 	this->b = LoadLibrary((LPCWSTR)n.c_str());
 	if (!this->b)
 		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error()).c_str());
-	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, "abb"));
+	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, (LPCSTR)MAKEINTRESOURCE(1)));
 	if (!this->a) {
 		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error()).c_str());

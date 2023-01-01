@@ -32,7 +32,7 @@ private:
 	std::mt19937_64 e;
 };
 
-extern "C" ABBAU std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+ABBAU std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
 
 
 #endif /* _PG_H */
