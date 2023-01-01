@@ -5,7 +5,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED 11)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
-set(CMAKE_SHARED_LIBRARY_PREFIX )
+set(CMAKE_SHARED_MODULE_PREFIX )
 if(CMAKE_BINARY_DIR MATCHES debug)
 	set(CMAKE_BUILD_TYPE Debug)
 elseif(CMAKE_BINARY_DIR MATCHES release)
@@ -113,71 +113,6 @@ function(compile_options Target)
 		endif()
 	endif()
 endfunction()
-function(release_compile_options Target)
-	if(NOT TARGET "${Target}")
-		return()
-	endif()
-	common_compile_options("${Target}")
-	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-			target_compile_options("${Target}" PRIVATE
-				-fvisibility=hidden
-				-fno-reorder-blocks-and-partition
-				-fno-reorder-functions
-				-fira-region=mixed
-				-ftree-cselim
-				-flive-range-shrinkage
-				-fpredictive-commoning
-				-ftree-loop-distribution
-				-fsched-pressure
-				-fweb
-				-frename-registers
-				-fipa-pta
-				-flto=auto
-				-flto-partition=one
-				-floop-nest-optimize
-				-fgraphite-identity
-				-fno-plt
-				-fno-semantic-interposition
-				-fdevirtualize-at-ltrans
-			)
-		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-			target_compile_options("${Target}" PRIVATE
-				-flto=thin
-				-fno-plt
-			)
-		endif()
-		target_link_options("${Target}" PRIVATE
-			LINKER:-s
-		)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		target_compile_options("${Target}" PRIVATE
-			/O2
-		)
-	endif()
-endfunction()
-function(debug_compile_options Target)
-	if(NOT TARGET "${Target}")
-		return()
-	endif()
-	common_compile_options("${Target}")
-	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-		target_compile_options("${Target}" PRIVATE
-			-Og
-			-ggdb
-			-fsanitize=address
-		)
-		target_link_options("${Target}" PRIVATE
-			-fsanitize=address
-		)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		target_compile_options("${Target}" PRIVATE
-			/Od
-		)
-	endif()
-endfunction()
 
 # Targets
 ### Core
@@ -203,20 +138,10 @@ compile_options(zuse)
 set_target_properties(zuse PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 ### Device binaries
-add_library(prufung SHARED
-	src/gerat/prufung.cc
-)
-target_link_libraries(prufung PRIVATE
-	kern
-)
-compile_options(prufung)
-
-add_library(gerate SHARED)
-target_link_libraries(gerate PRIVATE
-	prufung
-	kern
-)
-compile_options(gerate)
+file(GLOB GERATE src/gerat/*.cmake)
+foreach(Cmake ${GERATE})
+	include("${Cmake}")
+endforeach()
 
 ### Tests
 add_executable(durchgangeinheit
@@ -225,13 +150,15 @@ add_executable(durchgangeinheit
 target_link_libraries(durchgangeinheit PRIVATE
 	kern
 )
+add_dependencies(durchgangeinheit
+	prufung
+)
 compile_options(durchgangeinheit)
 
 add_executable(recheneinheit
 	prf/recheneinheit.cc
 )
 target_link_libraries(recheneinheit PRIVATE
-	prufung
 	kern
 )
 compile_options(recheneinheit)

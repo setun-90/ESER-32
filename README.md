@@ -26,12 +26,19 @@ Channel units in turn take the basename of a device plugin (either a .so on POSI
 ## Building
 ### Systems
 CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself.
-#### Make
+#### CMake single-configuration backends (Make, NMake, MinGW)
 Create the directory `$type` corresponding to the build type: either release or build.
 `$ mkdir $type`
 `$ cd $type`
 `$ cmake ..`
 `$ make -j$n`
+
+#### CMake multi-configuration (MSBuild/Visual Studio and Xcode)
+`$ mkdir build`
+`$ cd build`
+`$ cmake ..`
+`$ cmake --build . --config $type`
+
 
 ### Dependencies
 The emulator is written in C++11, but a C++20-compatible compiler is recommended for increased performance.
