@@ -16,21 +16,21 @@
 /* EZER Platform definitions */
 
 #if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
-#define ZUSE_POSIX
+#	define ZUSE_POSIX
 #elif defined(_WIN32) || defined(_WIN64)
-#define WIN32_LEAN_AND_MEAN
-#ifndef UNICODE
-#define UNICODE
-#endif
-#define ZUSE_WINDOWS
+#	define WIN32_LEAN_AND_MEAN
+#	ifndef UNICODE
+#		define UNICODE
+#	endif
+#	define ZUSE_WINDOWS
 #endif
 
 #if defined(__GNUC__)
-#define ABBAU __attribute__((visibility("default")))
+#	define ABBAU __attribute__((visibility("default")))
 #elif defined(_MSC_VER)
-#define ABBAU __declspec(dllexport)
+#	define ABBAU __declspec(dllexport)
 #else
-#define ABBAU
+#	define ABBAU
 #endif
 
 
