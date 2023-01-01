@@ -36,14 +36,14 @@ void durchgangeinheit::verbindung::zs(void) {
 	this->n.clear();
 }
 #elif defined(ZUSE_WINDOWS)
-static LPTSTR format_error(void) {
-	LPTSTR f;
+static char *format_error(void) {
+	char *f;
 	FormatMessage(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
 		nullptr,
 		GetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		&f,
+		(LPWSTR)f,
 		0,
 		nullptr
 	);
@@ -52,11 +52,11 @@ static LPTSTR format_error(void) {
 
 durchgangeinheit::verbindung::verbindung(string n):
 	n(n) {
-	this->b = LoadLibrary(n.c_str());
+	this->b = LoadLibrary((LPCWSTR)n.c_str());
 	if (!this->b)
 		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error()).c_str());
 	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, "abb"));
-	if (!abb) {
+	if (!this->a) {
 		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error()).c_str());
 	}

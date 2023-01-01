@@ -26,7 +26,7 @@
 using buchse = void *;
 #elif defined(ZUSE_WINDOWS)
 #include <Windows.h>
-using name = LPCSTR;
+using buchse = HMODULE;
 #endif
 
 struct durchgangeinheit::verbindung {
