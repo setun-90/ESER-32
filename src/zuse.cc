@@ -100,8 +100,9 @@ int main(int argc, char **argv) {
 		}
 		case 'd': {
 			string n;
-			il >> n; TRACE(string("n = ").append(n).c_str());
-			v.emplace_back(string(argv[2]).append(n).append(".so"));
+			il >> n;
+			n = string(argv[2]).append(n).append(ZUSE_PLUGIN_SUFFIX); TRACE(string("n = ").append(n).c_str());
+			v.emplace_back(n);
 			hs.ute(u, v.back().abb(hs, il));
 			break;
 		}

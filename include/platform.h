@@ -14,17 +14,33 @@
 
 
 /* EZER Platform definitions */
+/*** There are three different platform characteristics:
+     OS APIs
+     Plugin format
+     Compiler features */
 
+/*** Operating systems */
 #if defined(__unix__) || defined(__APPLE__) && defined(__MACH__)
 #	define ZUSE_POSIX
 #elif defined(_WIN32) || defined(_WIN64)
+#	define ZUSE_WINDOWS
+#endif
+
+
+/***** These currently also determine the plugin format
+       (PE/COFF/ELF) insofar as each OS has a preferred
+       format - I personally wish this weren't so */
+#if defined(ZUSE_POSIX)
+#	define ZUSE_PLUGIN_SUFFIX ".so"
+#elif defined(ZUSE_WINDOWS)
+#	define ZUSE_PLUGIN_SUFFIX ".dll"
 #	define WIN32_LEAN_AND_MEAN
 #	ifndef UNICODE
 #		define UNICODE
 #	endif
-#	define ZUSE_WINDOWS
 #endif
 
+/*** Compiler features */
 #if defined(__GNUC__)
 #	define ABBAU extern "C" __attribute__((visibility("default")))
 #elif defined(_MSC_VER)
