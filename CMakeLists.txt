@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
-project(EZER-32 CXX)
+project(ESER-32 CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

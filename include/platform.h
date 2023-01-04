@@ -13,7 +13,7 @@
 
 
 
-/* EZER Platform definitions */
+/* ESER Platform definitions */
 /*** There are three different platform characteristics:
      OS APIs
      Plugin format

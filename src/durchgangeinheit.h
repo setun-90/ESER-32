@@ -13,7 +13,7 @@
 
 
 
-/* EZER Durchgangeinheitsentwurf */
+/* ESER Durchgangeinheitsentwurf */
 /*     (C) 1979, 1988, 1992      */
 
 #include "einheit.h"
