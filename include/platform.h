@@ -35,9 +35,7 @@
 #elif defined(ZUSE_WINDOWS)
 #	define ZUSE_PLUGIN_SUFFIX ".dll"
 #	define WIN32_LEAN_AND_MEAN
-#	ifndef UNICODE
-#		define UNICODE
-#	endif
+#	include <tchar.h>
 #endif
 
 /*** Compiler features */

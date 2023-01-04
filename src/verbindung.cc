@@ -36,29 +36,30 @@ void durchgangeinheit::verbindung::zs(void) {
 	this->n.clear();
 }
 #elif defined(ZUSE_WINDOWS)
-static char *format_error(void) {
-	char *f(nullptr);
+static TCHAR const *format_error(HRESULT h) {
+	LPTSTR f(nullptr);
 	FormatMessage(
-		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 		nullptr,
-		GetLastError(),
+		h,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-		(LPWSTR)f,
+		(LPTSTR)&f,
 		0,
 		nullptr
 	);
-	return f;
+	return f ? f : _T("FormatMessage - no error string available");
 }
 
 durchgangeinheit::verbindung::verbindung(string n):
 	n(n) {
-	this->b = LoadLibrary((LPCWSTR)n.c_str());
-	if (!this->b)
-		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error()).c_str());
+	this->b = LoadLibrary((LPCTSTR)n.c_str());
+	if (!this->b) {
+		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error(GetLastError())).c_str());
+	}
 	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, (LPCSTR)MAKEINTRESOURCE(1)));
 	if (!this->a) {
 		this->zs();
-		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error()).c_str());
+		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error(GetLastError())).c_str());
 	}
 }
 void durchgangeinheit::verbindung::zs(void) {
