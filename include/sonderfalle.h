@@ -1,5 +1,5 @@
-#ifndef   EZER_SF_H
-#define   EZER_SF_H
+#ifndef   ESER_SF_H
+#define   ESER_SF_H
 
 
 
@@ -13,7 +13,7 @@
 
 
 
-/* EZER Sonderfalle Begriffserklärungen */
+/* ESER Sonderfalle Begriffserklärungen */
 /*         (C) 1979, 1988, 1992         */
 
 #include "kunstspeicher.h"
@@ -66,4 +66,4 @@ public:
 
 
 
-#endif /* EZER_SF_H */
+#endif /* ESER_SF_H */

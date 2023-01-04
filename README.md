@@ -1,12 +1,12 @@
 # Zuse Elektra emulator
-The Zuse Elektra is a system family from Zuse Gerätebau implementing the EZER/OSER architecture. Released in 1964, it has diversified into a line of mainframes, superminis, workstations and servers. The English Electric Electra is a licensed clone.
+The Zuse Elektra is a system family from Zuse Gerätebau implementing the ESER/OSER architecture (a fictionalized version of the real-life [ESER](https://en.wikipedia.org/wiki/ESER)). Released in 1964, it has diversified into a line of mainframes, superminis, workstations and servers. The English Electric Electra is a licensed clone.
 
 This emulator emulates a 32-bit Zuse Elektra.
 ## Status
 * Memory is verified; all specified features work, but some implementation features need to be frozen (such as cache sizing and replacement algorithms).
 * Channel units are in progress; tests and devices still need to be written.
   * The actual directory structure for device sources needs to be replaced.
-  * The POSIX device needs a decent EZER test program.
+  * The POSIX device needs a decent ESER test program.
 * Processing units are in progress; tests need to be written and some aspects need to be frozen, such as cache sizes.
 
 ## Running
@@ -69,10 +69,10 @@ The test is successful if it returns normally, i.e. doesn't call terminate after
 
 ## Documentation
 The principal documentation are the PDFs in doc/:
-* 32.pdf: The EZER-32 specification, in English;
-* de\_32.pdf / ae\_32.pdf: The original texts of the EZER-32 specification, in German and Ard English;
-* 64.pdf: The EZER-64 specification, in English;
-* de\_64.pdf / ae\_32.pdf: The original texts of the EZER-64 specification, in German and Ard English.
+* 32.pdf: The ESER-32 specification, in English;
+* de\_32.pdf / ae\_32.pdf: The original texts of the ESER-32 specification, in German and Ard English;
+* 64.pdf: The ESER-64 specification, in English;
+* de\_64.pdf / ae\_32.pdf: The original texts of the ESER-64 specification, in German and Ard English.
 
 ## Further information
-Visit #EZER on Libera for any questions (9:00-23:00 UTC+1); you will need to be registered to join.
+Visit #ESER on Libera for any questions (9:00-23:00 UTC+1); you will need to be registered to join.

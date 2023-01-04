@@ -1,5 +1,5 @@
-#ifndef   EZER_UB_H
-#define   EZER_UB_H
+#ifndef   ESER_UB_H
+#define   ESER_UB_H
 
 
 
@@ -13,7 +13,7 @@
 
 
 
-/* EZER Unterbrechung Begriffserklärungen */
+/* ESER Unterbrechung Begriffserklärungen */
 /*          (C) 1979, 1989, 1992          */
 
 #include "kunstspeicher.h"
@@ -25,4 +25,4 @@ namespace unterbrechung {
 
 
 
-#endif /* EZER_UB_H */
+#endif /* ESER_UB_H */

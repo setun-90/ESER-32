@@ -13,7 +13,7 @@
 
 
 
-/* EZER Prüfungsgerätsbegriffserklärung */
+/* ESER Prüfungsgerätsbegriffserklärung */
 /*        (C) 1979, 1988, 1992          */
 
 #include <platform.h>

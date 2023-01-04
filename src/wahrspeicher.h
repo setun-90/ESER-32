@@ -13,7 +13,7 @@
 
 
 
-/* EZER Wahrspeicherbegriffserklärung */
+/* ESER Wahrspeicherbegriffserklärung */
 /*        (C) 1979, 1988, 1992        */
 #include <hauptspeicher.h>
 

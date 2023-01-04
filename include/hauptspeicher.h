@@ -1,5 +1,5 @@
-#ifndef   EZER_HS_H
-#define   EZER_HS_H
+#ifndef   ESER_HS_H
+#define   ESER_HS_H
 
 
 
@@ -13,7 +13,7 @@
 
 
 
-/* EZER Hauptspeicher Begriffserklärungen */
+/* ESER Hauptspeicher Begriffserklärungen */
 /*          (C) 1979, 1988, 1992          */
 
 #include <cstdint>
@@ -54,4 +54,4 @@ template <h8 i, h8 j, class type> constexpr type feld(type a) {
 
 
 
-#endif /* EZER_HS_H */
+#endif /* ESER_HS_H */

@@ -1,5 +1,5 @@
-#ifndef   EZER_KS_H
-#define   EZER_KS_H
+#ifndef   ESER_KS_H
+#define   ESER_KS_H
 
 
 
@@ -13,7 +13,7 @@
 
 
 
-/* EZER Kunstspeicher Begriffserklärungen */
+/* ESER Kunstspeicher Begriffserklärungen */
 /*          (C) 1979, 1988, 1992          */
 
 #include "hauptspeicher.h"
@@ -79,4 +79,4 @@ namespace s2 {
 
 
 
-#endif /* EZER_KS_H */
+#endif /* ESER_KS_H */
