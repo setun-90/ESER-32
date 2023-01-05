@@ -18,7 +18,7 @@ shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &i) {
 	string n;
 	i >> n;
 	posix::buf f;
-	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out))
+	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out | ios::app))
 		throw runtime_error(n.append(": ").append(strerror(errno)).c_str());
 
 	return make_shared<posix>(hs, move(f));
