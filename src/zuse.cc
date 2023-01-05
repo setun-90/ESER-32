@@ -69,7 +69,7 @@ istream &cp_getline(istream &i, string &s) {
 
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);
-	if (argc <= 1) {
+	if (argc <= 2) {
 		cerr << string("Usage:  ").append(argv[0]).append("  $Config_File_Name  $Device_Plugin_Directory/").c_str() << '\n';
 		return 1;
 	}
