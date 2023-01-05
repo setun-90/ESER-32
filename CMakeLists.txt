@@ -3,21 +3,21 @@ project(ESER-32 CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(CMAKE_CXX_STANDARD_REQUIRED 11)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
 set(CMAKE_SHARED_MODULE_PREFIX )
-if(CMAKE_BINARY_DIR MATCHES debug)
-	set(CMAKE_BUILD_TYPE Debug)
-elseif(CMAKE_BINARY_DIR MATCHES release)
-	set(CMAKE_BUILD_TYPE Release)
-endif()
 
 function(common_compile_options Target)
 	if(NOT TARGET "${Target}")
 		return()
 	endif()
 	target_include_directories("${Target}" PRIVATE
-		include
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+	)
+	set_target_properties("${Target}" PROPERTIES
+		CXX_VISIBILITY_PRESET     hidden
+		VISIBILITY_INLINES_HIDDEN ON
 	)
 	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
 	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -58,66 +58,64 @@ function(compile_options Target)
 		return()
 	endif()
 	common_compile_options("${Target}")
-	if(CMAKE_BUILD_TYPE STREQUAL Release)
-		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-		   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-			if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-				target_compile_options("${Target}" PRIVATE
-					-fvisibility=hidden
-					-fno-reorder-blocks-and-partition
-					-fno-reorder-functions
-					-fira-region=mixed
-					-ftree-cselim
-					-flive-range-shrinkage
-					-fpredictive-commoning
-					-ftree-loop-distribution
-					-fsched-pressure
-					-fweb
-					-frename-registers
-					-fipa-pta
-					-flto=auto
-					-flto-partition=one
-					-floop-nest-optimize
-					-fgraphite-identity
-					-fno-plt
-					-fno-semantic-interposition
-					-fdevirtualize-at-ltrans
-				)
-			elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-				target_compile_options("${Target}" PRIVATE
-					-flto=thin
-					-fno-plt
-				)
-			endif()
-			target_link_options("${Target}" PRIVATE
-				LINKER:-s
-			)
-		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 			target_compile_options("${Target}" PRIVATE
-				/MD
-				/O2
-				/Zi
-			)
-		endif()
-	elseif(CMAKE_BUILD_TYPE STREQUAL Debug)
-		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-		   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-			target_compile_options("${Target}" PRIVATE
+				$<$<CONFIG:Release>:
+				-fno-reorder-blocks-and-partition
+				-fno-reorder-functions
+				-fira-region=mixed
+				-ftree-cselim
+				-flive-range-shrinkage
+				-fpredictive-commoning
+				-ftree-loop-distribution
+				-fsched-pressure
+				-fweb
+				-frename-registers
+				-fipa-pta
+				-flto=auto
+				-flto-partition=one
+				-floop-nest-optimize
+				-fgraphite-identity
+				-fno-plt
+				-fno-semantic-interposition
+				-fdevirtualize-at-ltrans>
+
+				$<$<CONFIG:Debug>:
 				-Og
 				-ggdb
-				-fsanitize=address
+				-fsanitize=address>
 			)
-			target_link_options("${Target}" PRIVATE
-				-fsanitize=address
-			)
-		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 			target_compile_options("${Target}" PRIVATE
-				/MDd
-				/Od
-				/ZI
-				/fsanitize=address
+				$<$<CONFIG:Release>:
+				-flto=thin
+				-fno-plt>
+
+				$<$<CONFIG:Debug>:
+				-Og
+				-ggdb
+				-fsanitize=address>
 			)
 		endif()
+		target_link_options("${Target}" PRIVATE
+			$<$<CONFIG:Release>:LINKER:-s>
+			$<$<CONFIG:Debug>:-fsanitize=address>
+		)
+	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+		target_compile_options("${Target}" PRIVATE
+			$<$<CONFIG:Release>:
+			/MD
+			/O2
+			/Zi>
+
+			$<$<CONFIG:Debug>:
+			/MDd
+			/Od
+			/ZI
+			/fsanitize=address>
+		)
 	endif()
 endfunction()
 
