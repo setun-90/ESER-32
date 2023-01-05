@@ -133,13 +133,13 @@ int main(int argc, char **argv) {
 	sigfillset(&sa.sa_mask);
 	for (auto s: {SIGINT, SIGTERM})
 		sigaction(s, &sa, NULL);
+#endif
 
 	string c;
 	while (cout << "<< " && !cp_getline(cin, c).eof()) {
 		cout << string("   ").append(c) << '\n';
 	}
 	cout << '\n';
-#endif
 	}
 
 	return 0;
