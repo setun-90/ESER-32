@@ -31,7 +31,7 @@ Create the directory `$type` corresponding to the build type: either release or 
 ```
 $ mkdir $type
 $ cd $type
-$ cmake ..
+$ cmake .. -DCMAKE_BUILD_TYPE=$type
 $ cmake --build . -j$n
 ```
 

@@ -8,115 +8,104 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
 set(CMAKE_SHARED_MODULE_PREFIX )
 
-function(common_compile_options Target)
-	if(NOT TARGET "${Target}")
-		return()
-	endif()
-	target_include_directories("${Target}" PRIVATE
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
-	)
-	set_target_properties("${Target}" PROPERTIES
-		CXX_VISIBILITY_PRESET     hidden
-		VISIBILITY_INLINES_HIDDEN ON
-	)
-	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-		target_compile_options("${Target}" PRIVATE
-			-Wall -Wextra -Wpedantic
-			-march=native
-			-pipe
-			-falign-functions=32
-			-falign-loops=32
-	  	)
-		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-			target_compile_options("${Target}" PRIVATE
-				-falign-jumps=32
-				-Wa,-mbranches-within-32B-boundaries
-				-mno-direct-extern-access
-			)
-		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-			target_compile_options("${Target}" PRIVATE
-				-fno-direct-access-external-data
-			)
-		endif()
-		target_link_options("${Target}" PRIVATE
-			LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,combreloc
-		)
-		target_link_libraries("${Target}" PRIVATE -ldl -pthread)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		target_compile_options("${Target}" PRIVATE
-			/Wall
-			/permissive-
-		)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
-		target_compile_options("${Target}" PRIVATE
-		)
-	endif()
-endfunction()
 function(compile_options Target)
 	if(NOT TARGET "${Target}")
 		return()
 	endif()
-	common_compile_options("${Target}")
-	if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
-	   OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-		if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-			target_compile_options("${Target}" PRIVATE
-				$<$<CONFIG:Release>:
-				-fno-reorder-blocks-and-partition
-				-fno-reorder-functions
-				-fira-region=mixed
-				-ftree-cselim
-				-flive-range-shrinkage
-				-fpredictive-commoning
-				-ftree-loop-distribution
-				-fsched-pressure
-				-fweb
-				-frename-registers
-				-fipa-pta
-				-flto=auto
-				-flto-partition=one
-				-floop-nest-optimize
-				-fgraphite-identity
-				-fno-plt
-				-fno-semantic-interposition
-				-fdevirtualize-at-ltrans>
 
-				$<$<CONFIG:Debug>:
-				-Og
-				-ggdb
-				-fsanitize=address>
-			)
-		elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-			target_compile_options("${Target}" PRIVATE
-				$<$<CONFIG:Release>:
-				-flto=thin
-				-fno-plt>
+	set(is_debug      "$<CONFIG:Debug>")
+	set(is_release    "$<CONFIG:Release>")
+	set(is_gnu        "$<CXX_COMPILER_ID:GNU>")
+	set(is_msvc       "$<CXX_COMPILER_ID:MSVC>")
+	set(is_clang      "$<CXX_COMPILER_ID:Clang>")
+	set(is_appleclang "$<CXX_COMPILER_ID:AppleClang>")
+	set(is_anyclang   "$<CXX_COMPILER_ID:Clang,AppleClang>")
+	set(is_anynix     "$<CXX_COMPILER_ID:GNU,Clang,AppleClang>")
 
-				$<$<CONFIG:Debug>:
-				-Og
-				-ggdb
-				-fsanitize=address>
-			)
-		endif()
-		target_link_options("${Target}" PRIVATE
-			$<$<CONFIG:Release>:LINKER:-s>
-			$<$<CONFIG:Debug>:-fsanitize=address>
-		)
-	elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-		target_compile_options("${Target}" PRIVATE
-			$<$<CONFIG:Release>:
+	set_target_properties("${Target}" PROPERTIES
+		CXX_VISIBILITY_PRESET     hidden
+		VISIBILITY_INLINES_HIDDEN ON
+	)
+
+	target_include_directories("${Target}" PRIVATE
+		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+	)
+	target_compile_options("${Target}" PRIVATE
+		$<${is_anynix}:
+			-Wall
+			-Wextra
+			-Wpedantic
+		>
+		$<${is_msvc}:
+			/Wall
+			/permissive-
+		>
+
+
+		$<${is_anynix}:
+			-march=native
+			-pipe
+			-falign-functions=32
+			-falign-loops=32
+		>
+		$<${is_gnu}:
+			-falign-jumps=32
+			-Wa,-mbranches-within-32B-boundaries
+			-mno-direct-extern-access
+		>
+		$<${is_anyclang}:-fno-direct-access-external-data>
+
+
+		$<$<AND:${is_release},${is_gnu}>:
+			-fno-reorder-blocks-and-partition
+			-fno-reorder-functions
+			-fira-region=mixed
+			-ftree-cselim
+			-flive-range-shrinkage
+			-fpredictive-commoning
+			-ftree-loop-distribution
+			-fsched-pressure
+			-fweb
+			-frename-registers
+			-fipa-pta
+			-flto=auto
+			-flto-partition=one
+			-floop-nest-optimize
+			-fgraphite-identity
+			-fno-plt
+			-fno-semantic-interposition
+			-fdevirtualize-at-ltrans
+		>
+		$<$<AND:${is_release},${is_anyclang}>:
+			-flto=thin
+			-fno-plt
+		>
+		$<$<AND:${is_release},${is_msvc}>:
 			/MD
 			/O2
-			/Zi>
+			/Zi
+		>
 
-			$<$<CONFIG:Debug>:
+
+		$<$<AND:${is_debug},${is_anynix}>:
+			-Og
+			-ggdb
+			-fsanitize=address
+		>
+		$<$<AND:${is_debug},${is_msvc}>:
 			/MDd
 			/Od
 			/ZI
-			/fsanitize=address>
-		)
-	endif()
+			/fsanitize=address
+		>
+	)
+
+	target_link_options("${Target}" PRIVATE
+		"$<${is_anynix}:LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,combreloc>"
+		-ldl -pthread
+		"$<$<AND:${is_release},${is_anynix}>:LINKER:-s>"
+		"$<$<AND:${is_debug},${is_anynix}>:-fsanitize=address>"
+	)
 endfunction()
 
 # Targets
