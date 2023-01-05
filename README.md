@@ -26,16 +26,16 @@ Channel units in turn take the basename of a device plugin (either a .so on POSI
 ## Building
 ### Systems
 CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself.
-#### CMake single-configuration backends (Make, NMake, MinGW)
-Create the directory `$type` corresponding to the build type: either release or build.
+#### CMake single-configuration backends (Make/NMake/MinGW, Ninja)
+Create the directory `$type` corresponding to the build type: either release or debug.
 ```
 $ mkdir $type
 $ cd $type
 $ cmake ..
-$ make -j$n
+$ cmake --build . -j$n
 ```
 
-#### CMake multi-configuration backends (MSBuild/Visual Studio and Xcode)
+#### CMake multi-configuration backends (MSBuild/Visual Studio, Xcode)
 ```
 $ mkdir build
 $ cd build
