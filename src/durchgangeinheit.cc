@@ -11,6 +11,41 @@ using namespace kunstspeicher;
 durchgangeinheit::durchgangeinheit(wahrspeicher &hs):
 	einheit(hs), zs(false) {}
 
+template <class type> bool durchgangeinheit::s(h32 k, type a) {
+	try {
+		this->se.s(k, a);
+	} catch (...) {
+		this->sf = current_exception();
+	}
+	return !!this->sf;
+}
+template bool durchgangeinheit::s(h32 k, h8 a);
+template bool durchgangeinheit::s(h32 k, h16 a);
+template bool durchgangeinheit::s(h32 k, h32 a);
+template bool durchgangeinheit::s(h32 k, h64 a);
+template <class type> bool durchgangeinheit::l(type &a, h32 k) {
+	try {
+		this->se.l(a, k);
+	} catch (...) {
+		this->sf = current_exception();
+	}
+	return !!this->sf;
+}
+template bool durchgangeinheit::l(h8 &a, h32 k);
+template bool durchgangeinheit::l(h16 &a, h32 k);
+template bool durchgangeinheit::l(h32 &a, h32 k);
+template bool durchgangeinheit::l(h64 &a, h32 k);
+template <class type> bool durchgangeinheit::a(type &a, h32 k) {
+	try {
+		this->se.a(a, k);
+	} catch (...) {
+		this->sf = current_exception();
+	}
+	return !!this->sf;
+}
+template bool durchgangeinheit::a(h32 &a, h32 k);
+template bool durchgangeinheit::a(h64 &a, h32 k);
+
 void durchgangeinheit::operator()(void) {
 	unique_lock<mutex> l(this->m);
 	for (;;) {
@@ -89,4 +124,6 @@ void durchgangeinheit::af(void) {
 	} else {
 		this->az += (*this)(a);
 	}
+	if (this->sf)
+		rethrow_exception(this->sf);
 }

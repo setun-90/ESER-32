@@ -15,11 +15,12 @@ h32 prufung::operator()(h64) {
 	return 4;
 }
 
-void prufung::s(h32 z, h32 ab) {
+void prufung::g_s(h32 z, h32 ab) {
 	for (h32 i(0); i < z; i += 1)
-		this->se.s(ab + i, this->e());
+		if (!this->s(ab + i, this->e()))
+			return;
 }
-void prufung::l(h32 z, h32) {
+void prufung::g_l(h32 z, h32) {
 	for (h32 i(0); i < z; i += 1)
 		this->e.discard(1);
 }

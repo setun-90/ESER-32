@@ -20,10 +20,13 @@
 
 #include <memory>
 #include <sstream>
+#include <exception>
 
 class durchgangeinheit: public einheit {
 	void operator()(void) override;
 	void af(void);
+
+	using einheit::se;
 
 protected:
 	h32 az;
@@ -32,10 +35,15 @@ protected:
 	h32 uez;
 	h8  b;
 	bool zs;
+	std::exception_ptr sf;
+
+	template <class type> bool s(h32 k, type a);
+	template <class type> bool l(type &a, h32 k);
+	template <class type> bool a(type &a, h32 k);
 
 	virtual h32 operator()(h64 a) = 0;
-	virtual void l(h32 z, h32 ab) = 0;
-	virtual void s(h32 z, h32 ab) = 0;
+	virtual void g_l(h32 z, h32 ab) = 0;
+	virtual void g_s(h32 z, h32 ab) = 0;
 
 public:
 	durchgangeinheit(wahrspeicher &hs);

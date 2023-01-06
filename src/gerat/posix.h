@@ -29,8 +29,8 @@ struct posix: public durchgangeinheit {
 	posix(wahrspeicher &hs, buf f);
 
 	h32 operator()(h64 a) override;
-	void s(h32 z, h32 ab) override;
-	void l(h32 z, h32 ab) override;
+	void g_s(h32 z, h32 ab) override;
+	void g_l(h32 z, h32 ab) override;
 
 private:
 	buf f;

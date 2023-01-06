@@ -18,8 +18,9 @@ durchgangeinheit *abb(wahrspeicher &hs, istringstream &i) {
 	string n;
 	i >> n;
 	posix::buf f;
-	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out | ios::app))
-		throw runtime_error(n.append(": ").append(strerror(errno)).c_str());
+	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out | ios::app)) {
+		return nullptr;
+	}
 
 	return new posix(hs, move(f));
 }
@@ -57,7 +58,8 @@ h32 posix::operator()(h64 a) {
 		h32 z(feld<33,64>(a));
 		if (stelle<7>(a)) {
 			h32 zz;
-			this->se.l(zz, this->az + z);
+			if (!this->l(zz, this->az + z))
+				return 0;
 			z = zz;
 		}
 		return z + 8;
@@ -78,12 +80,13 @@ h32 posix::operator()(h64 a) {
 		*/
 		auto e(stelle<6>(a) ? ios_base::beg : ios_base::cur);
 		h32 ab;
-		this->se.l(ab, this->az + vzw<ss1<h32>(11)>(feld<11,32, h64>(a)));
+		if (!this->l(ab, this->az + vzw<ss1<h32>(11)>(feld<11,32, h64>(a))))
+			return 0;
 		this->f.pubseekpos(this->f.pubseekoff(ab, e, r));
 		return 4;
 	}
 }
-void posix::s(h32 z, h32 ab) {
+void posix::g_s(h32 z, h32 ab) {
 	/*
 	h32 r(z%8), l(z - r), i(ab);
 	while (i < ab + l) {
@@ -127,12 +130,15 @@ void posix::s(h32 z, h32 ab) {
 	h8 a;
 	for (h32 i(0); i < z; i += 1) {
 		a = this->f.sbumpc();
-		if (buf::traits_type::to_int_type(a) == buf::traits_type::eof())
-			throw runtime_error("Underflow");
-		this->se.s(ab + i, a);
+		if (buf::traits_type::to_int_type(a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Underflow"));
+			return;
+		}
+		if (!this->s(ab + i, a))
+			return;
 	}
 }
-void posix::l(h32 z, h32 ab) {
+void posix::g_l(h32 z, h32 ab) {
 	/*
 	h32 r(z%8), l(z - r), i(ab);
 	while (i < ab + l) {
@@ -167,8 +173,11 @@ void posix::l(h32 z, h32 ab) {
 	*/
 	h8 a;
 	for (h32 i(0); i < z; i += 1) {
-		this->se.l(a, ab + i);
-		if (this->f.sputc(a) == buf::traits_type::eof())
-			throw runtime_error("Overflow");
+		if (!this->l(a, ab + i))
+			return;
+		if (this->f.sputc(a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Overflow"));
+			return;
+		}
 	}
 }
