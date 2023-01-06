@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 
 using namespace std;
 using namespace kunstspeicher;
@@ -137,7 +138,31 @@ int main(int argc, char **argv) {
 
 	string c;
 	while (cout << "<< " && !cp_getline(cin, c).eof()) {
-		cout << string("   ").append(c) << '\n';
+		istringstream ic(c);
+		char a;
+		ic >> a;
+		switch (a) {
+		case 'g': {
+			cout << "   " << hex << hs.g() << '\n';
+			break;
+		}
+		case 'l': {
+			unsigned n;
+			h32 an;
+			ic >> n >> ws >> hex >> an;
+			h32 ab;
+			hs.l(ab, an);
+			cout << "   " << hex << an << ":" << ab << '\n';
+			break;
+		}
+		case 's': {
+			break;
+		}
+		default: {
+			break;
+		}
+		}
+//		cout << string("   ").append(c) << '\n';
 	}
 	cout << '\n';
 	}
