@@ -43,7 +43,8 @@ struct durchgangeinheit::verbindung {
 private:
 	std::string n;
 	buchse b;
-	std::shared_ptr<durchgangeinheit> (*a)(wahrspeicher &hs, std::istringstream &i);
+	durchgangeinheit *(*v_ab)(wahrspeicher &hs, std::istringstream &i);
+	void (*v_zs)(durchgangeinheit *);
 };
 
 

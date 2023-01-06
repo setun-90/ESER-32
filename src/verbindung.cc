@@ -21,14 +21,16 @@ durchgangeinheit::verbindung::verbindung(string n):
 	char *f;
 	if (!this->b && (f = dlerror()))
 		throw runtime_error(string("Ladung ist gescheitert: ").append(f).c_str());
-	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(dlsym(this->b, "abb"));
-	if (!this->a && (f = dlerror())) {
+	this->v_ab = reinterpret_cast<durchgangeinheit *(*)(wahrspeicher &, istringstream &)>(dlsym(this->b, "abb"));
+	this->v_zs = reinterpret_cast<void (*)(durchgangeinheit *)>(dlsym(this->b, "zes"));
+	if (!(this->v_ab && this->v_zs) && (f = dlerror())) {
 		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(f).c_str());
 	}
 }
 void durchgangeinheit::verbindung::zs(void) {
-	this->a = nullptr;
+	this->v_zs = nullptr;
+	this->v_ab = nullptr;
 	if (this->b) {
 		dlclose(this->b);
 		this->b = nullptr;
@@ -56,14 +58,16 @@ durchgangeinheit::verbindung::verbindung(string n):
 	if (!this->b) {
 		throw runtime_error(string("Ladung ist gescheitert: ").append(format_error(GetLastError())).c_str());
 	}
-	this->a = reinterpret_cast<shared_ptr<durchgangeinheit> (*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, (LPCSTR)MAKEINTRESOURCE(1)));
-	if (!this->a) {
+	this->v_ab = reinterpret_cast<durchgangeinheit *(*)(wahrspeicher &, istringstream &)>(GetProcAddress(this->b, "abb"));
+	this->v_zs = reinterpret_cast<void (*)(durchgangeinheit *)>(GetProcAddress(this->b, "zes"));
+	if (!this->v_ab || !this->v_zs) {
 		this->zs();
 		throw runtime_error(string("Anschalt ist gescheitert: ").append(format_error(GetLastError())).c_str());
 	}
 }
 void durchgangeinheit::verbindung::zs(void) {
-	this->a = nullptr;
+	this->v_zs = nullptr;
+	this->v_ab = nullptr;
 	if (this->b) {
 		FreeLibrary(this->b);
 		this->b = nullptr;
@@ -72,7 +76,7 @@ void durchgangeinheit::verbindung::zs(void) {
 }
 #endif
 durchgangeinheit::verbindung::verbindung():
-	n(), b(nullptr), a(nullptr) {}
+	n(), b(nullptr), v_ab(nullptr), v_zs(nullptr) {}
 durchgangeinheit::verbindung::verbindung(verbindung &&v):
 	verbindung() {
 	*this = move(v);
@@ -80,14 +84,16 @@ durchgangeinheit::verbindung::verbindung(verbindung &&v):
 durchgangeinheit::verbindung &durchgangeinheit::verbindung::operator=(verbindung &&v) {
 	this->n = move(v.n);
 	this->b = v.b;
-	this->a = v.a;
-	v.a = nullptr;
+	this->v_ab = v.v_ab;
+	this->v_zs = v.v_zs;
+	v.v_zs = nullptr;
+	v.v_ab = nullptr;
 	v.b = nullptr;
 	return *this;
 }
 
 shared_ptr<durchgangeinheit> durchgangeinheit::verbindung::abb(wahrspeicher &hs, std::istringstream &i) {
-	return this->a(hs, i);
+	return shared_ptr<durchgangeinheit>(this->v_ab(hs, i), this->v_zs);
 }
 durchgangeinheit::verbindung::~verbindung() {
 	this->zs();

@@ -32,7 +32,8 @@ private:
 	std::mt19937_64 e;
 };
 
-ABBAU std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+GERAT durchgangeinheit *abb(wahrspeicher &hs, std::istringstream &i);
+GERAT void zes(durchgangeinheit *d);
 
 
 #endif /* _PG_H */

@@ -40,11 +40,11 @@
 
 /*** Compiler features */
 #if defined(__GNUC__)
-#	define ABBAU extern "C" __attribute__((visibility("default")))
+#	define GERAT extern "C" __attribute__((visibility("default")))
 #elif defined(_MSC_VER)
-#	define ABBAU __declspec(dllexport)
+#	define GERAT extern "C" __declspec(dllexport)
 #else
-#	define ABBAU
+#	define GERAT
 #endif
 
 

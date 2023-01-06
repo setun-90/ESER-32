@@ -4,8 +4,11 @@ using namespace std;
 
 
 
-shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, istringstream &) {
-	return make_shared<prufung>(hs);
+durchgangeinheit *abb(wahrspeicher &hs, istringstream &) {
+	return new prufung(hs);
+}
+void zes(durchgangeinheit *d) {
+	delete d;
 }
 
 h32 prufung::operator()(h64) {

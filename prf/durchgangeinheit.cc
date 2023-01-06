@@ -54,7 +54,8 @@ int main(int argc, char **argv) {
 	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8;
 
 	istringstream i;
-	shared_ptr<einheit> e(durchgangeinheit::verbindung(argv[1]).abb(hs, i));
+	durchgangeinheit::verbindung v(argv[1]);
+	shared_ptr<einheit> e(v.abb(hs, i));
 	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000_64));
 	this_thread::sleep_for(chrono::milliseconds(1000));

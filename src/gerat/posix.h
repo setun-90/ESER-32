@@ -36,7 +36,8 @@ private:
 	buf f;
 };
 
-ABBAU std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+GERAT durchgangeinheit *abb(wahrspeicher &hs, std::istringstream &i);
+GERAT void zes(durchgangeinheit *d);
 
 
 
