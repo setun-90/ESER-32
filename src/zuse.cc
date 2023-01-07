@@ -143,22 +143,27 @@ int main(int argc, char **argv) {
 		ic >> a;
 		switch (a) {
 		case 'g': {
-			cout << "   " << hex << hs.g() << '\n';
+			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
 			break;
 		}
 		case 'l': {
 			unsigned n;
 			h32 an;
-			ic >> n >> ws >> hex >> an;
+			ic >> n >> hex >> an >> dec;
+			if (an > hs.g() - 1) {
+				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << an << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
 			h32 ab;
 			hs.l(ab, an);
-			cout << "   " << hex << an << ":" << ab << '\n';
+			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(2*n) << ab << '\n').str().c_str();
 			break;
 		}
 		case 's': {
 			break;
 		}
 		default: {
+			cout << string("?? ").append(c) << '\n';
 			break;
 		}
 		}
