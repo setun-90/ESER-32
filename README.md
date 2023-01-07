@@ -8,6 +8,7 @@ This emulator emulates a 32-bit Zuse Elektra.
   * The actual directory structure for device sources needs to be replaced.
   * The POSIX device needs a decent ESER test program.
 * Processing units are in progress; tests need to be written and some aspects need to be frozen, such as cache sizes.
+* The console needs to be expanded with commands for device control.
 
 ## Running
 Run it as:
@@ -22,6 +23,18 @@ The config file specifies the following:
   * *p* are the parameters for each unit.
 
 Channel units in turn take the basename of a device plugin (either a .so on POSIX or a .dll on Windows) as the first parameter of *p*.
+
+If loading proceeds without errors, you will reach the operator's console:
+```
+>> _
+```
+### Commands
+* `g`: prints the highest physical address.
+* `l $n $a`: reads *n* bytes from address *a*.
+* `s $a $w`: writes *w* to address *a*.
+* `e`: lists active interrupt port physical addresses.
+
+More coming later.
 
 ## Building
 ### Systems

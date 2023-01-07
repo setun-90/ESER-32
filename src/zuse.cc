@@ -146,6 +146,11 @@ int main(int argc, char **argv) {
 			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
 			break;
 		}
+		case 'e': {
+			for (auto const &e: hs.ute())
+				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << e.first << '\n').str().c_str();
+			break;
+		}
 		case 'l': {
 			unsigned n;
 			h32 an;
@@ -160,6 +165,14 @@ int main(int argc, char **argv) {
 			break;
 		}
 		case 's': {
+			h32 as, ag;
+			ic >> hex >> as >> ag;
+			if (as > hs.g() - 1) {
+				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << as << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
+			hs.s(as, ag);
+			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(8) << ag << '\n').str().c_str();
 			break;
 		}
 		default: {
