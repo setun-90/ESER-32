@@ -30,11 +30,18 @@ If loading proceeds without errors, you will reach the operator's console:
 ```
 ### Commands
 * `g`: prints the highest physical address.
-* `l $n $a`: reads *n* bytes from address *a*.
+* `l $n $a`: prints *n* bytes located at address *a*.
 * `s $a $w`: writes *w* to address *a*.
 * `e`: lists active interrupt port physical addresses.
 
 More coming later.
+
+### Responses
+* `   `: No error.
+* `:: `: Notice.
+* `!! `: Error.
+* `?? `: Bad command.
+
 
 ## Building
 ### Systems
