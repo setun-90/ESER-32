@@ -115,7 +115,7 @@ int main(int argc, char **argv) {
 
 	// Create initial page table
 	{
-		h32 g(s1::z & hs.g()), l2(feld<1,10>(g)), l1(feld<11,20>(g));
+		h32 g(s1::z & (hs.g() - 1)), l2(feld<1,10>(g)), l1(feld<11,20>(g));
 		for (h32 i(0); i < l2; i += 1) {
 			hs.s(g + (i << 2), (i << 22) | stelle<11>(-1) | ss::s | ss::l | ss::a);
 		}
