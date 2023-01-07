@@ -33,8 +33,8 @@ If loading proceeds without errors, you will reach the operator's console:
 * `l $n $a`: prints *n* bytes located at address *a*.
 * `s $a $w`: writes *w* to address *a*.
 * `e`: lists active interrupt port physical addresses.
-
-More coming later.
+* `an $a`: powers on the unit whose interrupt port address is $a.
+* `ab $a`: powers off the unit whose interrupt port address is $a.
 
 ### Responses
 * `   `: No error.

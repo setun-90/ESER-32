@@ -170,19 +170,46 @@ int main(int argc, char **argv) {
 			unsigned n;
 			h32 an;
 			ic >> n >> hex >> an >> dec;
-			if (an > hs.g() - 1) {
+			if (an + n > hs.g() - 1) {
 				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << an << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
 				break;
 			}
-			h32 ab;
-			hs.l(ab, an);
-			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(2*n) << ab << '\n').str().c_str();
+			switch (n) {
+			case 8:
+			case 7:
+			case 6:
+			case 5: {
+				h64 ab;
+				hs.l(ab, an);
+				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(16) << ab << '\n').str().c_str();
+				break;
+			}
+			case 4:
+			case 3: {
+				h32 ab;
+				hs.l(ab, an);
+				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(8) << ab << '\n').str().c_str();
+				break;
+			}
+			case 2: {
+				h16 ab;
+				hs.l(ab, an);
+				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(4) << ab << '\n').str().c_str();
+				break;
+			}
+			case 1: {
+				h8 ab;
+				hs.l(ab, an);
+				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(2) << static_cast<unsigned>(ab) << '\n').str().c_str();
+				break;
+			}
+			}
 			break;
 		}
 		case anweisung::s: {
 			h32 as, ag;
 			ic >> hex >> as >> ag;
-			if (as > hs.g() - 1) {
+			if (as + 8 > hs.g() - 1) {
 				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << as << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
 				break;
 			}
