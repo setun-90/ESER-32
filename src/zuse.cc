@@ -191,11 +191,33 @@ int main(int argc, char **argv) {
 			break;
 		}
 		case anweisung::an: {
-			cout << string("   ").append(c) << '\n';
+			h32 ut;
+			ic >> hex >> ut;
+			if (ut > hs.g() - 1) {
+				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
+			auto e(hs.ute().find(ut));
+			if (e == hs.ute().end()) {
+				cout << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				break;
+			}
+			e->second->an();
 			break;
 		}
 		case anweisung::ab: {
-			cout << string("   ").append(c) << '\n';
+			h32 ut;
+			ic >> hex >> ut;
+			if (ut > hs.g() - 1) {
+				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
+			auto e(hs.ute().find(ut));
+			if (e == hs.ute().end()) {
+				cout << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				break;
+			}
+			e->second->ab();
 			break;
 		}
 		}
