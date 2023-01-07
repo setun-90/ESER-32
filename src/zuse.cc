@@ -138,20 +138,35 @@ int main(int argc, char **argv) {
 
 	string c;
 	while (cout << "<< " && !cp_getline(cin, c).eof()) {
+		enum class anweisung {g, e, l, s, an, ab};
+		unordered_map<string, anweisung> aw({
+			{"g",  anweisung::g},
+			{"e",  anweisung::e},
+			{"l",  anweisung::l},
+			{"s",  anweisung::s},
+			{"an", anweisung::an},
+			{"ab", anweisung::ab},
+		});
+
 		istringstream ic(c);
-		char a;
+		string a;
 		ic >> a;
-		switch (a) {
-		case 'g': {
+		auto i(aw.find(a));
+		if (i == aw.end()) {
+			cout << string("?? ").append(c) << '\n';
+			continue;
+		}
+		switch (i->second) {
+		case anweisung::g: {
 			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
 			break;
 		}
-		case 'e': {
+		case anweisung::e: {
 			for (auto const &e: hs.ute())
 				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << e.first << '\n').str().c_str();
 			break;
 		}
-		case 'l': {
+		case anweisung::l: {
 			unsigned n;
 			h32 an;
 			ic >> n >> hex >> an >> dec;
@@ -164,7 +179,7 @@ int main(int argc, char **argv) {
 			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(2*n) << ab << '\n').str().c_str();
 			break;
 		}
-		case 's': {
+		case anweisung::s: {
 			h32 as, ag;
 			ic >> hex >> as >> ag;
 			if (as > hs.g() - 1) {
@@ -175,14 +190,18 @@ int main(int argc, char **argv) {
 			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(8) << ag << '\n').str().c_str();
 			break;
 		}
-		default: {
-			cout << string("?? ").append(c) << '\n';
+		case anweisung::an: {
+			cout << string("   ").append(c) << '\n';
+			break;
+		}
+		case anweisung::ab: {
+			cout << string("   ").append(c) << '\n';
 			break;
 		}
 		}
-//		cout << string("   ").append(c) << '\n';
 	}
 	cout << '\n';
+
 	}
 
 	return 0;
