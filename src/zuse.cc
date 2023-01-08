@@ -41,6 +41,137 @@ istream &cp_getline(istream &i, string &s) {
 
 
 
+namespace host {
+string oob(h32 a, h32 g) {
+	return (ostringstream() << "!! " << setfill('0') << hex << setw(8) << a << " > " << setw(8) << g - 1 << '\n').str();
+}
+template <class type> string format(h32 as, type ag) {
+	return (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(2*sizeof(type)) << ag << '\n').str();
+}
+template <> string format(h32 as, h8 ag) {
+	return (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(2) << static_cast<unsigned>(ag) << '\n').str();
+}
+
+void console(ostream &o, istream &i, wahrspeicher &hs) {
+	string c;
+	while (o << "<< " && !cp_getline(i, c).eof()) {
+		enum class anweisung {g, e, l, s, an, ab};
+		unordered_map<string, anweisung> aw({
+			{"g",  anweisung::g},
+			{"e",  anweisung::e},
+			{"l",  anweisung::l},
+			{"s",  anweisung::s},
+			{"an", anweisung::an},
+			{"ab", anweisung::ab},
+		});
+
+		istringstream ic(c);
+		string a;
+		ic >> a;
+		auto i(aw.find(a));
+		if (i == aw.end()) {
+			o << string("?? ").append(c) << '\n';
+			continue;
+		}
+		switch (i->second) {
+		case anweisung::g: {
+			o << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
+			break;
+		}
+		case anweisung::e: {
+			for (auto const &e: hs.ute())
+				o << (ostringstream() << "   " << setfill('0') << hex << setw(8) << e.first << '\n').str().c_str();
+			break;
+		}
+		case anweisung::l: {
+			unsigned n;
+			h32 an;
+			ic >> n >> hex >> an >> dec;
+			if (an + n > hs.g() - 1) {
+				o << oob(an, hs.g() - 1).c_str();
+				break;
+			}
+			switch (n) {
+			case 8:
+			case 7:
+			case 6:
+			case 5: {
+				h64 ab;
+				hs.l(ab, an);
+				o << format(an, ab).c_str();
+				break;
+			}
+			case 4:
+			case 3: {
+				h32 ab;
+				hs.l(ab, an);
+				o << format(an, ab).c_str();
+				break;
+			}
+			case 2: {
+				h16 ab;
+				hs.l(ab, an);
+				o << format(an, ab).c_str();
+				break;
+			}
+			case 1: {
+				h8 ab;
+				hs.l(ab, an);
+				o << format(an, ab).c_str();
+				break;
+			}
+			}
+			break;
+		}
+		case anweisung::s: {
+			h32 as, ag;
+			ic >> hex >> as >> ag;
+			if (as + 8 > hs.g() - 1) {
+				o << oob(as + 8, hs.g()).c_str();
+				break;
+			}
+			hs.s(as, ag);
+			o << format(as, ag).c_str();
+			break;
+		}
+		case anweisung::an: {
+			h32 ut;
+			ic >> hex >> ut;
+			if (ut > hs.g() - 1) {
+				o << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
+			auto e(hs.ute().find(ut));
+			if (e == hs.ute().end()) {
+				o << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				break;
+			}
+			e->second->an();
+			break;
+		}
+		case anweisung::ab: {
+			h32 ut;
+			ic >> hex >> ut;
+			if (ut > hs.g() - 1) {
+				o << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				break;
+			}
+			auto e(hs.ute().find(ut));
+			if (e == hs.ute().end()) {
+				o << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				break;
+			}
+			e->second->ab();
+			break;
+		}
+		}
+	}
+	o << '\n';
+}
+}
+
+
+
 int main(int argc, char **argv) {
 	ios_base::sync_with_stdio(false);
 	if (argc <= 2) {
@@ -49,7 +180,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Parse config file
-	ifstream cnf(argv[1]);
+	ifstream cnf(argv[1], ios_base::binary);
 	cnf.exceptions(ios::badbit);
 	unsigned s;
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
@@ -100,121 +231,7 @@ int main(int argc, char **argv) {
 	}
 
 	// Operator's console
-	string c;
-	while (cout << "<< " && !cp_getline(cin, c).eof()) {
-		enum class anweisung {g, e, l, s, an, ab};
-		unordered_map<string, anweisung> aw({
-			{"g",  anweisung::g},
-			{"e",  anweisung::e},
-			{"l",  anweisung::l},
-			{"s",  anweisung::s},
-			{"an", anweisung::an},
-			{"ab", anweisung::ab},
-		});
-
-		istringstream ic(c);
-		string a;
-		ic >> a;
-		auto i(aw.find(a));
-		if (i == aw.end()) {
-			cout << string("?? ").append(c) << '\n';
-			continue;
-		}
-		switch (i->second) {
-		case anweisung::g: {
-			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
-			break;
-		}
-		case anweisung::e: {
-			for (auto const &e: hs.ute())
-				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << e.first << '\n').str().c_str();
-			break;
-		}
-		case anweisung::l: {
-			unsigned n;
-			h32 an;
-			ic >> n >> hex >> an >> dec;
-			if (an + n > hs.g() - 1) {
-				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << an << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
-				break;
-			}
-			switch (n) {
-			case 8:
-			case 7:
-			case 6:
-			case 5: {
-				h64 ab;
-				hs.l(ab, an);
-				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(16) << ab << '\n').str().c_str();
-				break;
-			}
-			case 4:
-			case 3: {
-				h32 ab;
-				hs.l(ab, an);
-				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(8) << ab << '\n').str().c_str();
-				break;
-			}
-			case 2: {
-				h16 ab;
-				hs.l(ab, an);
-				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(4) << ab << '\n').str().c_str();
-				break;
-			}
-			case 1: {
-				h8 ab;
-				hs.l(ab, an);
-				cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << an << " : " << setw(2) << static_cast<unsigned>(ab) << '\n').str().c_str();
-				break;
-			}
-			}
-			break;
-		}
-		case anweisung::s: {
-			h32 as, ag;
-			ic >> hex >> as >> ag;
-			if (as + 8 > hs.g() - 1) {
-				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << as << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
-				break;
-			}
-			hs.s(as, ag);
-			cout << (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(8) << ag << '\n').str().c_str();
-			break;
-		}
-		case anweisung::an: {
-			h32 ut;
-			ic >> hex >> ut;
-			if (ut > hs.g() - 1) {
-				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
-				break;
-			}
-			auto e(hs.ute().find(ut));
-			if (e == hs.ute().end()) {
-				cout << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
-				break;
-			}
-			e->second->an();
-			break;
-		}
-		case anweisung::ab: {
-			h32 ut;
-			ic >> hex >> ut;
-			if (ut > hs.g() - 1) {
-				cout << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
-				break;
-			}
-			auto e(hs.ute().find(ut));
-			if (e == hs.ute().end()) {
-				cout << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
-				break;
-			}
-			e->second->ab();
-			break;
-		}
-		}
-	}
-	cout << '\n';
-
+	host::console(cout, cin, hs);
 	}
 
 	return 0;
