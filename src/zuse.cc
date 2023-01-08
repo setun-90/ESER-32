@@ -15,33 +15,6 @@ using namespace kunstspeicher;
 
 
 
-#if defined(ZUSE_POSIX)
-#include <stdlib.h>
-#include <setjmp.h>
-#include <signal.h>
-#include <unistd.h>
-
-volatile sig_atomic_t handling = 0;
-
-void handle_signal(int s) {
-	switch (s) {
-	case SIGINT:
-	case SIGTERM: {
-		if (handling)
-			raise(s);
-		handling = 1;
-		signal(s, SIG_DFL);
-		raise(s);
-		break;
-	}
-	default:
-		exit(s);
-	}
-}
-#endif
-
-
-
 istream &cp_getline(istream &i, string &s) {
 	s.clear();
 	istream::sentry si(i, true);
@@ -126,16 +99,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	// Handle signals/keyboard
-#if defined(ZUSE_POSIX)
-	struct sigaction sa;
-	memset(&sa, 0, sizeof sa);
-	sa.sa_handler = handle_signal;
-	sigfillset(&sa.sa_mask);
-	for (auto s: {SIGINT, SIGTERM})
-		sigaction(s, &sa, NULL);
-#endif
-
+	// Operator's console
 	string c;
 	while (cout << "<< " && !cp_getline(cin, c).eof()) {
 		enum class anweisung {g, e, l, s, an, ab};
