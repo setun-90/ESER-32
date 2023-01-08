@@ -23,7 +23,7 @@ void recheneinheit::operator()(void) {
 		if (!this->ss)
 			break;
 		h32 gf(unterbrechung::g(this->ube)), ka(unterbrechung::z(this->ube));
-		this->ube =  einheit::nube;
+		this->ube = einheit::nube;
 		l.unlock();
 
 		h64 ze;
@@ -35,10 +35,10 @@ void recheneinheit::operator()(void) {
 			this->se.gf = ngfb - 16;
 			this->se.s(0, aze);
 		}
-		this->se.gf = this->gfb =  ngfb;
-		this->b     =  ((ze >> 32) & 0x00000006_32) >> 1;
-		this->az    =   ze & 0xFFFFFFFE_32;
-		this->zs    =  static_cast<bool>(ze & 1);
+		this->se.gf = this->gfb = ngfb;
+		this->b     = ((ze >> 32) & 0x00000006_32) >> 1;
+		this->az    = ze & 0xFFFFFFFE_32;
+		this->zs    = static_cast<bool>(ze & 1);
 
 		if (!this->zs)
 			break;
