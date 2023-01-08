@@ -37,6 +37,7 @@ protected:
 	verwandlungseinheit se;
 	virtual void operator()(void) = 0;
 	std::atomic<bool> ss;
+	std::exception_ptr sf;
 	std::atomic<h64> ube;
 	std::thread t;
 	std::condition_variable cv;

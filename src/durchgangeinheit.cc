@@ -65,14 +65,17 @@ void durchgangeinheit::operator()(void) {
 			do {
 				this->af();
 			} while (this->ss && this->zs && this->ube == einheit::nube);
-			if (!this->ss)
-				break;
-		} catch (sonderfalle const &e) {
+		} catch (sonderfalle const &s) {
 			h64 ue;
 			this->se.l(ue, this->uez);
 			this->se.s(this->utz, ue);
 			this->zs = false;
+		} catch (exception const &e) {
+			this->sf = make_exception_ptr(e);
+			this->ss = this->zs = false;
 		}
+		if (!this->ss)
+			break;
 		l.lock();
 	}
 }

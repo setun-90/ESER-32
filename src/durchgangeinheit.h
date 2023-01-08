@@ -35,7 +35,6 @@ protected:
 	h32 uez;
 	h8  b;
 	bool zs;
-	std::exception_ptr sf;
 
 	template <class type> bool s(h32 k, type a);
 	template <class type> bool l(type &a, h32 k);

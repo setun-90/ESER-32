@@ -43,13 +43,25 @@ void recheneinheit::operator()(void) {
 		if (!this->zs)
 			break;
 		this->zes =  true;
-		do {
-			this->af();
-		} while (this->ss && this->zs && this->ube == einheit::nube);
+		try {
+			do {
+				this->af();
+			} while (this->ss && this->zs && this->ube == einheit::nube);
+		} catch (sonderfalle const &s) {
+			// Gastfehler
+			//host.trace(s.what());
+			this->zs = false;
+		} catch (exception const &e) {
+			// Host error
+			this->sf = current_exception();
+			this->ss = this->zs = false;
+		}
 		if (!this->ss)
 			break;
 		l.lock();
 	}
+	// TODO: Notify host of error
+	if (this->sf);
 }
 
 void recheneinheit::nss(h8 z, h32 a) {
