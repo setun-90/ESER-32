@@ -34,14 +34,14 @@ int main(void) {
 	/* Test program */
 	h32 aaf(sba & s1::z), az(aaf);
 	/**** Jump instructions */
-	hs.s(az, 0x00000004_32); az += 4;
-	hs.s(az, 0x0F000004_32); az += 4;
-	hs.s(az, 0x0F000004_32); az += 4;
-	hs.s(az, 0x0F0FFFF8_32); az += 4;
-	hs.s(az, 0xCF10_16); az += 2;
+	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4 ; This should not execute
+	hs.s(az, 0x0F000004_32); az += 4;  // WGLB F 0 +4 ; This should
+	hs.s(az, 0x0F000004_32); az += 4;  // WGLB F 0 +4
+	hs.s(az, 0x0F0FFFF8_32); az += 4;  // WGLB F 0 -8
+	hs.s(az, 0xCF10_16); az += 2;      // WGLN F 1 0
 
 	/**** Move and conditional jump instructions */
-	hs.s(az, 0xF010_16); az += 2;
+	hs.s(az, 0xF021_16); az += 2;      // BWGN 2 1
 //	hs.s(az, 0x07000004); az += 4;
 //	hs.s(az, 0x180F0000); az += 4;
 
@@ -49,7 +49,7 @@ int main(void) {
 //	hs.s(az, 0xB2004008); az += 4;
 
 	/**** Shutdown */
-	hs.s(az, 0x72004008_32);
+	hs.s(az, 0x72004008_32);           // VWE1 0 0 #8
 
 
 	shared_ptr<einheit> e1(make_shared<recheneinheit>(hs));

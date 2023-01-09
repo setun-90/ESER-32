@@ -43,15 +43,15 @@ int main(int argc, char **argv) {
 	/* Channel program */
 	h32 az(aaf);
 	/**** Jump instructions */
-	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;
-	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;
-	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;
-	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;
-	hs.s(az, static_cast<h32>(0x103FFFF4_32)); az += 4;
+	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;  // RB  0
+	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;  // RB +8
+	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;  // RB +8
+	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;  // RB  0
+	hs.s(az, static_cast<h32>(0x103FFFF4_32)); az += 4;  // RB -8
 
 	/**** Transfer instructions */
-	hs.s(az, static_cast<h64>(0xB000000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8;
-	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8;
+	hs.s(az, static_cast<h64>(0xB000000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // LB 0x800 0x3FF
+	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // SB 0x800 0x3FF
 
 	istringstream i;
 	durchgangeinheit::verbindung v(argv[1]);
