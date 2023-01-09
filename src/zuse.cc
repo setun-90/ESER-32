@@ -42,8 +42,11 @@ istream &cp_getline(istream &i, string &s) {
 
 
 namespace host {
-string oob(h32 a, h32 g) {
-	return (ostringstream() << "!! " << setfill('0') << hex << setw(8) << a << " > " << setw(8) << g - 1 << '\n').str();
+string no_such_address(h32 a, h32 g) {
+	return (ostringstream() << "!! " << setfill('0') << hex << setw(8) << a << " > " << setw(8) << g << '\n').str();
+}
+string no_such_port(h32 a) {
+	return (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << a << '\n').str();
 }
 template <class type> string format(h32 as, type ag) {
 	return (ostringstream() << "   " << setfill('0') << hex << setw(8) << as << " : " << setw(2*sizeof(type)) << ag << '\n').str();
@@ -88,7 +91,7 @@ void console(ostream &o, istream &i, wahrspeicher &hs) {
 			h32 an;
 			ic >> n >> hex >> an >> dec;
 			if (an + n > hs.g() - 1) {
-				o << oob(an, hs.g() - 1).c_str();
+				o << no_such_address(an, hs.g() - 1).c_str();
 				break;
 			}
 			switch (n) {
@@ -127,7 +130,7 @@ void console(ostream &o, istream &i, wahrspeicher &hs) {
 			h32 as, ag;
 			ic >> hex >> as >> ag;
 			if (as + 8 > hs.g() - 1) {
-				o << oob(as + 8, hs.g()).c_str();
+				o << no_such_address(as + 8, hs.g() - 1).c_str();
 				break;
 			}
 			hs.s(as, ag);
@@ -138,12 +141,12 @@ void console(ostream &o, istream &i, wahrspeicher &hs) {
 			h32 ut;
 			ic >> hex >> ut;
 			if (ut > hs.g() - 1) {
-				o << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				o << no_such_address(ut, hs.g() - 1).c_str();
 				break;
 			}
 			auto e(hs.ute().find(ut));
 			if (e == hs.ute().end()) {
-				o << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				o << no_such_port(ut).c_str();
 				break;
 			}
 			e->second->an();
@@ -153,12 +156,12 @@ void console(ostream &o, istream &i, wahrspeicher &hs) {
 			h32 ut;
 			ic >> hex >> ut;
 			if (ut > hs.g() - 1) {
-				o << (ostringstream() << "!! " << setfill('0') << hex << setw(8) << ut << " > " << setw(8) << hs.g() - 1 << '\n').str().c_str();
+				o << no_such_address(ut, hs.g() - 1).c_str();
 				break;
 			}
 			auto e(hs.ute().find(ut));
 			if (e == hs.ute().end()) {
-				o << (ostringstream() << "!! !" << setfill('0') << hex << setw(8) << ut << '\n').str().c_str();
+				o << no_such_port(ut).c_str();
 				break;
 			}
 			e->second->ab();
