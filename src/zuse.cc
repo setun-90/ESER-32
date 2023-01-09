@@ -57,7 +57,7 @@ template <> string format(h32 as, h8 ag) {
 
 void console(ostream &o, istream &i, wahrspeicher &hs) {
 	string c;
-	while (o << "<< " && !cp_getline(i, c).eof()) {
+	while (o << ">> " && !cp_getline(i, c).eof()) {
 		enum class anweisung {g, e, l, s, an, ab};
 		unordered_map<string, anweisung> aw({
 			{"g",  anweisung::g},
@@ -91,7 +91,7 @@ void console(ostream &o, istream &i, wahrspeicher &hs) {
 			h32 an;
 			ic >> n >> hex >> an >> dec;
 			if (an + n > hs.g() - 1) {
-				o << no_such_address(an, hs.g() - 1).c_str();
+				o << no_such_address(an + n, hs.g() - 1).c_str();
 				break;
 			}
 			switch (n) {
