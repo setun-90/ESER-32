@@ -256,6 +256,7 @@ void recheneinheit::af(void) {
 			}
 			case 0x2: { // Hauptspeicherzielgestalt
 				az += 4;
+				this->nsl(q, feld<13,16>(a));
 				h32 zns(feld<9,12>(a));
 				this->nsl(z, zns);
 				if (stelle<17>(a)) {
