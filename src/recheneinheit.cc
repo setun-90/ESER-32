@@ -340,11 +340,15 @@ void recheneinheit::af(void) {
 			switch (g) {
 			case 0x1: {
 				if (stelle<17>(a)) {
-					this->nss(feld<13,16>(a), g + feld<21,32>(a));
+					this->nss(feld<13,16>(a), feld<21,32>(a));
 				}
+			case 0x0:
+			case 0x3:
+				this->nss(z, qz);
 				break;
 			}
 			case 0x2: {
+				this->se.s(z, qz);
 				break;
 			}
 			}
