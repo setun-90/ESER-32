@@ -61,7 +61,8 @@ void recheneinheit::operator()(void) {
 		l.lock();
 	}
 	// TODO: Notify host of error
-	if (this->sf);
+	if (this->sf)
+		;
 }
 
 void recheneinheit::nss(h8 z, h32 a) {
@@ -117,40 +118,32 @@ void recheneinheit::af(void) {
 				this->az = q;
 			}
 		}
-		return;
 	// Bewegungsanweisungen
 	} else {
 		if (stelle<4>(a)) {
 			// Gestalten
 			h32 q;
-			switch ((a >> 24) & 0xF) {
+			switch (feld<5,8>(a)) {
 			case 0x0: { // BWG - Bewegung
-				switch ((a >> a_g) & 0x3) {
+				switch (feld<1,2>(a)) {
 				case 0x0: { // Beständergestalt
 					az += 4;
-					h32 q(a & a_w);
+					h32 q(feld<13,32>(a));
 					this->b = recheneinheit::zb(q);
-					this->nss((a >> a_z) & 0xF, q);
-					break;
-				}
-				case 0x3: { // Nahspeichergestalt
-					az += 2;
-					this->nsl(q, (a >> a_q) & 0xF);
-					this->b = recheneinheit::zb(q);
-					this->nss((a >> a_z) & 0xF, q);
+					this->nss(feld<9,12>(a), q);
 					break;
 				}
 				case 0x1: { // Hauptspeicherquellegestalt
 					az += 4;
-					h32 g, gns((a >> a_q) & 0xF), zns((a >> a_z) & 0xF);
+					h32 g, gns(feld<13,16>(a)), zns(feld<9,12>(a));
 					this->nsl(g, gns);
-					if (a & (1 << 17)) {
+					if (stelle<17>(a)) {
 						this->se.l(q, g);
 						this->b = recheneinheit::zb(q);
 						this->nss(zns, q);
-						this->nss(gns, g + (a & a_a));
+						this->nss(gns, g + feld<21,32>(a));
 					} else {
-						this->se.l(q, g + (a & a_a));
+						this->se.l(q, g + feld<21,32>(a));
 						this->b = recheneinheit::zb(q);
 						this->nss(zns, q);
 					}
@@ -158,10 +151,10 @@ void recheneinheit::af(void) {
 				}
 				case 0x2: { // Hauptspeicherzielgestalt
 					az += 4;
-					h32 g, gns((a >> a_q) & 0xF), qns((a >> a_z) & 0xF);
+					h32 g, gns(feld<13,16>(a)), qns(feld<9,12>(a));
 					this->nsl(g, gns);
-					if (a & (1 << 17)) {
-						g += (a & a_a);
+					if (stelle<17>(a)) {
+						g += feld<21,32>(a);
 						this->nss(gns, g);
 						this->nsl(q, qns);
 						this->b = recheneinheit::zb(q);
@@ -169,18 +162,24 @@ void recheneinheit::af(void) {
 					} else {
 						this->nsl(q, qns);
 						this->b = recheneinheit::zb(q);
-						this->se.s(g + (a & a_a), q);
+						this->se.s(g + feld<21,32>(a), q);
 					}
+					break;
+				}
+				case 0x3: { // Nahspeichergestalt
+					az += 2;
+					this->nsl(q, feld<13,16>(a));
+					this->b = recheneinheit::zb(q);
+					this->nss(feld<9,12>(a), q);
 					break;
 				}
 				}
 				break;
 			}
 			case 0x1: { // UWG - Ungeschnittende Bewegung
-				switch ((a >> a_g) & 0x3) {
+				switch (feld<1,2>(a)) {
 				case 0x1: { // Hauptspeicherquellegestalt
 					az += 4;
-					h8 z((a >> a_z) & 0xF);
 					break;
 				}
 				case 0x2: { // Hauptspeicherzielgestalt
@@ -191,13 +190,13 @@ void recheneinheit::af(void) {
 				break;
 			}
 			case 0x2: { // Zustandseintragsanweisungen
-				switch ((a >> a_g) & 0x3) {
+				switch (feld<1,2>(a)) {
 				case 0x1: { // VWE - Verfahrenwechsel (Ladung)
 					h32 q;
 					{
 						h32 t;
-						this->nsl(t, (a >> a_q) & 0xF);
-						q = t + (a & a_ra);
+						this->nsl(t, feld<13,16>(a));
+						q = t + feld<17,32>(a);
 					}
 					h64 ze;
 					this->se.g(ze, q);
@@ -209,15 +208,15 @@ void recheneinheit::af(void) {
 					h64 q;
 					{
 						h32 t1, t2;
-						this->nsl(t1, (a >> a_q) & 0xE);
-						this->nsl(t2, ((a >> a_q) & 0xE) + 1);
+						this->nsl(t1, feld<13,15>(a));
+						this->nsl(t2, feld<13,15>(a) + 1);
 						q = (((h64)t1) << 32) | t2;
 					}
 					h32 ut;
 					{
 						h32 t;
-						this->nsl(t, (a >> a_z) & 0xE);
-						ut = t + (a & a_ra);
+						this->nsl(t, feld<9,11>(a));
+						ut = t + feld<17,32>(a);
 					}
 					this->se.s(ut, q);
 					break;
@@ -228,49 +227,48 @@ void recheneinheit::af(void) {
 			default:
 				throw AUA(this->az, this->gfb, a);
 			}
-			return;
 		// Rechnungsanweisungen
 		} else {
 			// Gestalten
 			bool nsz(false);
 			h32 z, q;
-			h8 g((a >> a_g) & 0x3);
+			h8 g(feld<1,2>(a));
 			switch (g) {
 			case 0x0: { // Beständergestalt
 				az += 4;
 				nsz = true;
-				z = (a >> a_z) & 0xF;
-				q = vzw(a & a_w, 20);
-				break;
-			}
-			case 0x3: { // Nahspeichergestalt
-				az += 2;
-				nsz = true;
-				z = (a >> a_z) & 0xF;
-				this->nsl(q, (a >> a_q) & 0xF);
+				z = feld<9,12>(a);
+				q = vzw(feld<13,32>(a), 20);
 				break;
 			}
 			case 0x1: { // Hauptspeicherquellegestalt
 				az += 4;
 				nsz = true;
-				z = (a >> a_z) & 0xF;
+				z = feld<9,12>(a);
 				h32 gr;
-				this->nsl(gr, (a >> a_z) & 0xF);
-				if (a & (1 << a_an)) {
+				this->nsl(gr, z);
+				if (stelle<17>(a)) {
 					this->se.l(q, gr);
 				} else {
-					this->se.l(q, gr + vzw(a & a_a, 12));
+					this->se.l(q, gr + vzw(feld<21,32>(a), 21));
 				}
 				break;
 			}
 			case 0x2: { // Hauptspeicherzielgestalt
 				az += 4;
-				h32 zns((a >> a_z) & 0xF);
+				h32 zns(feld<9,12>(a));
 				this->nsl(z, zns);
-				if (a & (1 << a_an)) {
-					z += vzw(a & a_a, 12);
+				if (stelle<17>(a)) {
+					z += vzw(feld<21,32>(a), 21);
 					this->nss(zns, z);
 				}
+				break;
+			}
+			case 0x3: { // Nahspeichergestalt
+				az += 2;
+				nsz = true;
+				z = feld<9,12>(a);
+				this->nsl(q, feld<13,16>(a));
 				break;
 			}
 			}
@@ -280,7 +278,7 @@ void recheneinheit::af(void) {
 			} else {
 				this->se.l(qz, z);
 			}
-			switch ((a >> 28) & 0xF) {
+			switch (feld<5,8>(a)) {
 			case 0x0: { // LVS - Linksverschiebung
 				q %= 32;
 				if (q) qz <<= q;
@@ -333,11 +331,16 @@ void recheneinheit::af(void) {
 				qz /= q;
 				break;
 			}
+			default: {
+				// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
+				//break;
+				throw AUA(this->az, this->gfb, a);
+			}
 			}
 			switch (g) {
 			case 0x1: {
-				if (a & (1 << a_an)) {
-					this->nss((a >> a_q) & 0xF, g + (a & a_a));
+				if (stelle<17>(a)) {
+					this->nss(feld<13,16>(a), g + feld<21,32>(a));
 				}
 				break;
 			}
