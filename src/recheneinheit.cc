@@ -68,7 +68,7 @@ void recheneinheit::nss(h8 z, h32 a) {
 	if (z) this->ns[z] = a;
 }
 void recheneinheit::nsl(h32 &a, h8 q) {
-	a = q ? this->ns[q] : 0;
+	a = this->ns[q];
 }
 h8 recheneinheit::zb(h32 a) {
 	return !a ? 0 : a > 0 ? 1 : 2;
@@ -79,33 +79,36 @@ void recheneinheit::af(void) {
 	this->se.a(a, this->az);
 	// Regelungsanweisungen
 	if (!stelle<3>(a)) {
-		// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
-
 		// Gestalten
 		h32 q(0);
-		switch ((a >> a_g) & 0x3) {
+		switch (feld<1,2>(a)) {
 		case 0x0: { // Beständergestalt
 			this->az += 4;
-			q = vzw(a & a_w, 32 - 13);
-			break;
-		}
-		case 0x3: { // Nahspeichergestalt
-			this->az += 2;
-			this->nsl(q, (a >> a_z) & 0xF);
+			q = vzw(feld<13,32>(a), ss1<h32>(13));
 			break;
 		}
 		case 0x1: { // Hauptspeichergestalt
 			this->az += 4;
 			h32 t;
-			this->nsl(t, (a >> a_z) & 0xF);
-			h32 qa(t + (a & a_a));
+			this->nsl(t, feld<13,16>(a));
+			h32 qa(t + feld<17,32>(a));
 			this->se.l(q, qa);
 			break;
 		}
+		case 0x2: {
+			// Alle Verweiterungen dieser Abteilung des Entwurfs hier.
+			//break;
+			throw AUA(this->az, this->gfb, a);
 		}
-		h32 z((a >> 20) & 0xF);
+		case 0x3: { // Nahspeichergestalt
+			this->az += 2;
+			this->nsl(q, feld<13,16>(a));
+			break;
+		}
+		}
+		h32 z(feld<9,12>(a));
 		this->nss(z, this->az);
-		if (a & (1 << (27 - this->b))) {
+		if (stelle(a, 5 + this->b)) {
 			if (!stelle<4>(a)) {
 				// WGL - Weglass
 				this->az += q;
@@ -115,8 +118,8 @@ void recheneinheit::af(void) {
 			}
 		}
 		return;
+	// Bewegungsanweisungen
 	} else {
-		// Bewegungsanweisungen
 		if (stelle<4>(a)) {
 			// Gestalten
 			h32 q;
@@ -226,8 +229,8 @@ void recheneinheit::af(void) {
 				throw AUA(this->az, this->gfb, a);
 			}
 			return;
-		} else {
 		// Rechnungsanweisungen
+		} else {
 			// Gestalten
 			bool nsz(false);
 			h32 z, q;
@@ -344,6 +347,4 @@ void recheneinheit::af(void) {
 			}
 		}
 	}
-
-	throw AUA(this->az, this->gfb, a);
 }
