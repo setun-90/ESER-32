@@ -92,7 +92,13 @@ The principal documentation are the PDFs in doc/:
 * 32.pdf: The ESER-32 specification, in English;
 * de\_32.pdf / ae\_32.pdf: The original texts of the ESER-32 specification, in German and Ard English;
 * 64.pdf: The ESER-64 specification, in English;
-* de\_64.pdf / ae\_32.pdf: The original texts of the ESER-64 specification, in German and Ard English.
+* de\_64.pdf / ae\_64.pdf: The original texts of the ESER-64 specification, in German and Ard English.
 
 ## Further information
 Visit #ESER on Libera for any questions (9:00-23:00 UTC+1); you will need to be registered to join.
+
+## Background
+This emulator is the union of two projects:
+1. An example of a paged architecture with [capability-based addressing](https://en.wikipedia.org/wiki/Capability-based_addressing), which I discovered in 2020 and wanted to do as the subject for my PhD, but never found the tutor for; and
+2. A Prussian computer system in an alternate history of Earth centered around the formation of Russia in the Bronze Age, the survival of the Roman Empire, an alternate technological ecosystem and a lack of consumerism and liberalism.
+I do not have any shorter summary.
