@@ -34,10 +34,13 @@ int main(void) {
 	/* Test program */
 	h32 aaf(sba & s1::z), az(aaf);
 	/**** Jump instructions */
-	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4 ; This should not execute
-	hs.s(az, 0x0F000004_32); az += 4;  // WGLB F 0 +4 ; This should
-	hs.s(az, 0x0F000004_32); az += 4;  // WGLB F 0 +4
-	hs.s(az, 0x0F0FFFF8_32); az += 4;  // WGLB F 0 -8
+	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4  ; This should not execute
+	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12 ; This should
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
+	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
+	hs.s(az, 0x0F0FFFF4_32); az += 4;  // WGLB F 0 -12
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
 	hs.s(az, 0xCF10_16); az += 2;      // WGLN F 1 0
 
 	/**** Move and conditional jump instructions */
