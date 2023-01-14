@@ -59,7 +59,6 @@ function(compile_options Target)
 		$<$<AND:${is_release},${is_gnu}>:
 			-fno-reorder-blocks-and-partition
 			-fno-reorder-functions
-			-fira-region=mixed
 			-ftree-cselim
 			-flive-range-shrinkage
 			-fpredictive-commoning
@@ -75,6 +74,7 @@ function(compile_options Target)
 			-fno-plt
 			-fno-semantic-interposition
 			-fdevirtualize-at-ltrans
+			-fasynchronous-unwind-tables
 		>
 		$<$<AND:${is_release},${is_anyclang}>:
 			-flto=thin
