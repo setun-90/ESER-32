@@ -101,10 +101,9 @@ function(compile_options Target)
 	)
 
 	target_link_options("${Target}" PRIVATE
-		"$<${is_anynix}:LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,combreloc>"
-		-ldl -pthread
-		"$<$<AND:${is_release},${is_anynix}>:LINKER:-s>"
-		"$<$<AND:${is_debug},${is_anynix}>:-fsanitize=address>"
+		$<${is_anynix}:LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,combreloc -ldl -pthread>
+		$<$<AND:${is_release},${is_anynix}>:LINKER:-s>
+		$<$<AND:${is_debug},${is_anynix}>:-fsanitize=address>
 	)
 endfunction()
 
