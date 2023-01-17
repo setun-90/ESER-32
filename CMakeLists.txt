@@ -46,14 +46,17 @@ function(compile_options Target)
 			-march=native
 			-pipe
 			-falign-functions=32
-			-falign-loops=32
 		>
 		$<${is_gnu}:
-			-falign-jumps=32
+			-falign-loops=32:24:16
+			-falign-jumps=32:24:16
 			-Wa,-mbranches-within-32B-boundaries
 			-mno-direct-extern-access
 		>
-		$<${is_anyclang}:-fno-direct-access-external-data>
+		$<${is_anyclang}:
+			-falign-loops=32
+			-fno-direct-access-external-data
+		>
 
 
 		$<$<AND:${is_release},${is_gnu}>:
