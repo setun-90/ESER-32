@@ -65,7 +65,6 @@ function(compile_options Target)
 			-ftree-cselim
 			-flive-range-shrinkage
 			-fpredictive-commoning
-			-ftree-loop-distribution
 			-fsched-pressure
 			-fweb
 			-frename-registers
