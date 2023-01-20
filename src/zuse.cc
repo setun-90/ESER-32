@@ -42,6 +42,37 @@ istream &cp_getline(istream &i, string &s) {
 
 
 namespace host {
+
+struct host_error_category: public error_category {
+	char const *name() const noexcept override final {
+		return "Zuse Host Error";
+	}
+#if defined(ZUSE_POSIX)
+	string message(int c) const override final {
+		return system_category().message(c);
+	}
+#elif defined(ZUSE_WINDOWS)
+	string message(int c) const override final {
+		LPTSTR f(nullptr);
+		FormatMessage(
+			FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+			nullptr,
+			c,
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+			(LPTSTR)&f,
+			0,
+			nullptr
+		);
+		return f ? f : _T("FormatMessage - no error string available");
+	}
+#endif
+};
+host_error_category const &error_category() {
+	static host_error_category e;
+	return e;
+}
+
+
 string no_such_address(h32 a, h32 g) {
 	return (ostringstream() << "!! " << setfill('0') << hex << setw(8) << a << " > " << setw(8) << g << '\n').str();
 }
@@ -184,6 +215,10 @@ int main(int argc, char **argv) {
 
 	// Parse config file
 	ifstream cnf(argv[1], ios_base::binary);
+	if (!cnf) {
+		cerr << string(argv[1]).append(": ").append(make_error_code(static_cast<errc>(errno)).message()).c_str() << '\n';
+		return 2;
+	}
 	cnf.exceptions(ios::badbit);
 	unsigned s;
 	cnf >> s; TRACE((ostringstream() << "s = " << dec << s).str().c_str());
