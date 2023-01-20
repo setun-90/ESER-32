@@ -60,6 +60,8 @@ int main(int argc, char **argv) {
 	e->ub(static_cast<h64>(0x0080400000800000_64));
 	this_thread::sleep_for(chrono::milliseconds(1000));
 	e->ab();
+	if (e->sf)
+		rethrow_exception(e->sf);
 
 	return 0;
 }

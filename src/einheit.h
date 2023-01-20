@@ -31,13 +31,13 @@ struct einheit {
 	void ub(h64 e);
 	void an(void);
 	void ab(void);
+	std::exception_ptr sf;
 	static h64 const nube = 1_64 << 32;
 
 protected:
 	verwandlungseinheit se;
 	virtual void operator()(void) = 0;
 	std::atomic<bool> ss;
-	std::exception_ptr sf;
 	std::atomic<h64> ube;
 	std::thread t;
 	std::condition_variable cv;

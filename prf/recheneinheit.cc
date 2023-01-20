@@ -61,6 +61,8 @@ int main(void) {
 //	while (!e1->ls());
 	while (e1->ls());
 	e1->ab();
+	if (e1->sf)
+		rethrow_exception(e1->sf);
 
 	return 0;
 }
