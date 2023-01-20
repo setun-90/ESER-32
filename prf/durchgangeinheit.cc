@@ -1,4 +1,4 @@
-#include "../src/verbindung.h"
+#include "../src/host.h"
 #include <trace.h>
 
 #include <thread>
@@ -54,7 +54,7 @@ int main(int argc, char **argv) {
 	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // SB 0x800 0x3FF
 
 	istringstream i;
-	durchgangeinheit::verbindung v(argv[1]);
+	host::plugin v(argv[1]);
 	shared_ptr<einheit> e(v.abb(hs, i));
 	e->an();
 	e->ub(static_cast<h64>(0x0080400000800000_64));

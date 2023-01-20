@@ -48,8 +48,6 @@ public:
 	durchgangeinheit(wahrspeicher &hs);
 	virtual ~durchgangeinheit() = default;
 
-	struct verbindung;
-
 	bool ls(void) override;
 };
 

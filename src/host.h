@@ -1,5 +1,5 @@
-#ifndef   ZUSE_VB_H
-#define   ZUSE_VB_H
+#ifndef   ZUSE_HOST_H
+#define   ZUSE_HOST_H
 
 
 
@@ -13,12 +13,13 @@
 
 
 
-/* Zuse Elektra Verbindungbegriffserklärung */
-/*      (C) 1993, 1998, 2003, 2011          */
+/* Host interface definitions */
 
+#include <hauptspeicher.h>
 #include <platform.h>
 #include "durchgangeinheit.h"
 
+#include <iostream>
 #include <string>
 
 #if defined(ZUSE_POSIX)
@@ -29,24 +30,41 @@ using buchse = void *;
 using buchse = HMODULE;
 #endif
 
-struct durchgangeinheit::verbindung {
-	explicit verbindung(std::string n);
-	void zs(void);
+namespace host {
+	struct host_error_category: public std::error_category {
+		char const *name() const noexcept override final;
+		std::string message(int c) const override final;
+	};
+	host_error_category const &error_category();
 
-	~verbindung();
-	verbindung();
-	verbindung(verbindung &&);
-	verbindung &operator=(verbindung &&);
+	std::istream &getline(std::istream &i, std::string &s);
 
-	std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+	namespace console {
+		std::string no_such_address(h32 a, h32 g);
+		std::string no_such_port(h32 a);
+		template <class type> std::string format(h32 as, type ag);
+		void loop(std::ostream &o, std::istream &i, wahrspeicher &hs);
+	}
 
-private:
-	std::string n;
-	buchse b;
-	durchgangeinheit *(*v_ab)(wahrspeicher &hs, std::istringstream &i);
-	void (*v_zs)(durchgangeinheit *);
-};
+	struct plugin {
+		explicit plugin(std::string n);
+		void zs(void);
+
+		~plugin();
+		plugin();
+		plugin(plugin &&);
+		plugin &operator=(plugin &&);
+
+		std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
+
+	private:
+		std::string n;
+		buchse b;
+		durchgangeinheit *(*v_ab)(wahrspeicher &hs, std::istringstream &i);
+		void (*v_zs)(durchgangeinheit *);
+	};
+}
 
 
 
-#endif /* ZUSE_VB_H */
+#endif /* ZUSE_HOST_H */

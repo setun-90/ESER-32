@@ -112,7 +112,7 @@ endfunction()
 # Targets
 ### Core
 add_library(kern OBJECT EXCLUDE_FROM_ALL
-	src/verbindung.cc
+	src/host.cc
 	src/wahrspeicher.cc
 	src/sonderfalle.cc
 	src/verwandlungseinheit.cc
