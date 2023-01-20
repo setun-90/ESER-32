@@ -59,7 +59,7 @@ int main(int argc, char **argv) {
 			break;
 		}
 		default: {
-			cerr << "Unbekannte Einheitsart: " << p << '\n';
+			cerr << "Unknown unit type: " << p << '\n';
 		}
 		}
 	}
