@@ -5,7 +5,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/lib>")
 set(CMAKE_SHARED_MODULE_PREFIX )
 
 function(compile_options Target)
@@ -28,7 +28,7 @@ function(compile_options Target)
 	)
 
 	target_include_directories("${Target}" PRIVATE
-		"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+		"$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>"
 	)
 	target_compile_options("${Target}" PRIVATE
 		$<${is_anynix}:
@@ -133,9 +133,11 @@ compile_options(zuse)
 set_target_properties(zuse PROPERTIES RUNTIME_OUTPUT_DIRECTORY bin)
 
 ### Device binaries
-file(GLOB GERATE src/gerat/*.cmake)
-foreach(Cmake ${GERATE})
-	include("${Cmake}")
+file(GLOB GERATE src/gerat/*/)
+foreach(GERAT ${GERATE})
+	if(IS_DIRECTORY ${GERAT})
+		add_subdirectory("${GERAT}")
+	endif()
 endforeach()
 
 ### Tests

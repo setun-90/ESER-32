@@ -1,5 +1,5 @@
-#ifndef   _PG_H
-#define   _PG_H
+#ifndef   _POSIX_H
+#define   _POSIX_H
 
 
 
@@ -13,27 +13,32 @@
 
 
 
-/* ESER Prüfungsgerätsbegriffserklärung */
-/*        (C) 1979, 1988, 1992          */
+/* POSIX-Gerätsbegriffserklärung */
+/*           (C) 1992            */
 
+#include <sonderfalle.h>
 #include <platform.h>
-#include "../durchgangeinheit.h"
+#include "../../durchgangeinheit.h"
 
-#include <random>
+#include <fstream>
+#include <sstream>
 
-struct prufung: public durchgangeinheit {
-	using durchgangeinheit::durchgangeinheit;
+struct posix: public durchgangeinheit {
+	using buf = std::basic_filebuf<h8>;
+
+	posix(wahrspeicher &hs, buf f);
 
 	h32 operator()(h64 a) override;
 	void g_s(h32 z, h32 ab) override;
 	void g_l(h32 z, h32 ab) override;
 
 private:
-	std::mt19937_64 e;
+	buf f;
 };
 
 GERAT durchgangeinheit *abb(wahrspeicher &hs, std::istringstream &i);
 GERAT void zes(durchgangeinheit *d);
 
 
-#endif /* _PG_H */
+
+#endif /* _POSIX_H */

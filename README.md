@@ -5,8 +5,7 @@ This emulator emulates a 32-bit Zuse Elektra.
 ## Status
 * Memory is verified; all specified features work, but some implementation features need to be frozen (such as cache sizing and replacement algorithms).
 * Channel units are in progress; tests and devices still need to be written.
-  * The actual directory structure for device sources needs to be replaced.
-  * The POSIX device needs a decent ESER test program.
+  * The Datei device needs a decent ESER test program.
 * Processing units are in progress; tests need to be written and some aspects need to be frozen, such as cache sizes.
 * The console needs to be expanded with commands for device control.
 
@@ -69,7 +68,7 @@ The emulator is written in C++11, but a C++20-compatible compiler is recommended
 
 ### Targets
 * zuse: the emulator binary;
-* gerate: the devices binaries
+* gerate: the device binaries;
 * prf/*: the individual tests.
   * speicher: tests memory, physical and virtual;
   * durchgangeinheit: tests channels and some essential devices (in progress);
@@ -93,6 +92,23 @@ The principal documentation are the PDFs in doc/:
 * de\_32.pdf / ae\_32.pdf: The original texts of the ESER-32 specification, in German and Ard English;
 * 64.pdf: The ESER-64 specification, in English;
 * de\_64.pdf / ae\_64.pdf: The original texts of the ESER-64 specification, in German and Ard English.
+
+### Contributing
+If you wish to provide a new device, just create a folder named `${Device_Name}` in `src/gerat/` with a CMakeLists.txt file containing at least the following:
+```
+cmake_minimum_required(VERSION 3.18)
+project(${Device_Name} CXX)
+
+add_library(${Device_Name} MODULE
+	${Sources}
+)
+target_link_libraries(${Device_Name} PRIVATE
+	kern
+)
+compile_options(${Device_Name})
+add_dependencies(zuse ${Device_Name})
+```
+
 
 ## Further information
 Visit #ESER on Libera for any questions (9:00-23:00 UTC+1); you will need to be registered to join.
