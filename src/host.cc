@@ -256,7 +256,10 @@ host::plugin &host::plugin::operator=(plugin &&v) {
 }
 
 shared_ptr<durchgangeinheit> host::plugin::abb(wahrspeicher &hs, std::istringstream &i) {
-	return shared_ptr<durchgangeinheit>(this->v_ab(hs, i), this->v_zs);
+	durchgangeinheit *p(this->v_ab(hs, i));
+	if (!p)
+		throw system_error(errno, host::error_category());
+	return shared_ptr<durchgangeinheit>(p, this->v_zs);
 }
 host::plugin::~plugin() {
 	this->zs();

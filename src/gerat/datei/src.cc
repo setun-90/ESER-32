@@ -19,7 +19,6 @@ durchgangeinheit *abb(wahrspeicher &hs, istringstream &i) {
 	i >> n;
 	posix::buf f;
 	if (!f.open(n.c_str(), ios::binary | ios::in | ios::out | ios::app)) {
-		this->sf = make_exception_ptr(system_error(error_code(static_cast<errc>(errno)), host::error_category()));
 		return nullptr;
 	}
 
