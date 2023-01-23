@@ -50,8 +50,8 @@ int main(int argc, char **argv) {
 	hs.s(az, static_cast<h32>(0x103FFFF4_32)); az += 4;  // RB -8
 
 	/**** Transfer instructions */
-	hs.s(az, static_cast<h64>(0xB000000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // LB 0x800 0x3FF
-	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x00000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // SB 0x800 0x3FF
+	hs.s(az, static_cast<h64>(0xB000000000000000_64 | (static_cast<h64>(0x01000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // LB 0x010000800 0x3FF
+	hs.s(az, static_cast<h64>(0xB040000000000000_64 | (static_cast<h64>(0x01000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // SB 0x010000800 0x3FF
 
 	istringstream i;
 	host::plugin v(argv[1]);
