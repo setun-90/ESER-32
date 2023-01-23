@@ -35,19 +35,19 @@ int main(int argc, char **argv) {
 
 	/* Channel interrupt data structure */
 	h32 aaf(0x00000200_32);
-	hs.s(0_32,  static_cast<h32>(0x00800000_32));
-	hs.s(4_32,  static_cast<h32>(0x00C00010_32));
+	hs.s(0_32,  0x00800000_32);
+	hs.s(4_32,  0x00C00010_32);
 	hs.s(8_32,  gf);
 	hs.s(12_32, aaf);
 
 	/* Channel program */
 	h32 az(aaf);
 	/**** Jump instructions */
-	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;  // RB  0
-	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;  // RB +8
-	hs.s(az, static_cast<h32>(0x10000008_32)); az += 4;  // RB +8
-	hs.s(az, static_cast<h32>(0x10000000_32)); az += 4;  // RB  0
-	hs.s(az, static_cast<h32>(0x103FFFF4_32)); az += 4;  // RB -8
+	hs.s(az, 0x10000000_32); az += 4;  // RB  0
+	hs.s(az, 0x10000008_32); az += 4;  // RB +8
+	hs.s(az, 0x10000008_32); az += 4;  // RB +8
+	hs.s(az, 0x10000000_32); az += 4;  // RB  0
+	hs.s(az, 0x103FFFF4_32); az += 4;  // RB -8
 
 	/**** Transfer instructions */
 	hs.s(az, static_cast<h64>(0xB000000000000000_64 | (static_cast<h64>(0x01000800_32 - az) << 32) | 0x000003FF_32)); az += 8; // LB 0x010000800 0x3FF
@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
 	host::plugin v(argv[1]);
 	shared_ptr<einheit> e(v.abb(hs, i));
 	e->an();
-	e->ub(static_cast<h64>(0x0080400000800000_64));
+	e->ub(0x0080400000800000_64);
 	this_thread::sleep_for(chrono::milliseconds(1000));
 	e->ab();
 	if (e->sf)
