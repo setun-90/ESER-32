@@ -1,6 +1,7 @@
 #include "../src/host.h"
 #include <trace.h>
 
+#include <iomanip>
 #include <thread>
 #include <chrono>
 
@@ -60,8 +61,12 @@ int main(int argc, char **argv) {
 	e->ub(0x0080400000800000_64);
 	this_thread::sleep_for(chrono::milliseconds(1000));
 	e->ab();
-	if (e->sf)
+	if (e->sf) {
+		h32 ua, an((s1b & s1::z) + 0x10_32);
+		hs.l(ua, an);
+		cerr << (ostringstream() << hex << setfill('0') << setw(8) << an << " : " << setw(8) << ua << '\n').str();
 		rethrow_exception(e->sf);
+	}
 
 	return 0;
 }
