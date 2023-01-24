@@ -61,8 +61,9 @@ function(compile_options Target)
 		$<$<AND:${is_release},${is_gnu}>:
 			-fno-reorder-blocks-and-partition
 			-fno-reorder-functions
-			-ftree-cselim
+			-ftree-lrs
 			-flive-range-shrinkage
+			-ftree-partial-pre
 			-fpredictive-commoning
 			-fsched-pressure
 			-fweb
