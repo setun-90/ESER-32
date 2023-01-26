@@ -6,8 +6,10 @@ using namespace std;
 
 
 
+wahrspeicher::wahrspeicher(vector<h8> g):
+	hs(g) {}
 wahrspeicher::wahrspeicher(h32 g):
-	hs(g << 12) {}
+	wahrspeicher(vector<h8>(g << 12)) {}
 
 // Unterbrechungstore
 void wahrspeicher::ute(h32 w, shared_ptr<einheit> e) {

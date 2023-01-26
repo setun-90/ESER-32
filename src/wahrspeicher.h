@@ -33,6 +33,7 @@ class wahrspeicher {
 
 public:
 	wahrspeicher(h32 g);
+	wahrspeicher(std::vector<h8> g);
 
 	void ute(h32 a, std::shared_ptr<einheit> e);
 	void ute(h32 a);
