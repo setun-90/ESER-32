@@ -64,6 +64,8 @@ function(compile_options Target)
 			-ftree-lrs
 			-flive-range-shrinkage
 			-ftree-partial-pre
+			-fgcse-after-reload
+			-fsplit-paths
 			-fpredictive-commoning
 			-fsched-pressure
 			-fweb
