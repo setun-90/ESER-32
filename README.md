@@ -54,13 +54,34 @@ $ cmake .. -DCMAKE_BUILD_TYPE=$type
 $ cmake --build . -j$n
 ```
 
-#### CMake multi-configuration backends (MSBuild/Visual Studio, Xcode)
+#### CMake multi-configuration backends (MSBuild, Xcode)
 ```
-$ mkdir build
-$ cd build
+$ mkdir out
+$ cd out
 $ cmake ..
 $ cmake --build . --config $type
 ```
+##### Visual Studio debugging notes
+Visual Studio debugging is experimental. In particular, passing the required arguments to programs properly under debugging is to still be figured out, as they must be launched from the IDE.
+
+For Visual Studio with MSBuild:
+1. Run the CMake generation (3rd) step;
+2. Open `out\ESER-32.sln` in Visual Studio;
+3. Locate the relevant project in the Solution Explorer and right-click on it;
+4. Select Properties (bottom) in the drop-down menu;
+5. Select Configuration Properties > Debugging in the left pane;
+6. Fill in the Command Arguments field.
+
+For Visual Studio with Ninja, a CMakePresets.json is being considered. In the mean time:
+1. Open the local repository folder in Visual Studio;
+2. Wait for Visual Studio to generate the Ninja build files;
+3. Select the relevant target as startup item in the Select Startup Item dropdown;
+4. Go to Main Menu > Debug > Debug and Launch Configuration for &lt;target&gt;;
+5. Add the following line to each relevant target of `launch.vs.json` or `launch.json`:
+   `"args": args`
+   Where `args` is as follows:
+   * for `durchgangeinheit.exe`: `["..\\lib\\prufung.dll"]`;
+   * for `zuse.exe`: `["..\\..\\..\\..\\src\\beispiel.conf", "..\\lib\\"]`
 
 
 ### Dependencies
@@ -78,9 +99,9 @@ Install targets are being considered.
 
 ### Testing
 The test order is:
-1. prf/speicher;
-2. prf/durchgangeinheit;
-3. prf/recheneinheit;
+1. `prf/speicher`;
+2. `prf/durchgangeinheit ${Test_Device_Plugin}`;
+3. `prf/recheneinheit`;
 4. all device tests.
 
 The test is successful if it returns normally, i.e. doesn't call terminate after throwing an exception or doesn't segfault. The tests can be run under gdb for debugging.
