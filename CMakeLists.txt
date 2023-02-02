@@ -87,6 +87,8 @@ function(compile_options Target)
 		$<$<AND:${is_release},${is_msvc}>:
 			/MD
 			/O2
+			/GL
+			/Gw
 			/Zi
 		>
 
