@@ -49,7 +49,7 @@ function(compile_options Target)
 			-falign-loops=16
 		>
 		$<${is_gnu}:
-			-falign-jumps=16
+			-fno-align-jumps
 			-Wa,-mbranches-within-32B-boundaries
 			-mno-direct-extern-access
 		>
