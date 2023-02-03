@@ -50,6 +50,7 @@ function(compile_options Target)
 		>
 		$<${is_gnu}:
 			-fno-align-jumps
+			-fno-align-labels
 			-Wa,-mbranches-within-32B-boundaries
 			-mno-direct-extern-access
 		>
