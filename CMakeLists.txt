@@ -13,8 +13,10 @@ function(compile_options Target)
 		return()
 	endif()
 
-	set(is_debug      "$<CONFIG:Debug>")
-	set(is_release    "$<CONFIG:Release>")
+	set(is_debug          "$<CONFIG:Debug>")
+	set(is_release        "$<CONFIG:Release>")
+	set(is_relwithdebinfo "$<CONFIG:RelWithDebInfo>")
+	set(is_optimized      $<OR:${is_release},${is_relwithdebinfo}>)
 	set(is_gnu        "$<CXX_COMPILER_ID:GNU>")
 	set(is_msvc       "$<CXX_COMPILER_ID:MSVC>")
 	set(is_clang      "$<CXX_COMPILER_ID:Clang>")
@@ -59,7 +61,7 @@ function(compile_options Target)
 		>
 
 
-		$<$<AND:${is_release},${is_gnu}>:
+		$<$<AND:${is_optimized},${is_gnu}>:
 			-fno-reorder-blocks-and-partition
 			-fno-reorder-functions
 			-ftree-lrs
@@ -81,18 +83,20 @@ function(compile_options Target)
 			-fdevirtualize-at-ltrans
 			-fasynchronous-unwind-tables
 		>
-		$<$<AND:${is_release},${is_anyclang}>:
+		$<$<AND:${is_optimized},${is_anyclang}>:
 			-flto=thin
 			-fno-plt
 		>
-		$<$<AND:${is_release},${is_msvc}>:
+		$<$<AND:${is_optimized},${is_msvc}>:
 			/MD
 			/O2
 			/GL
 			/Gw
-			/Zi
 		>
 
+		$<$<AND:${is_relwithdebinfo},${is_mvsc}>:
+			/Zi
+		>
 
 		$<$<AND:${is_debug},${is_anynix}>:
 			-Og
