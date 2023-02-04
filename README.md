@@ -44,9 +44,9 @@ If loading proceeds without errors, you will reach the operator's console:
 
 ## Building
 ### Systems
-CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself.
+CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself. There are three main supported build types: Release, RelWithDebInfo or Debug.
 #### CMake single-configuration backends (Make/NMake/MinGW, Ninja)
-Create the directory `$type` corresponding to the build type: either release or debug.
+Create the directory `$type` corresponding to the build type.
 ```
 $ mkdir $type
 $ cd $type
