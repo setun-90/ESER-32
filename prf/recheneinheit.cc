@@ -36,20 +36,48 @@ int main(void) {
 	/**** Jump instructions */
 	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4  ; This should not execute
 	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12 ; This should
-	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 16
 	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12
-	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 16
 	hs.s(az, 0x0F0FFFF4_32); az += 4;  // WGLB F 0 -12
-	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 #16
+	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 16
 	hs.s(az, 0xCF10_16); az += 2;      // WGLN F 1 0
 
-	/**** Move and conditional jump instructions */
-	hs.s(az, 0xF021_16); az += 2;      // BWGN 2 1
-//	hs.s(az, 0x07000004); az += 4;
-//	hs.s(az, 0x180F0000); az += 4;
+	/**** Move instructions and basic condition codes */
+	hs.s(az, 0xF020_16); az += 2;      // BWGN 2 0
+	hs.s(az, 0x01000004_32); az += 4;  // WGLB 1 0 +4
+	hs.s(az, 0x72004018_32); az += 4;  // VWE1 0 0 24
 
-	/**** Interrupt next unit */
-//	hs.s(az, 0xB2004008); az += 4;
+	hs.s(az, 0x30100001_32); az += 4;  // BWGB 1 1
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 2 0 +4
+	hs.s(az, 0x72004018_32); az += 4;  // VWE1 0 0 24
+
+	hs.s(az, 0xB0102000_32); az += 4;  // BWGZ 1 2000
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 2 0 +4
+	hs.s(az, 0x72004018_32); az += 4;  // VWE1 0 0 24
+
+	hs.s(az, 0x70202000_32); az += 4;  // BWGQ 2 2000
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 2 0 +4
+	hs.s(az, 0x72004018_32); az += 4;  // VWE1 0 0 24
+
+	/**** Bitwise instructions */
+	hs.s(az, 0xE610_16); az += 2;      // NICN 1 0
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
+	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
+
+	hs.s(az, 0x26100000_32); az += 4;  // NICB 1 0
+	hs.s(az, 0x01000004_32); az += 4;  // WGLB 1 0 +4
+	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
+
+	hs.s(az, 0xA6102010_16); az += 4;  // NICZ 1 2010
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
+	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
+
+	hs.s(az, 0x66202010_16); az += 4;  // NICQ 2 2010
+	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
+	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
+
+	/**** Arithmetic instructions */
 
 	/**** Shutdown */
 	hs.s(az, 0x72004008_32);           // VWE1 0 0 #8
