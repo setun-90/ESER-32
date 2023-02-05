@@ -61,8 +61,7 @@ void recheneinheit::operator()(void) {
 		l.lock();
 	}
 	// TODO: Notify host of error
-	if (this->sf)
-		;
+	if (this->sf) {}
 }
 
 void recheneinheit::nss(h8 z, h32 a) {
@@ -343,6 +342,7 @@ void recheneinheit::af(void) {
 				if (stelle<17>(a)) {
 					this->nss(feld<13,16>(a), feld<21,32>(a));
 				}
+				/* falls through */
 			case 0x0:
 			case 0x3:
 				this->nss(z, qz);
