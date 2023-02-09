@@ -47,7 +47,7 @@ function(compile_options Target)
 		$<${is_anynix}:
 			-march=native
 			-pipe
-			-falign-functions=16
+			-falign-functions=64
 			-falign-loops=16
 		>
 		$<${is_gnu}:
@@ -63,14 +63,10 @@ function(compile_options Target)
 
 		$<$<AND:${is_optimized},${is_gnu}>:
 			-fno-reorder-blocks-and-partition
-			-fno-reorder-functions
-			-ftree-lrs
-			-flive-range-shrinkage
 			-ftree-partial-pre
 			-fgcse-after-reload
 			-fsplit-paths
 			-fpredictive-commoning
-			-fsched-pressure
 			-fweb
 			-frename-registers
 			-fipa-pta
