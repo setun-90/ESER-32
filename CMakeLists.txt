@@ -48,7 +48,6 @@ function(compile_options Target)
 			-march=native
 			-pipe
 			-falign-functions=64
-			-falign-loops=16
 		>
 		$<${is_gnu}:
 			-fno-align-jumps
@@ -67,8 +66,6 @@ function(compile_options Target)
 			-fgcse-after-reload
 			-fsplit-paths
 			-fpredictive-commoning
-			-fweb
-			-frename-registers
 			-fipa-pta
 			-flto=auto
 			-flto-partition=one
