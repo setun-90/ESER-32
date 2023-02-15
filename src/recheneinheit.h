@@ -26,7 +26,9 @@ class recheneinheit: public einheit {
 	void operator()(void) override;
 	void nss(h8 z,  h32 a);
 	void nsl(h32 &a, h8 z);
-	static h8 zb(h32 a);
+	static h8 b1(h32 a);
+	static h8 b2(h32 a);
+	static h8 b3(h32 a);
 	void af(void);
 
 	h32 ns[16];

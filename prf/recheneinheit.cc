@@ -34,8 +34,8 @@ int main(void) {
 	/* Test program */
 	h32 aaf(sba & s1::z), az(aaf);
 	/**** Jump instructions */
-	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4  ; This should not execute
-	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12 ; This should
+	hs.s(az, 0x00000004_32); az += 4;  // WGLB 0 0 +4    This should not execute
+	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12   This should
 	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 16
 	hs.s(az, 0x0F00000C_32); az += 4;  // WGLB F 0 +12
 	hs.s(az, 0x72004010_32); az += 4;  // VWE1 0 0 16
@@ -60,6 +60,8 @@ int main(void) {
 	hs.s(az, 0x02000004_32); az += 4;  // WGLB 2 0 +4
 	hs.s(az, 0x72004018_32); az += 4;  // VWE1 0 0 24
 
+	hs.s(az, 0x30302000_32); az += 4;  // BWGB 3 2000    Load a base into register 3 for later
+
 	/**** Bitwise instructions */
 	hs.s(az, 0xE610_16); az += 2;      // NICN 1 0
 	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
@@ -78,6 +80,7 @@ int main(void) {
 	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
 
 	/**** Arithmetic instructions */
+//	hs.s(az, 0xE900_16); az += 2;      // UNTN 0 0
 
 	/**** Shutdown */
 	hs.s(az, 0x72004008_32);           // VWE1 0 0 #8

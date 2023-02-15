@@ -70,8 +70,14 @@ void recheneinheit::nss(h8 z, h32 a) {
 void recheneinheit::nsl(h32 &a, h8 q) {
 	a = this->ns[q];
 }
-h8 recheneinheit::zb(h32 a) {
-	return !a ? 0 : a > 0 ? 1 : 2;
+h8 recheneinheit::b1(h32 a) {
+	return !a ? 0 : !stelle<1>(a) ? 1 : 2;
+}
+h8 recheneinheit::b2(h32 a) {
+	return stelle<1>(a) ? 2 : 1;
+}
+h8 recheneinheit::b3(h32 a) {
+	return !a ? 0 : 3;
 }
 
 void recheneinheit::af(void) {
@@ -128,7 +134,7 @@ void recheneinheit::af(void) {
 				case 0x0: { // Beständergestalt
 					az += 4;
 					h32 q(feld<13,32>(a));
-					this->b = recheneinheit::zb(q);
+					this->b = recheneinheit::b1(q);
 					this->nss(feld<9,12>(a), q);
 					break;
 				}
@@ -138,12 +144,12 @@ void recheneinheit::af(void) {
 					this->nsl(g, gns);
 					if (stelle<17>(a)) {
 						this->se.l(q, g);
-						this->b = recheneinheit::zb(q);
+						this->b = recheneinheit::b1(q);
 						this->nss(zns, q);
 						this->nss(gns, g + feld<21,32>(a));
 					} else {
 						this->se.l(q, g + feld<21,32>(a));
-						this->b = recheneinheit::zb(q);
+						this->b = recheneinheit::b1(q);
 						this->nss(zns, q);
 					}
 					break;
@@ -156,11 +162,11 @@ void recheneinheit::af(void) {
 						g += feld<21,32>(a);
 						this->nss(gns, g);
 						this->nsl(q, qns);
-						this->b = recheneinheit::zb(q);
+						this->b = recheneinheit::b1(q);
 						this->se.s(g, q);
 					} else {
 						this->nsl(q, qns);
-						this->b = recheneinheit::zb(q);
+						this->b = recheneinheit::b1(q);
 						this->se.s(g + feld<21,32>(a), q);
 					}
 					break;
@@ -168,7 +174,7 @@ void recheneinheit::af(void) {
 				case 0x3: { // Nahspeichergestalt
 					az += 2;
 					this->nsl(q, feld<13,16>(a));
-					this->b = recheneinheit::zb(q);
+					this->b = recheneinheit::b1(q);
 					this->nss(feld<9,12>(a), q);
 					break;
 				}
@@ -282,53 +288,65 @@ void recheneinheit::af(void) {
 			case 0x0: { // LVS - Linksverschiebung
 				q %= 32;
 				if (q) qz <<= q;
+				this->b = recheneinheit::b3(qz);
 				break;
 			}
 			case 0x1: { // RNS - Rechtsnullverschiebung
 				q %= 32;
 				if (q) qz >>= q;
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			case 0x2: { // RZS - Rechtsvorzeichenverschiebung
 				q %= 32;
 				if (q) qz = vzw(qz >> q, 32 - q);
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			case 0x3: { // DRH - Umdreh
 				q %= 32;
 				qz = q ? (qz >> q) | (qz << (32 - q)) : qz;
+				this->b = recheneinheit::b2(qz);
 				break;
 			}
 			case 0x4: { // UND - Durchschnitt
 				qz &= q;
+				this->b = recheneinheit::b3(qz);
 				break;
 			}
 			case 0x5: { // ODR - Vereinigung
 				qz |= q;
+				this->b = recheneinheit::b3(qz);
 				break;
 			}
 			case 0x6: { // NIC - Nicht
 				qz = ~qz;
+				this->b = recheneinheit::b2(qz);
 				break;
 			}
 			case 0x7: { // VZW - Vorzeichenwechsel
 				qz = ~qz + 1;
+				this->b = recheneinheit::b2(qz);
 				break;
 			}
 			case 0x8: { // ZGB - Zugabe
 				qz += q;
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			case 0x9: { // UNT - Unterschied
 				qz -= q;
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			case 0xA: { // VFL - Verfaltung
 				qz *= q;
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			case 0xB: { // VTL - Verteilung
 				qz /= q;
+				this->b = recheneinheit::b1(qz);
 				break;
 			}
 			default: {
