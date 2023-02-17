@@ -65,7 +65,6 @@ function(compile_options Target)
 			-ftree-partial-pre
 			-fgcse-after-reload
 			-fsplit-paths
-			-fpredictive-commoning
 			-fipa-pta
 			-flto=auto
 			-flto-partition=one
