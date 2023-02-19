@@ -41,6 +41,7 @@ function(compile_options Target)
 		$<${is_msvc}:
 			/Wall
 			/permissive-
+			/QIntel-jcc-erratum
 		>
 
 
