@@ -51,8 +51,7 @@ function(compile_options Target)
 			-falign-functions=64
 		>
 		$<${is_gnu}:
-			-fno-align-jumps
-			-fno-align-labels
+			-falign-jumps=64:32:16
 			-Wa,-mbranches-within-32B-boundaries
 			-mno-direct-extern-access
 		>
