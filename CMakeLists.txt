@@ -8,21 +8,21 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/lib>")
 set(CMAKE_SHARED_MODULE_PREFIX )
 
+set(is_debug          "$<CONFIG:Debug>")
+set(is_release        "$<CONFIG:Release>")
+set(is_relwithdebinfo "$<CONFIG:RelWithDebInfo>")
+set(is_optimized      $<OR:${is_release},${is_relwithdebinfo}>)
+set(is_gnu        "$<CXX_COMPILER_ID:GNU>")
+set(is_msvc       "$<CXX_COMPILER_ID:MSVC>")
+set(is_clang      "$<CXX_COMPILER_ID:Clang>")
+set(is_appleclang "$<CXX_COMPILER_ID:AppleClang>")
+set(is_anyclang   "$<CXX_COMPILER_ID:Clang,AppleClang>")
+set(is_anynix     "$<CXX_COMPILER_ID:GNU,Clang,AppleClang>")
+
 function(compile_options Target)
 	if(NOT TARGET "${Target}")
 		return()
 	endif()
-
-	set(is_debug          "$<CONFIG:Debug>")
-	set(is_release        "$<CONFIG:Release>")
-	set(is_relwithdebinfo "$<CONFIG:RelWithDebInfo>")
-	set(is_optimized      $<OR:${is_release},${is_relwithdebinfo}>)
-	set(is_gnu        "$<CXX_COMPILER_ID:GNU>")
-	set(is_msvc       "$<CXX_COMPILER_ID:MSVC>")
-	set(is_clang      "$<CXX_COMPILER_ID:Clang>")
-	set(is_appleclang "$<CXX_COMPILER_ID:AppleClang>")
-	set(is_anyclang   "$<CXX_COMPILER_ID:Clang,AppleClang>")
-	set(is_anynix     "$<CXX_COMPILER_ID:GNU,Clang,AppleClang>")
 
 	set_target_properties("${Target}" PROPERTIES
 		CXX_VISIBILITY_PRESET     hidden
