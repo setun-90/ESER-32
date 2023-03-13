@@ -41,28 +41,15 @@ function(compile_options Target)
 		$<${is_msvc}:
 			/Wall
 			/permissive-
-			/QIntel-jcc-erratum
 		>
 
 
 		$<${is_anynix}:
 			-march=native
 			-pipe
-			-falign-functions=64
 		>
-		$<${is_gnu}:
-			-falign-jumps=64:40:16
-			-falign-loops=8
-			-Wa,-mbranches-within-32B-boundaries
-			-mno-direct-extern-access
-		>
-		$<${is_anyclang}:
-			-fno-direct-access-external-data
-		>
-
 
 		$<$<AND:${is_optimized},${is_gnu}>:
-			-fno-reorder-blocks-and-partition
 			-ftree-partial-pre
 			-fgcse-after-reload
 			-fsplit-paths
@@ -81,14 +68,8 @@ function(compile_options Target)
 			-fno-plt
 		>
 		$<$<AND:${is_optimized},${is_msvc}>:
-			/MD
-			/O2
 			/GL
 			/Gw
-		>
-
-		$<$<AND:${is_relwithdebinfo},${is_mvsc}>:
-			/Zi
 		>
 
 		$<$<AND:${is_debug},${is_anynix}>:
@@ -97,8 +78,6 @@ function(compile_options Target)
 			-fsanitize=address
 		>
 		$<$<AND:${is_debug},${is_msvc}>:
-			/MDd
-			/Od
 			/ZI
 			/fsanitize=address
 		>

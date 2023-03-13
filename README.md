@@ -45,12 +45,23 @@ If loading proceeds without errors, you will reach the operator's console:
 ## Building
 ### Systems
 CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself. There are three main supported build types: Release, RelWithDebInfo or Debug.
+
+In particular, don't forget to add appropriate flags for your CPU in the `CXXFLAGS` environment variable, mainly for alignment. For example, one might use the following on the Intel i7-8565U:
+```
+$ CXXFLAGS="-falign-functions=64 -falign-jumps=64:40:16 -Wa,-mbranches-within-32B-boundaries"
+```
+
+while the following gives the best results on the i7-1195G7:
+```
+$ CXXFLAGS="-falign-functions=64 -falign-jumps=64"
+```
+
 #### CMake single-configuration backends (Make/NMake/MinGW, Ninja)
 Create the directory `$type` corresponding to the build type.
 ```
 $ mkdir $type
 $ cd $type
-$ cmake .. -DCMAKE_BUILD_TYPE=$type
+$ CXXFLAGS="$specific_flags" cmake .. -DCMAKE_BUILD_TYPE=$type
 $ cmake --build . -j$n
 ```
 
