@@ -1,5 +1,5 @@
 # Zuse Elektra emulator
-The Zuse Elektra is a system family from Zuse Gerätebau implementing the ESER/OSER architecture (a fictionalized version of the real-life [ESER](https://en.wikipedia.org/wiki/ESER)). Released in 1964, it has diversified into a line of mainframes, superminis, workstations and servers. The English Electric Electra is a licensed clone.
+The Zuse Elektra is a system family from Zuse Gerätebau implementing the ESER/OSER architecture (a fictionalized version of the real-life [ESER](https://en.wikipedia.org/wiki/ESER); see [below](#background)). Released in 1964, it has diversified into a line of mainframes, superminis, workstations and servers. The English Electric Electra is a licensed clone.
 
 This emulator emulates a 32-bit Zuse Elektra.
 ## Status
