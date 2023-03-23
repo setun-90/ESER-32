@@ -57,7 +57,7 @@ int main(void) {
 	hs.s((s1::z & s1f) + 12_32, s1s);
 	hs.s(ss::z & s2s,           s2t);
 	hs.s(ss::z & s1s,           s1t);
-	for (auto ka: {static_cast<h32>(0x003FFFFC_32), static_cast<h32>(0x01000FFC_32)}) {
+	for (auto ka: {0x003FFFFC_32, 0x01000FFC_32}) {
 		try {
 			e.s(ka, q64);
 			throw logic_error("Unmapped address accepted");
