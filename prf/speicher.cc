@@ -74,12 +74,15 @@ int main(void) {
 	e.enk(ka2, s1::z & s1f);
 
 	for (auto ez: {
-		make_tuple(ka1, s2b,                   gf, s2b,                    gf),
-		make_tuple(ka2, s1b,          s1f & s1::z, s1b,           s1f & s1::z),
-		make_tuple(ka3, s2b,            gf + 8_32, s2s,            gf + 12_32),
-		make_tuple(ka4, s1b, (s1f & s1::z) + 8_32, s1s, (s1f & s1::z) + 12_32)
+		make_tuple(ka1,                   gf,                    gf),
+		make_tuple(ka2,          s1f & s1::z,           s1f & s1::z),
+		make_tuple(ka3,            gf + 8_32,            gf + 12_32),
+		make_tuple(ka4, (s1f & s1::z) + 8_32, (s1f & s1::z) + 12_32)
 	}) {
-		auto ka(get<0>(ez)), fe1(get<1>(ez)), fa1(get<2>(ez)), fe2(get<3>(ez)), fa2(get<4>(ez));
+		auto ka(get<0>(ez)), fa1(get<1>(ez)), fa2(get<2>(ez));
+		h32 fe1, fe2;
+		hs.l(fe1, fa1);
+		hs.l(fe2, fa2);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		e.g(z64, ka);
