@@ -57,7 +57,7 @@ int main(void) {
 	hs.s((s1::z & s1f) + 12_32, s1s);
 	hs.s(ss::z & s2s,           s2t);
 	hs.s(ss::z & s1s,           s1t);
-	for (auto ka: {0x003FFFFC_32, 0x01000FFC_32}) {
+	for (auto ka: {0x003FFFFD_32, 0x01000FFD_32}) {
 		try {
 			e.s(ka, q64);
 			throw logic_error("Unmapped address accepted");
@@ -66,7 +66,7 @@ int main(void) {
 		}
 	}
 
-	h32 ka1(0x00300FFC_32), ka2(0x010000FC_32), ka3(0x00BFFFFC_32), ka4(0x01002FFC_32);
+	h32 ka1(0x00BFFFFD_32), ka2(0x01002FFD_32), ka3(0x00FFFFFD_32);
 
 	hs.s(gf,          s2b);
 	hs.s(s1::z & s1f, s1b);
@@ -74,10 +74,9 @@ int main(void) {
 	e.enk(ka2, s1::z & s1f);
 
 	for (auto ez: {
-		make_tuple(ka1,                   gf,                    gf),
-		make_tuple(ka2,          s1f & s1::z,           s1f & s1::z),
-		make_tuple(ka3,            gf + 8_32,            gf + 12_32),
-		make_tuple(ka4, (s1f & s1::z) + 8_32, (s1f & s1::z) + 12_32)
+		make_tuple(ka1,             gf + 8_32,            gf + 12_32),
+		make_tuple(ka2,  (s1::z & s1f) + 8_32, (s1::z & s1f) + 12_32),
+		make_tuple(ka3,            gf + 12_32,           s1::z & s1f)
 	}) {
 		auto ka(get<0>(ez)), fa1(get<1>(ez)), fa2(get<2>(ez));
 		h32 fe1, fe2;
@@ -86,66 +85,72 @@ int main(void) {
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		e.g(z64, ka);
+		hs.s(fa1, fe1 | ss::s);
+		e.enk(ka, gf);
 		try {
 			e.s(ka, q64);
 			throw logic_error("Forbidden write succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa1, fe1 | ss::s);
 		hs.s(fa2, fe2 | ss::s);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		e.s(ka, q64);
+		hs.s(fa1, fe1 | ss::l);
+		e.enk(ka, gf);
 		try {
 			e.l(z64, ka);
 			throw logic_error("Forbidden read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa1, fe1 | ss::l);
 		hs.s(fa2, fe2 | ss::l);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		e.l(z64, ka);
+		hs.s(fa1, fe1 | ss::a);
+		e.enk(ka, gf);
 		try {
 			e.a(z64, ka);
 			throw logic_error("Forbidden instruction read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa1, fe1 | ss::a);
 		hs.s(fa2, fe2 | ss::a);
 		e.enk(ka, gf);
 		e.enk(ka + 4, gf);
 		e.a(z64, ka);
+		hs.s(fa1, fe1);
+		e.enk(ka, gf);
 		try {
 			e.g(z64, ka);
 			throw logic_error("Forbidden context entry read succeeded");
 		} catch (ZZE const &e) {
 			TRACE(e.what());
 		}
-		hs.s(fa1, fe1 | ss::s);
-		hs.s(fa2, fe2 | ss::s);
+		hs.s(fa2, fe2);
 	}
 
+	hs.s(gf,                    s2b | ss::s | ss::l);
+	hs.s(gf +  8_32,            s2b | ss::s | ss::l);
+	hs.s(gf + 12_32,            s2s | ss::s | ss::l);
+	hs.s(s1::z & s1f,           s1b | ss::s | ss::l);
+	hs.s((s1::z & s1f) +  8_32, s1b | ss::s | ss::l);
+	hs.s((s1::z & s1f) + 12_32, s1s | ss::s | ss::l);
 	for (auto ez: {
-		make_tuple(ka1,                   gf,          gf),
-		make_tuple(ka2,          s1::z & s1f, s1::z & s1f),
-		make_tuple(ka3,            gf + 8_32, ss::z & s2s),
-		make_tuple(ka4, (s1::z & s1f) + 8_32, ss::z & s1s)
+		make_tuple(ka1,             gf + 8_32, ss::z & s2s),
+		make_tuple(ka2,  (s1::z & s1f) + 8_32, ss::z & s1s),
+		make_tuple(ka3,            gf + 12_32, s1::z & s1f)
 	}) {
-		auto ka(get<0>(ez)),
-			sa(get<1>(ez)),
-			ta(get<2>(ez));
+		auto ka(get<0>(ez)), sa(get<1>(ez)), ta(get<2>(ez));
 		h32 fs, ft;
 		hs.l(fs, sa);
-		hs.s(sa, fs | ss::s);
 		hs.l(ft, ta);
 		hs.s(ta, ft | st::w);
 
 		e.enk(ka, gf);
-		e.enk(ka + 4, gf);
+		e.enk(ka + 3, gf);
 		try {
 			e.s(ka, q64);
 			throw logic_error("Write to absent page succeeded");
@@ -153,22 +158,13 @@ int main(void) {
 			TRACE(e.what());
 		}
 		hs.s(ta, ft & ~st::w);
-		hs.s(sa, fs | ss::s | ss::l);
-		e.enk(ka, gf);
-		e.enk(ka + 4, gf);
+		e.enk(ka + 3, gf);
 	}
 
-	hs.s(gf,                    s2b | ss::s | ss::l);
-	hs.s(gf + 8_32,             s2b | ss::s | ss::l);
-	hs.s(gf + 12_32,            s2s | ss::s | ss::l);
-	hs.s(s1::z & s1f,           s1b | ss::s | ss::l);
-	hs.s((s1::z & s1f) + 8_32,  s1b | ss::s | ss::l);
-	hs.s((s1::z & s1f) + 12_32, s1s | ss::s | ss::l);
 	for (auto ka: {
 		ka1,
 		ka2,
-		ka3,
-		ka4
+		ka3
 	}) {
 		TRACE((ostringstream() << hex << setfill('0') << setw(8) << gf).str().c_str());
 		e.s(ka, q64);
