@@ -73,7 +73,7 @@ function(compile_options Target)
 		>
 
 		$<$<AND:${is_debug},${is_anynix}>:
-			-Og
+			-O0
 			-ggdb
 			-fsanitize=address
 		>
