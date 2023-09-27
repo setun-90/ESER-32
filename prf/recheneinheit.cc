@@ -71,11 +71,11 @@ int main(void) {
 	hs.s(az, 0x01000004_32); az += 4;  // WGLB 1 0 +4
 	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
 
-	hs.s(az, 0xA6102010_16); az += 4;  // NICZ 1 2010
+	hs.s(az, 0xA6102010_32); az += 4;  // NICZ 1 2010
 	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
 	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
 
-	hs.s(az, 0x66202010_16); az += 4;  // NICQ 2 2010
+	hs.s(az, 0x66202010_32); az += 4;  // NICQ 2 2010
 	hs.s(az, 0x02000004_32); az += 4;  // WGLB 1 0 +4
 	hs.s(az, 0x72004020_32); az += 4;  // VWE1 0 0 32
 
