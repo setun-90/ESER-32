@@ -50,9 +50,8 @@ function(compile_options Target)
 		>
 
 		$<$<AND:${is_optimized},${is_gnu}>:
+			-fno-reorder-blocks-and-partition
 			-ftree-partial-pre
-			-fgcse-after-reload
-			-fsplit-paths
 			-fipa-pta
 			-flto=auto
 			-flto-partition=one
@@ -64,6 +63,7 @@ function(compile_options Target)
 			-fasynchronous-unwind-tables
 		>
 		$<$<AND:${is_optimized},${is_anyclang}>:
+			-fno-direct-access-external-data
 			-flto=thin
 			-fno-plt
 		>
