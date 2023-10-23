@@ -52,7 +52,6 @@ function(compile_options Target)
 		$<$<AND:${is_optimized},${is_gnu}>:
 			-fno-reorder-blocks-and-partition
 			-ftree-partial-pre
-			-fipa-pta
 			-flto=auto
 			-flto-partition=one
 			-floop-nest-optimize
