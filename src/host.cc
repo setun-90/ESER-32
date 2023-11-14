@@ -109,6 +109,10 @@ void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 			unsigned n;
 			h32 an;
 			ic >> n >> hex >> an >> dec;
+			if (!ic) {
+				o << string("?? ").append(c) << '\n';
+				continue;
+			}
 			if (an + n > hs.g() - 1) {
 				o << no_such_address(an + n, hs.g() - 1).c_str();
 				break;
@@ -148,6 +152,10 @@ void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 		case anweisung::s: {
 			h32 as, ag;
 			ic >> hex >> as >> ag;
+			if (!ic) {
+				o << string("?? ").append(c) << '\n';
+				continue;
+			}
 			if (as + 8 > hs.g() - 1) {
 				o << no_such_address(as + 8, hs.g() - 1).c_str();
 				break;
@@ -159,6 +167,10 @@ void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 		case anweisung::an: {
 			h32 ut;
 			ic >> hex >> ut;
+			if (!ic) {
+				o << string("?? ").append(c) << '\n';
+				continue;
+			}
 			if (ut > hs.g() - 1) {
 				o << no_such_address(ut, hs.g() - 1).c_str();
 				break;
@@ -174,6 +186,10 @@ void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 		case anweisung::ab: {
 			h32 ut;
 			ic >> hex >> ut;
+			if (!ic) {
+				o << string("?? ").append(c) << '\n';
+				continue;
+			}
 			if (ut > hs.g() - 1) {
 				o << no_such_address(ut, hs.g() - 1).c_str();
 				break;
