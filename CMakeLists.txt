@@ -77,7 +77,7 @@ function(compile_options Target)
 			-fsanitize=address
 		>
 		$<$<AND:${is_debug},${is_msvc}>:
-			/ZI
+			/Zi
 			/fsanitize=address
 		>
 	)
