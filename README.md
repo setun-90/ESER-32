@@ -28,6 +28,7 @@ If loading proceeds without errors, you will reach the operator's console:
 >> _
 ```
 ### Commands
+* `?`: prints the available commands along with their inputs.
 * `g`: prints the highest physical address.
 * `l $n $a`: prints *n* bytes located at address *a*.
 * `s $a $w`: writes *w* to address *a*.

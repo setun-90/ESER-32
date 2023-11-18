@@ -77,8 +77,9 @@ template <> string host::console::format(h32 as, h8 ag) {
 void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 	string c;
 	while (o << ">> " && !getline(i, c).eof()) {
-		enum class anweisung {g, e, l, s, an, ab};
+		enum class anweisung {h, g, e, l, s, an, ab};
 		unordered_map<string, anweisung> aw({
+			{"?",  anweisung::h},
 			{"g",  anweisung::g},
 			{"e",  anweisung::e},
 			{"l",  anweisung::l},
@@ -96,6 +97,17 @@ void host::console::loop(ostream &o, istream &i, wahrspeicher &hs) {
 			continue;
 		}
 		switch (i->second) {
+		case anweisung::h: {
+			o << (ostringstream()
+				<< "   g\n"
+				<< "   e\n"
+				<< "   l $size $address\n"
+				<< "   s $address $data\n"
+				<< "   an $interrupt_port_address\n"
+				<< "   ab $interrupt_port_address\n"
+				).str().c_str();
+			break;
+		}
 		case anweisung::g: {
 			o << (ostringstream() << "   " << setfill('0') << hex << setw(8) << hs.g() - 1 << '\n').str().c_str();
 			break;
