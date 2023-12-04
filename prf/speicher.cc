@@ -73,7 +73,7 @@ int main(void) {
 	e.enk(ka1,          gf);
 	e.enk(ka2, s1::z & s1f);
 
-	for (auto ez: {
+	for (auto &ez: {
 		make_tuple(ka1,             gf + 8_32,            gf + 12_32),
 		make_tuple(ka2,  (s1::z & s1f) + 8_32, (s1::z & s1f) + 12_32),
 		make_tuple(ka3,            gf + 12_32,           s1::z & s1f)
@@ -138,7 +138,7 @@ int main(void) {
 	hs.s(s1::z & s1f,           s1b | ss::s | ss::l);
 	hs.s((s1::z & s1f) +  8_32, s1b | ss::s | ss::l);
 	hs.s((s1::z & s1f) + 12_32, s1s | ss::s | ss::l);
-	for (auto ez: {
+	for (auto &ez: {
 		make_tuple(ka1,             gf + 8_32, ss::z & s2s),
 		make_tuple(ka2,  (s1::z & s1f) + 8_32, ss::z & s1s),
 		make_tuple(ka3,            gf + 12_32, s1::z & s1f)
