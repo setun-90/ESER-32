@@ -58,7 +58,6 @@ function(compile_options Target)
 			-flto=auto
 			-flto-partition=one
 			-floop-nest-optimize
-			-fgraphite-identity
 			-fno-plt
 			-fno-semantic-interposition
 			-fdevirtualize-at-ltrans
