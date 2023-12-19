@@ -49,12 +49,12 @@ CMake is used to simplify cross-platform building; nevertheless, some platform-s
 
 In particular, don't forget to add appropriate flags for your CPU in the `CXXFLAGS` environment variable, mainly for alignment. For example, one might use the following on the Intel i7-8565U:
 ```
-$ CXXFLAGS="-falign-functions=64 -falign-jumps=64:3 -fno-align-loops -Wa,-mbranches-within-32B-boundaries --param l1-cache-size=64 --param tree-reassoc-width=4"
+$ CXXFLAGS="-march=native -falign-functions=64 -falign-jumps=64:3 -fno-align-loops -Wa,-mbranches-within-32B-boundaries --param=l1-cache-size=64 --param=tree-reassoc-width=4 -fira-region=all"
 ```
 
-while the following might give the best results on the i7-1195G7:
+while the following might give the best results on the i5-1340P:
 ```
-$ CXXFLAGS="-falign-functions=64 -falign-jumps=64"
+$ CXXFLAGS="-march=raptorlake -falign-functions=64 -falign-jumps=10 -fno-align-loops --param=l2-cache-size=12288"
 ```
 
 #### CMake single-configuration backends (Make/NMake/MinGW, Ninja)
