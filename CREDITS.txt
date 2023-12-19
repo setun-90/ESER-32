@@ -1,0 +1,9 @@
+Milo de Rauglaudre
+	Initial MacOS testing
+Vincent Damewood
+	CMakeLists.txt
+	MacOS testing
+Philippe Cayouette
+	(https://www.codeproject.com/Articles/594671/How-to-Ensure-Proper-Dynamic-Library-Boundary-Cros)
+Claus Witt
+	(https://www.clauswitt.com/creating-a-plugin-system-in-c.html)
