@@ -54,7 +54,7 @@ $ CXXFLAGS="-march=native -falign-functions=64 -falign-jumps=32:4 -fno-align-loo
 
 while the following might give the best results on the i5-1340P:
 ```
-$ CXXFLAGS="-march=alderlake -falign-functions=64 -falign-jumps=32:11:8 -fno-align-loops"
+$ CXXFLAGS="-march=alderlake -falign-functions=64 -fno-align-jumps -fno-align-loops -fno-align-labels"
 ```
 
 #### CMake single-configuration backends (Make/NMake/MinGW, Ninja)

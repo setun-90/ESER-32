@@ -50,14 +50,12 @@ function(compile_options Target)
 		>
 
 		$<$<AND:${is_optimized},${is_gnu}>:
-			-fno-reorder-blocks-and-partition
+			-flimit-function-alignment
 			-ftree-partial-pre
 			-fgcse-after-reload
 			-fsplit-paths
-			-fira-region=all
 			-flto=auto
 			-flto-partition=one
-			-floop-nest-optimize
 			-fno-plt
 			-fno-semantic-interposition
 			-fdevirtualize-at-ltrans
