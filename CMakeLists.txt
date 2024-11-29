@@ -50,10 +50,6 @@ function(compile_options Target)
 		>
 
 		$<$<AND:${is_optimized},${is_gnu}>:
-			-flimit-function-alignment
-			-ftree-partial-pre
-			-fgcse-after-reload
-			-fsplit-paths
 			-flto=auto
 			-flto-partition=one
 			-fno-plt
