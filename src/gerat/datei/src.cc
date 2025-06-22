@@ -88,43 +88,47 @@ h32 posix::operator()(h64 a) {
 }
 void posix::g_s(h32 z, h32 ab) {
 	/*
-	h32 r(z%8), l(z - r), i(ab);
+	h32 l(z - z%8), i(ab);
 	while (i < ab + l) {
 		h64 a;
-		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a)
-			throw runtime_error("Underflow");
-		this->se.s(i, a);
+		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a) {
+			this->sf = make_exception_ptr(runtime_error("Underflow"));
+			return;
+		}
+		if (!this->se.s(i, a))
+			return;
 		i += 8;
 	}
-	r = r%4; l = z - r;
+	l = z - z%4;
 	while (i < ab + l) {
 		h32 a;
-		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a)
-			throw runtime_error("Underflow");
-		this->se.s(i, a);
+		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a) {
+			this->sf = make_exception_ptr(runtime_error("Underflow"));
+			return;
+		}
+		if (!this->se.s(i, a))
+			return;
 		i += 4;
 	}
-	r = r%2; l = z - r;
+	l = z - z%2;
 	while (i < ab + l) {
 		h16 a;
-		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a)
-			throw runtime_error("Underflow");
-		this->se.s(i, a);
+		if (this->f.sgetn(reinterpret_cast<char const *>(&a), sizeof a) < sizeof a) {
+			this->sf = make_exception_ptr(runtime_error("Underflow"));
+			return;
+		}
+		if (!this->se.s(i, a))
+			return;
 		i += 2;
 	}
-	if (r) {
+	if (z & 1) {
 		h8 a(this->f.sbumpc());
-		if (a == buf::traits_type::eof())
-			throw runtime_error("Underflow");
-		this->se.s(i + 1, a);
-	}
-	*/
-	/*
-	h32 lz(z & (~z + 1));
-	h8 a[lz];
-	for (h32 i(0); i < lz; i += 1) {
-		this->f.read(a);
-		d->s(ab + i, a);
+		if (a == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Underflow"));
+			return;
+		}
+		if (!this->se.s(i + 1, a))
+			return;
 	}
 	*/
 	h8 a;
@@ -140,35 +144,47 @@ void posix::g_s(h32 z, h32 ab) {
 }
 void posix::g_l(h32 z, h32 ab) {
 	/*
-	h32 r(z%8), l(z - r), i(ab);
+	h32 l(z - z%8), i(ab);
 	while (i < ab + l) {
 		h64 a;
-		this->se.l(a, i);
-		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof())
-			throw runtime_error("Overflow");
+		if (!this->se.l(a, ab + i))
+			return;
+		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Overflow"));
+			return;
+		}
 		i += 8;
 	}
-	r = r%4; l = z - r;
+	l = z - z%4;
 	while (i < ab + l) {
 		h32 a;
-		this->se.l(a, i);
-		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof())
-			throw runtime_error("Overflow");
+		if (!this->se.l(a, ab + i))
+			return;
+		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Overflow"));
+			return;
+		}
 		i += 4;
 	}
-	r = r%2; l = z - r;
+	l = z - z%2;
 	while (i < ab + l) {
 		h16 a;
-		this->se.l(a, ab + i);
-		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof())
-			throw runtime_error("Overflow");
+		if (!this->se.l(a, ab + i))
+			return;
+		if (this->f.sputn(reinterpret_cast<char const *>(&a), sizeof a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Overflow"));
+			return;
+		}
 		i += 2;
 	}
-	if (r) {
+	if (z & 1) {
 		h8 a;
-		this->se.l(a, i + 1);
-		if (this->f.sputc(a) == buf::traits_type::eof())
-			throw runtime_error("Overflow");
+		if (!this->se.l(a, i + 1))
+			return;
+		if (this->f.sputc(a) == buf::traits_type::eof()) {
+			this->sf = make_exception_ptr(runtime_error("Overflow"));
+			return;
+		}
 	}
 	*/
 	h8 a;
