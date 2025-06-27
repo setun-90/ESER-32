@@ -52,8 +52,8 @@ namespace host {
 
 		~plugin();
 		plugin();
-		plugin(plugin &&);
-		plugin &operator=(plugin &&);
+		plugin(plugin &&) noexcept;
+		plugin &operator=(plugin &&) noexcept;
 
 		std::shared_ptr<durchgangeinheit> abb(wahrspeicher &hs, std::istringstream &i);
 

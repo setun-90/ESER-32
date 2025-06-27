@@ -272,11 +272,11 @@ void host::plugin::zs(void) {
 #endif
 host::plugin::plugin():
 	n(), b(nullptr), v_ab(nullptr), v_zs(nullptr) {}
-host::plugin::plugin(plugin &&v):
+host::plugin::plugin(plugin &&v) noexcept:
 	plugin() {
 	*this = move(v);
 }
-host::plugin &host::plugin::operator=(plugin &&v) {
+host::plugin &host::plugin::operator=(plugin &&v) noexcept {
 	this->n = move(v.n);
 	this->b = v.b;
 	this->v_ab = v.v_ab;
