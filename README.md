@@ -47,14 +47,19 @@ If loading proceeds without errors, you will reach the operator's console:
 ### Systems
 CMake is used to simplify cross-platform building; nevertheless, some platform-specific adaptations are employed to simplify the process itself. There are three main supported build types: Release, RelWithDebInfo or Debug.
 
-In particular, don't forget to add appropriate flags for your CPU in the `CXXFLAGS` environment variable, mainly for alignment. For example, one might use the following on the Intel i7-8565U:
+In particular, don't forget to add appropriate flags for your CPU in the `CXXFLAGS` environment variable, mainly for alignment and fine-tuning. For example, one might use the following on the Intel i7-8565U:
 ```
 $ CXXFLAGS="-march=native -falign-functions=64 -falign-jumps=32:4 -fno-align-loops -Wa,-mbranches-within-32B-boundaries --param=l1-cache-size=64 --param=tree-reassoc-width=4"
 ```
 
-while the following might give the best results on the i5-1340P:
+while the following might give the best results on the i5-1340P, for GCC 14:
 ```
 $ CXXFLAGS="-march=alderlake -falign-functions=32:6 -falign-jumps=32:2 -fno-align-labels -fno-loop-interchange -fno-unroll-loops -fira-region=one -fgcse-sm -fgraphite -fgraphite-identity"
+```
+
+and the following for GCC 15:
+```
+$ CXXFLAGS="-march=alderlake -mno-avx -falign-functions=64 -falign-jumps=32:8 -fno-align-loops -fno-align-labels -fno-loop-interchange -fno-reorder-blocks-and-partition -fgcse-sm -fgraphite -fgraphite-identity"
 ```
 
 #### CMake single-configuration backends (Make/NMake/MinGW, Ninja)

@@ -59,7 +59,7 @@ function(compile_options Target)
 		>
 		$<$<AND:${is_optimized},${is_anyclang}>:
 			-fno-direct-access-external-data
-			-flto=thin
+			-flto=full
 			-fno-plt
 		>
 		$<$<AND:${is_optimized},${is_msvc}>:
@@ -79,7 +79,7 @@ function(compile_options Target)
 	)
 
 	target_link_options("${Target}" PRIVATE
-		$<${is_anynix}:LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,combreloc -ldl -pthread>
+		$<${is_anynix}:LINKER:-O1,--as-needed,--sort-common,-z,relro,-z,pack-relative-relocs -ldl -pthread>
 		$<$<AND:${is_release},${is_anynix}>:LINKER:-s>
 		$<$<AND:${is_debug},${is_anynix}>:-fsanitize=address>
 	)
